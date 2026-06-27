@@ -35,7 +35,6 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form4));
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -48,6 +47,7 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form4));
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2CustomGradientPanel1 = new Guna.UI2.WinForms.Guna2CustomGradientPanel();
             gunaPanel = new Guna.UI2.WinForms.Guna2GradientPanel();
@@ -153,8 +153,8 @@
             tbPassword.Font = new Font("Segoe UI", 9F);
             tbPassword.ForeColor = Color.FromArgb(154, 136, 128);
             tbPassword.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            tbPassword.IconLeft = (Image)resources.GetObject("tbPassword.IconLeft");
-            tbPassword.IconRight = (Image)resources.GetObject("tbPassword.IconRight");
+            tbPassword.IconLeft = Properties.Resources._lock;
+            tbPassword.IconRight = Properties.Resources.eye_open;
             tbPassword.Location = new Point(45, 523);
             tbPassword.Margin = new Padding(3, 4, 3, 4);
             tbPassword.Name = "tbPassword";
@@ -190,7 +190,7 @@
             tbEmail.Font = new Font("Segoe UI", 9F);
             tbEmail.ForeColor = Color.FromArgb(154, 136, 128);
             tbEmail.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            tbEmail.IconLeft = (Image)resources.GetObject("tbEmail.IconLeft");
+            tbEmail.IconLeft = Properties.Resources.mail_24dp_B89A8C_FILL0_wght400_GRAD0_opsz24;
             tbEmail.Location = new Point(45, 422);
             tbEmail.Margin = new Padding(3, 4, 3, 4);
             tbEmail.Name = "tbEmail";
