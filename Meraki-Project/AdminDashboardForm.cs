@@ -1,10 +1,22 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Meraki_Project
 {
     public partial class AdminDashboardForm : Form
     {
+        private static readonly Color ColorCoral = Color.FromArgb(232, 113, 74);
+        private static readonly Color ColorWarmBrown = Color.FromArgb(154, 136, 128);
+        private static readonly Color ColorActiveTabFill = Color.FromArgb(253, 238, 232);
+
+        // name, role, email, status, joined - same shape as the grid columns.
+        // TODO (Phase 2): replace with `SELECT ... FROM users` instead of a fixed list.
+        private readonly List<string[]> _allUsers = new();
+
         public AdminDashboardForm()
         {
             InitializeComponent();
@@ -27,6 +39,8 @@ namespace Meraki_Project
                 new[] { revJan, revFeb, revMar, revApr, revMay, revJun },
                 new[] { lblRevJan, lblRevFeb, lblRevMar, lblRevApr, lblRevMay, lblRevJun },
                 new[] { 3200, 4100, 3800, 5200, 4900, 6100 }); // e.g. monthly revenue totals
+
+            SetActiveSidebarButton(btnSidebarOverview);
         }
 
         /// <summary>
@@ -38,12 +52,36 @@ namespace Meraki_Project
         /// </summary>
         private void LoadSampleUsers()
         {
+            _allUsers.Clear();
+            _allUsers.Add(new[] { "Sarah Mitchell", "Parent", "sarah@email.com", "active", "May 12, 2024" });
+            _allUsers.Add(new[] { "Emma Thompson", "Babysitter", "emma@email.com", "active", "Apr 3, 2024" });
+            _allUsers.Add(new[] { "Jake Reynolds", "Parent", "jake@email.com", "pending", "Jun 1, 2024" });
+            _allUsers.Add(new[] { "Lily Chen", "Babysitter", "lily@email.com", "suspended", "Mar 20, 2024" });
+            _allUsers.Add(new[] { "Tom Wallace", "Parent", "tom@email.com", "active", "Jun 8, 2024" });
+
+            ApplyUserFilter(string.Empty);
+        }
+
+        private void ApplyUserFilter(string search)
+        {
             dgvUsers.Rows.Clear();
-            dgvUsers.Rows.Add("Sarah Mitchell", "Parent", "sarah@email.com", "active", "May 12, 2024", "...");
-            dgvUsers.Rows.Add("Emma Thompson", "Babysitter", "emma@email.com", "active", "Apr 3, 2024", "...");
-            dgvUsers.Rows.Add("Jake Reynolds", "Parent", "jake@email.com", "pending", "Jun 1, 2024", "...");
-            dgvUsers.Rows.Add("Lily Chen", "Babysitter", "lily@email.com", "suspended", "Mar 20, 2024", "...");
-            dgvUsers.Rows.Add("Tom Wallace", "Parent", "tom@email.com", "active", "Jun 8, 2024", "...");
+            search = (search ?? string.Empty).Trim();
+
+            IEnumerable<string[]> rows = _allUsers;
+            if (search.Length > 0)
+            {
+                rows = _allUsers.Where(u =>
+                    u[0].Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    u[2].Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
+
+            foreach (var u in rows)
+                dgvUsers.Rows.Add(u[0], u[1], u[2], u[3], u[4], "...");
+        }
+
+        private void tbSearchUsers_TextChanged(object sender, EventArgs e)
+        {
+            ApplyUserFilter(tbSearchUsers.Text);
         }
 
         /// <summary>
@@ -80,39 +118,55 @@ namespace Meraki_Project
             return max;
         }
 
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
+        // ----- Sidebar navigation -----
+        // Only "Overview" has real content right now (the KPI cards / charts / user
+        // table already on this form). The other sections are placeholders until their
+        // own views get built - clicking them just restyles the sidebar and says so.
 
-        }
-
-        private void btnSidebarOverview_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void btnSidebarOverview_Click(object sender, EventArgs e) => SetActiveSidebarButton(btnSidebarOverview);
 
         private void btnSidebarUsers_Click(object sender, EventArgs e)
         {
-
+            SetActiveSidebarButton(btnSidebarUsers);
+            tbSearchUsers.Focus();
         }
 
         private void btnSidebarBookings_Click(object sender, EventArgs e)
         {
-
+            SetActiveSidebarButton(btnSidebarBookings);
+            MessageBox.Show("A dedicated Bookings view isn't built yet - for now, booking data will show up here once the database is wired up.",
+                "Coming soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSidebarReports_Click(object sender, EventArgs e)
         {
-
+            SetActiveSidebarButton(btnSidebarReports);
+            MessageBox.Show("Reports view isn't built yet.", "Coming soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSidebarSettings_Click(object sender, EventArgs e)
         {
-
+            SetActiveSidebarButton(btnSidebarSettings);
+            MessageBox.Show("Admin settings aren't built yet.", "Coming soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void tbSearchUsers_TextChanged(object sender, EventArgs e)
+        private void SetActiveSidebarButton(Guna2Button active)
         {
+            foreach (var btn in new[] { btnSidebarOverview, btnSidebarUsers, btnSidebarBookings, btnSidebarReports, btnSidebarSettings })
+            {
+                bool isActive = btn == active;
+                btn.FillColor = isActive ? ColorActiveTabFill : Color.Transparent;
+                btn.ForeColor = isActive ? ColorCoral : ColorWarmBrown;
+                btn.Font = new Font("Segoe UI", 9F, isActive ? FontStyle.Bold : FontStyle.Regular);
+            }
+        }
 
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            var login = new LoginForm();
+            login.Show();
+            this.Close();
         }
     }
 }
