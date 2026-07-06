@@ -58,9 +58,9 @@
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             pnlRoleTabs.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // pnlBackground
-            // 
+            //
             pnlBackground.Controls.Add(pnlLoginCard);
             pnlBackground.CustomizableEdges = customizableEdges19;
             pnlBackground.Dock = DockStyle.Fill;
@@ -72,9 +72,9 @@
             pnlBackground.ShadowDecoration.CustomizableEdges = customizableEdges20;
             pnlBackground.Size = new Size(1250, 875);
             pnlBackground.TabIndex = 0;
-            // 
+            //
             // pnlLoginCard
-            // 
+            //
             pnlLoginCard.BackColor = Color.Transparent;
             pnlLoginCard.BorderRadius = 24;
             pnlLoginCard.Controls.Add(picLogo);
@@ -99,9 +99,9 @@
             pnlLoginCard.ShadowDecoration.Enabled = true;
             pnlLoginCard.Size = new Size(450, 650);
             pnlLoginCard.TabIndex = 0;
-            // 
+            //
             // picLogo
-            // 
+            //
             picLogo.BorderRadius = 16;
             picLogo.CustomizableEdges = customizableEdges1;
             picLogo.Image = Properties.Resources.meraki_logo;
@@ -114,9 +114,9 @@
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 0;
             picLogo.TabStop = false;
-            // 
+            //
             // lblAppTitle
-            // 
+            //
             lblAppTitle.BackColor = Color.Transparent;
             lblAppTitle.Location = new Point(182, 121);
             lblAppTitle.Margin = new Padding(4, 4, 4, 4);
@@ -124,9 +124,9 @@
             lblAppTitle.Size = new Size(102, 43);
             lblAppTitle.TabIndex = 1;
             lblAppTitle.Text = "<div style=\"text-align:center;color:#E8714A;font-weight:bold;font-size:18pt;\">Meraki</div>";
-            // 
+            //
             // lblAppSubtitle
-            // 
+            //
             lblAppSubtitle.BackColor = Color.Transparent;
             lblAppSubtitle.Location = new Point(166, 162);
             lblAppSubtitle.Margin = new Padding(4, 4, 4, 4);
@@ -134,9 +134,9 @@
             lblAppSubtitle.Size = new Size(122, 22);
             lblAppSubtitle.TabIndex = 2;
             lblAppSubtitle.Text = "<div style=\"text-align:center;color:#9A8880;font-size:9pt;\">Caring Babysitters</div>";
-            // 
+            //
             // pnlRoleTabs
-            // 
+            //
             pnlRoleTabs.BorderRadius = 12;
             pnlRoleTabs.Controls.Add(rbParent);
             pnlRoleTabs.Controls.Add(rbBabysitter);
@@ -149,9 +149,10 @@
             pnlRoleTabs.ShadowDecoration.CustomizableEdges = customizableEdges10;
             pnlRoleTabs.Size = new Size(375, 50);
             pnlRoleTabs.TabIndex = 3;
-            // 
+            //
             // rbParent
-            // 
+            //
+            rbParent.BackColor = Color.Transparent;
             rbParent.BorderRadius = 8;
             rbParent.CustomizableEdges = customizableEdges3;
             rbParent.FillColor = Color.White;
@@ -165,9 +166,10 @@
             rbParent.TabIndex = 0;
             rbParent.Text = "Parent";
             rbParent.Click += rbParent_Click;
-            // 
+            //
             // rbBabysitter
-            // 
+            //
+            rbBabysitter.BackColor = Color.Transparent;
             rbBabysitter.BorderRadius = 8;
             rbBabysitter.CustomizableEdges = customizableEdges5;
             rbBabysitter.FillColor = Color.Transparent;
@@ -181,9 +183,10 @@
             rbBabysitter.TabIndex = 1;
             rbBabysitter.Text = "Babysitter";
             rbBabysitter.Click += rbBabysitter_Click;
-            // 
+            //
             // rbAdmin
-            // 
+            //
+            rbAdmin.BackColor = Color.Transparent;
             rbAdmin.BorderRadius = 8;
             rbAdmin.CustomizableEdges = customizableEdges7;
             rbAdmin.FillColor = Color.Transparent;
@@ -197,9 +200,10 @@
             rbAdmin.TabIndex = 2;
             rbAdmin.Text = "Admin";
             rbAdmin.Click += rbAdmin_Click;
-            // 
+            //
             // lblEmail
-            // 
+            //
+            lblEmail.BackColor = Color.Transparent;
             lblEmail.ForeColor = Color.FromArgb(154, 136, 128);
             lblEmail.Location = new Point(38, 278);
             lblEmail.Margin = new Padding(4, 0, 4, 0);
@@ -207,9 +211,9 @@
             lblEmail.Size = new Size(200, 22);
             lblEmail.TabIndex = 4;
             lblEmail.Text = "Email / Username";
-            // 
+            //
             // tbEmail
-            // 
+            //
             tbEmail.BorderRadius = 10;
             tbEmail.CustomizableEdges = customizableEdges11;
             tbEmail.DefaultText = "";
@@ -224,9 +228,10 @@
             tbEmail.ShadowDecoration.CustomizableEdges = customizableEdges12;
             tbEmail.Size = new Size(375, 50);
             tbEmail.TabIndex = 5;
-            // 
+            //
             // lblPassword
-            // 
+            //
+            lblPassword.BackColor = Color.Transparent;
             lblPassword.ForeColor = Color.FromArgb(154, 136, 128);
             lblPassword.Location = new Point(38, 370);
             lblPassword.Margin = new Padding(4, 0, 4, 0);
@@ -234,9 +239,9 @@
             lblPassword.Size = new Size(200, 22);
             lblPassword.TabIndex = 6;
             lblPassword.Text = "Password";
-            // 
+            //
             // tbPassword
-            // 
+            //
             tbPassword.BorderRadius = 10;
             tbPassword.CustomizableEdges = customizableEdges13;
             tbPassword.DefaultText = "";
@@ -253,24 +258,28 @@
             tbPassword.Size = new Size(375, 50);
             tbPassword.TabIndex = 7;
             tbPassword.UseSystemPasswordChar = true;
-            // 
+            //
             // lnkForgotPassword
-            // 
+            //
             lnkForgotPassword.BackColor = Color.Transparent;
+            lnkForgotPassword.Cursor = Cursors.Hand;
             lnkForgotPassword.Location = new Point(250, 450);
             lnkForgotPassword.Margin = new Padding(4, 4, 4, 4);
             lnkForgotPassword.Name = "lnkForgotPassword";
             lnkForgotPassword.Size = new Size(120, 22);
             lnkForgotPassword.TabIndex = 8;
             lnkForgotPassword.Text = "<div style=\"text-align:right;color:#E8714A;\">Forgot Password?</div>";
-            // 
+            lnkForgotPassword.Click += lnkForgotPassword_Click;
+            //
             // btnSignIn
-            // 
+            //
+            btnSignIn.BackColor = Color.Transparent;
             btnSignIn.BorderRadius = 12;
             btnSignIn.CustomizableEdges = customizableEdges15;
             btnSignIn.FillColor = Color.FromArgb(232, 113, 74);
             btnSignIn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSignIn.ForeColor = Color.White;
+            btnSignIn.HoverState.FillColor = Color.FromArgb(214, 96, 58);
             btnSignIn.Location = new Point(38, 495);
             btnSignIn.Margin = new Padding(4, 4, 4, 4);
             btnSignIn.Name = "btnSignIn";
@@ -279,19 +288,21 @@
             btnSignIn.TabIndex = 9;
             btnSignIn.Text = "Sign In";
             btnSignIn.Click += btnSignIn_Click;
-            // 
+            //
             // lnkCreateAccount
-            // 
+            //
             lnkCreateAccount.BackColor = Color.Transparent;
+            lnkCreateAccount.Cursor = Cursors.Hand;
             lnkCreateAccount.Location = new Point(38, 575);
             lnkCreateAccount.Margin = new Padding(4, 4, 4, 4);
             lnkCreateAccount.Name = "lnkCreateAccount";
             lnkCreateAccount.Size = new Size(268, 22);
             lnkCreateAccount.TabIndex = 10;
             lnkCreateAccount.Text = "<div style=\"text-align:center;color:#9A8880;\">Don't have an account? <a href=\"register\" style=\"color:#5EC8C4;font-weight:bold;\">Create Account</a></div>";
-            // 
+            lnkCreateAccount.Click += lnkCreateAccount_Click;
+            //
             // LoginForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1250, 875);

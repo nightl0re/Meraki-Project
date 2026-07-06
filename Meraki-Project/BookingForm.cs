@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Meraki_Project
 {
@@ -112,11 +111,10 @@ namespace Meraki_Project
                 Margin = new Padding(2),
                 Text = day.ToString(),
                 BorderRadius = 8,
-                BorderThickness = 0,
                 Font = new Font("Segoe UI", 8.5F, isSelected ? FontStyle.Bold : FontStyle.Regular),
                 Enabled = !isPast,
+                BackColor = Color.White,
             };
-            btn.ShadowDecoration.Enabled = false;
 
             if (isSelected)
             {
@@ -125,12 +123,12 @@ namespace Meraki_Project
             }
             else if (isPast)
             {
-                btn.FillColor = Color.Transparent;
+                btn.FillColor = Color.White;
                 btn.ForeColor = Color.FromArgb(200, 200, 200);
             }
             else
             {
-                btn.FillColor = Color.Transparent;
+                btn.FillColor = Color.White;
                 btn.ForeColor = Color.FromArgb(60, 50, 45);
                 btn.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             }
@@ -150,6 +148,7 @@ namespace Meraki_Project
             pnlTimeSlotsCard.Visible = _selectedDay.HasValue;
             if (!_selectedDay.HasValue) return;
 
+            flpTimeSlots.SuspendLayout();
             flpTimeSlots.Controls.Clear();
             foreach (var slot in TimeSlots)
             {
@@ -160,12 +159,11 @@ namespace Meraki_Project
                     Size = new Size(96, 34),
                     Margin = new Padding(4),
                     BorderRadius = 8,
-                    BorderThickness = 0,
                     FillColor = selected ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242),
                     ForeColor = selected ? Color.White : Color.FromArgb(60, 50, 45),
                     Font = new Font("Segoe UI", 8F, selected ? FontStyle.Bold : FontStyle.Regular),
+                    BackColor = Color.White,
                 };
-                btn.ShadowDecoration.Enabled = false;
                 btn.Click += (s, e) =>
                 {
                     _selectedTime = slot;
@@ -175,6 +173,7 @@ namespace Meraki_Project
                 };
                 flpTimeSlots.Controls.Add(btn);
             }
+            flpTimeSlots.ResumeLayout();
         }
 
         private void RenderDurations()
@@ -182,6 +181,7 @@ namespace Meraki_Project
             pnlDurationCard.Visible = _selectedTime != null;
             if (_selectedTime == null) return;
 
+            flpDurations.SuspendLayout();
             flpDurations.Controls.Clear();
             foreach (var d in Durations)
             {
@@ -192,12 +192,11 @@ namespace Meraki_Project
                     Size = new Size(110, 34),
                     Margin = new Padding(4),
                     BorderRadius = 8,
-                    BorderThickness = 0,
                     FillColor = selected ? Color.FromArgb(94, 200, 196) : Color.FromArgb(247, 245, 242),
                     ForeColor = selected ? Color.White : Color.FromArgb(60, 50, 45),
                     Font = new Font("Segoe UI", 8F, selected ? FontStyle.Bold : FontStyle.Regular),
+                    BackColor = Color.White,
                 };
-                btn.ShadowDecoration.Enabled = false;
                 btn.Click += (s, e) =>
                 {
                     _selectedDuration = d;
@@ -206,15 +205,18 @@ namespace Meraki_Project
                 };
                 flpDurations.Controls.Add(btn);
             }
+            flpDurations.ResumeLayout();
         }
 
         // ----- Babysitter choice (step 1) -----
 
         private void RenderBabysitterChoices()
         {
+            flpBabysitterSelect.SuspendLayout();
             flpBabysitterSelect.Controls.Clear();
             foreach (var b in MockData.Babysitters)
                 flpBabysitterSelect.Controls.Add(BuildBabysitterChoiceRow(b));
+            flpBabysitterSelect.ResumeLayout();
         }
 
         private Control BuildBabysitterChoiceRow(Babysitter b)
@@ -227,10 +229,10 @@ namespace Meraki_Project
                 Height = 90,
                 Margin = new Padding(0, 0, 0, 12),
                 BorderRadius = 14,
-                // Tint the card instead of drawing a border on selection - keeps this
-                // to the same FillColor/BackColor properties already used everywhere
-                // else in the project instead of relying on unverified border members.
+                // Tint the whole card when selected - uses only the FillColor/BackColor
+                // properties proven everywhere else in the project.
                 FillColor = selected ? Color.FromArgb(253, 238, 232) : Color.White,
+                BackColor = Color.Transparent,
                 Cursor = b.Available ? Cursors.Hand : Cursors.No,
             };
 
@@ -238,6 +240,7 @@ namespace Meraki_Project
             {
                 BorderRadius = 16,
                 FillColor = LightenColor(b.Color, 0.8),
+                BackColor = Color.Transparent,
                 Location = new Point(14, 17),
                 Size = new Size(56, 56),
             };
@@ -382,13 +385,13 @@ namespace Meraki_Project
             pnlStepBabysitter.Visible = false;
             pnlStepDetails.Visible = false;
             pnlStepConfirm.Visible = false;
-            btnBack.Visible = false;
-            btnContinue.Visible = false;
+            pnlBottomBar.Visible = false;
             lblPageTitle.Visible = false;
             lblPageSubtitle.Visible = false;
             SetWizardChromeVisible(false);
 
             pnlConfirmationScreen.Visible = true;
+            pnlConfirmationScreen.BringToFront();
         }
 
         private void SetWizardChromeVisible(bool visible)
@@ -406,7 +409,7 @@ namespace Meraki_Project
             pnlStepLine3.Visible = visible;
         }
 
-        private void btnBackToDashboard_Click(object sender, EventArgs e) => GoTo(new ParentDashboardForm());
+        private void btnBackToDashboard_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ParentDashboardForm());
 
         private void btnNewBooking_Click(object sender, EventArgs e)
         {
@@ -415,14 +418,14 @@ namespace Meraki_Project
             _selectedDuration = null;
             _selectedBabysitterId = null;
             _childCount = 1;
-            tbAddress.Clear();
-            tbNotes.Clear();
+            tbAddress.Text = "";
+            tbNotes.Text = "";
             lblChildCount.Text = "1";
 
             pnlConfirmationScreen.Visible = false;
             lblPageTitle.Visible = true;
             lblPageSubtitle.Visible = true;
-            btnContinue.Visible = true;
+            pnlBottomBar.Visible = true;
             SetWizardChromeVisible(true);
 
             _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -486,8 +489,8 @@ namespace Meraki_Project
             pnlStepConfirm.Visible = step == 3;
 
             btnBack.Visible = step > 0;
-            btnContinue.Location = new Point(btnBack.Visible ? 180 : 30, btnContinue.Location.Y);
-            btnContinue.Width = btnBack.Visible ? 1270 : 1420;
+            btnContinue.Location = new Point(step > 0 ? 190 : 30, 11);
+            btnContinue.Width = step > 0 ? 1280 : 1440;
             btnContinue.Text = step == 3 ? "Confirm Booking" : "Continue >";
 
             StyleStepCircle(pnlStepCircle1, lblStepNum1, lblStepCaption1, step >= 0, step == 0);
@@ -528,29 +531,21 @@ namespace Meraki_Project
 
         // ----- Navigation -----
 
-        private void btnNavParentHome_Click(object sender, EventArgs e) => GoTo(new ParentDashboardForm());
+        private void btnNavParentHome_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ParentDashboardForm());
 
-        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => GoTo(new SearchBabysitterForm());
+        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => Navigation.GoTo(this, new SearchBabysitterForm());
 
         private void btnNavBookNow_Click(object sender, EventArgs e)
         {
             // Already here - no-op.
         }
 
-        private void btnNavMyProfile_Click(object sender, EventArgs e) => GoTo(new ProfileForm());
+        private void btnNavMyProfile_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ProfileForm());
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            var login = new LoginForm();
-            login.Show();
-            this.Close();
-        }
-
-        private void GoTo(Form next)
-        {
-            next.Show();
-            this.Close();
+            Navigation.GoTo(this, new LoginForm());
         }
     }
 }

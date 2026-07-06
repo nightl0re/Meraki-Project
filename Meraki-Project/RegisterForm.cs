@@ -55,8 +55,6 @@ namespace Meraki_Project
         }
 
         // ----- Password strength meter -----
-        // Requires wiring tbPassword.TextChanged += tbPassword_TextChanged in the Designer
-        // (see notes) so the bar/label update as the user types.
 
         private void tbPassword_TextChanged(object sender, EventArgs e) => UpdatePasswordStrength();
 
@@ -66,11 +64,13 @@ namespace Meraki_Project
 
             if (strength == 0)
             {
-                pnlStrengthBar.Width = 0;
+                // Hide instead of shrinking to width 0 - safer with Guna's rounded corners.
+                pnlStrengthBar.Visible = false;
                 lblStrengthLabel.Text = "";
                 return;
             }
 
+            pnlStrengthBar.Visible = true;
             pnlStrengthBar.FillColor = StrengthColors[strength - 1];
             pnlStrengthBar.Width = StrengthBarFullWidth * strength / 4;
             lblStrengthLabel.Text = StrengthLabels[strength - 1];
@@ -142,8 +142,7 @@ namespace Meraki_Project
             }
 
             // TODO (Phase 2): INSERT a new row into `users` (and `babysitter_profiles`
-            // when role == Babysitter) with a PBKDF2 hash of `password` instead of
-            // just holding these values in memory for the session.
+            // when role == Babysitter) with a PBKDF2 hash of `password`.
             Session.CurrentUserEmail = email;
             Session.CurrentUserName = $"{firstName} {lastName}";
             Session.CurrentRole = _selectedRole;
@@ -152,15 +151,12 @@ namespace Meraki_Project
                 ? new BabysitterDashboardForm()
                 : new ParentDashboardForm();
 
-            next.Show();
-            this.Close();
+            Navigation.GoTo(this, next);
         }
 
         private void lnkSignIn_Click(object sender, EventArgs e)
         {
-            var login = new LoginForm();
-            login.Show();
-            this.Close();
+            Navigation.GoTo(this, new LoginForm());
         }
     }
 }

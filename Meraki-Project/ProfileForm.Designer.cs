@@ -17,486 +17,801 @@
 
         private void InitializeComponent()
         {
-            this.pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
-
-            // Navbar - every possible link is created here, but only the ones that
-            // match the signed-in role get added to pnlNavbar.Controls at runtime
-            // (see SetupNavbarForRole in ProfileForm.cs).
-            this.pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
-            this.picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.btnNavParentHome = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavBabysitterHome = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavFindBabysitter = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavBookNow = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavMyProfile = new Guna.UI2.WinForms.Guna2Button();
-            this.btnLogout = new Guna.UI2.WinForms.Guna2Button();
-
-            this.pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
-
-            // Header card
-            this.pnlProfileHeaderCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlBanner = new Guna.UI2.WinForms.Guna2GradientPanel();
-            this.pnlAvatarCircle = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblAvatarInitial = new System.Windows.Forms.Label();
-            this.picAvatarPhoto = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.btnChangePhoto = new Guna.UI2.WinForms.Guna2Button();
-            this.btnEditProfile = new Guna.UI2.WinForms.Guna2Button();
-            this.lblProfileName = new System.Windows.Forms.Label();
-            this.lblRoleBadge = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.lblRatingLocation = new System.Windows.Forms.Label();
-            this.pnlStatBookings = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStatBookingsValue = new System.Windows.Forms.Label();
-            this.lblStatBookingsLabel = new System.Windows.Forms.Label();
-            this.pnlStatExperience = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStatExperienceValue = new System.Windows.Forms.Label();
-            this.lblStatExperienceLabel = new System.Windows.Forms.Label();
-            this.pnlStatRate = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStatRateValue = new System.Windows.Forms.Label();
-            this.lblStatRateLabel = new System.Windows.Forms.Label();
-
-            // Tabs
-            this.pnlTabsBar = new Guna.UI2.WinForms.Guna2Panel();
-            this.btnTabProfile = new Guna.UI2.WinForms.Guna2Button();
-            this.btnTabReviews = new Guna.UI2.WinForms.Guna2Button();
-            this.btnTabSettings = new Guna.UI2.WinForms.Guna2Button();
-
-            // Profile tab
-            this.pnlTabProfile = new System.Windows.Forms.Panel();
-            this.pnlPersonalInfoCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblPersonalInfoTitle = new System.Windows.Forms.Label();
-            this.lblFirstNameCaption = new System.Windows.Forms.Label();
-            this.tbFirstName = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblLastNameCaption = new System.Windows.Forms.Label();
-            this.tbLastName = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblEmailCaption = new System.Windows.Forms.Label();
-            this.tbEmail = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblPhoneCaption = new System.Windows.Forms.Label();
-            this.tbPhone = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblLocationCaption = new System.Windows.Forms.Label();
-            this.tbLocation = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblBioCaption = new System.Windows.Forms.Label();
-            this.tbBio = new Guna.UI2.WinForms.Guna2TextBox();
-            this.pnlSkillsCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblSkillsTitle = new System.Windows.Forms.Label();
-            this.flpSkills = new System.Windows.Forms.FlowLayoutPanel();
-
-            // Reviews tab
-            this.pnlTabReviews = new System.Windows.Forms.Panel();
-            this.flpReviews = new System.Windows.Forms.FlowLayoutPanel();
-
-            // Settings tab
-            this.pnlTabSettings = new System.Windows.Forms.Panel();
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picAvatarPhoto)).BeginInit();
-            this.pnlPageBackground.SuspendLayout();
-            this.pnlNavbar.SuspendLayout();
-            this.pnlContent.SuspendLayout();
-            this.pnlProfileHeaderCard.SuspendLayout();
-            this.pnlAvatarCircle.SuspendLayout();
-            this.pnlStatBookings.SuspendLayout();
-            this.pnlStatExperience.SuspendLayout();
-            this.pnlStatRate.SuspendLayout();
-            this.pnlTabsBar.SuspendLayout();
-            this.pnlTabProfile.SuspendLayout();
-            this.pnlPersonalInfoCard.SuspendLayout();
-            this.pnlSkillsCard.SuspendLayout();
-            this.pnlTabReviews.SuspendLayout();
-            this.pnlTabSettings.SuspendLayout();
-            this.SuspendLayout();
-
+            pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
+            pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
+            picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
+            lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            btnNavParentHome = new Guna.UI2.WinForms.Guna2Button();
+            btnNavBabysitterHome = new Guna.UI2.WinForms.Guna2Button();
+            btnNavFindBabysitter = new Guna.UI2.WinForms.Guna2Button();
+            btnNavBookNow = new Guna.UI2.WinForms.Guna2Button();
+            btnNavMyProfile = new Guna.UI2.WinForms.Guna2Button();
+            btnLogout = new Guna.UI2.WinForms.Guna2Button();
+            pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
+            pnlProfileHeaderCard = new Guna.UI2.WinForms.Guna2Panel();
+            pnlBanner = new Guna.UI2.WinForms.Guna2GradientPanel();
+            pnlAvatarCircle = new Guna.UI2.WinForms.Guna2Panel();
+            lblAvatarInitial = new Label();
+            picAvatarPhoto = new Guna.UI2.WinForms.Guna2PictureBox();
+            btnChangePhoto = new Guna.UI2.WinForms.Guna2Button();
+            btnEditProfile = new Guna.UI2.WinForms.Guna2Button();
+            lblProfileName = new Label();
+            lblRoleBadge = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            lblRatingLocation = new Label();
+            pnlStatBookings = new Guna.UI2.WinForms.Guna2Panel();
+            lblStatBookingsValue = new Label();
+            lblStatBookingsLabel = new Label();
+            pnlStatExperience = new Guna.UI2.WinForms.Guna2Panel();
+            lblStatExperienceValue = new Label();
+            lblStatExperienceLabel = new Label();
+            pnlStatRate = new Guna.UI2.WinForms.Guna2Panel();
+            lblStatRateValue = new Label();
+            lblStatRateLabel = new Label();
+            pnlTabsBar = new Guna.UI2.WinForms.Guna2Panel();
+            btnTabProfile = new Guna.UI2.WinForms.Guna2Button();
+            btnTabReviews = new Guna.UI2.WinForms.Guna2Button();
+            btnTabSettings = new Guna.UI2.WinForms.Guna2Button();
+            pnlTabProfile = new Panel();
+            pnlPersonalInfoCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblPersonalInfoTitle = new Label();
+            lblFirstNameCaption = new Label();
+            tbFirstName = new Guna.UI2.WinForms.Guna2TextBox();
+            lblLastNameCaption = new Label();
+            tbLastName = new Guna.UI2.WinForms.Guna2TextBox();
+            lblEmailCaption = new Label();
+            tbEmail = new Guna.UI2.WinForms.Guna2TextBox();
+            lblPhoneCaption = new Label();
+            tbPhone = new Guna.UI2.WinForms.Guna2TextBox();
+            lblLocationCaption = new Label();
+            tbLocation = new Guna.UI2.WinForms.Guna2TextBox();
+            lblBioCaption = new Label();
+            tbBio = new Guna.UI2.WinForms.Guna2TextBox();
+            pnlSkillsCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblSkillsTitle = new Label();
+            flpSkills = new FlowLayoutPanel();
+            pnlTabReviews = new Panel();
+            flpReviews = new FlowLayoutPanel();
+            pnlTabSettings = new Panel();
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picAvatarPhoto).BeginInit();
+            pnlPageBackground.SuspendLayout();
+            pnlNavbar.SuspendLayout();
+            pnlContent.SuspendLayout();
+            pnlProfileHeaderCard.SuspendLayout();
+            pnlAvatarCircle.SuspendLayout();
+            pnlStatBookings.SuspendLayout();
+            pnlStatExperience.SuspendLayout();
+            pnlStatRate.SuspendLayout();
+            pnlTabsBar.SuspendLayout();
+            pnlTabProfile.SuspendLayout();
+            pnlPersonalInfoCard.SuspendLayout();
+            pnlSkillsCard.SuspendLayout();
+            pnlTabReviews.SuspendLayout();
+            SuspendLayout();
             //
             // pnlPageBackground
             //
-            this.pnlPageBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPageBackground.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlPageBackground.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlPageBackground.Name = "pnlPageBackground";
-            this.pnlPageBackground.Size = new System.Drawing.Size(1500, 900);
-            this.pnlPageBackground.Controls.Add(this.pnlContent);
-            this.pnlPageBackground.Controls.Add(this.pnlNavbar);
-
+            pnlPageBackground.Controls.Add(pnlContent);
+            pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.Dock = DockStyle.Fill;
+            pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
+            pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlPageBackground.Location = new Point(0, 0);
+            pnlPageBackground.Name = "pnlPageBackground";
+            pnlPageBackground.Size = new Size(1500, 900);
+            pnlPageBackground.TabIndex = 0;
             //
-            // pnlNavbar (buttons styled here, added to Controls at runtime per role)
+            // pnlNavbar (only logo + brand added here; role-specific nav buttons and
+            // Logout are positioned and added at runtime by SetupNavbarForRole)
             //
-            this.pnlNavbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNavbar.FillColor = System.Drawing.Color.White;
-            this.pnlNavbar.BackColor = System.Drawing.Color.White;
-            this.pnlNavbar.Name = "pnlNavbar";
-            this.pnlNavbar.Size = new System.Drawing.Size(1500, 80);
-
-            this.picNavLogo.BorderRadius = 10;
-            this.picNavLogo.Image = global::Meraki_Project.Properties.Resources.meraki_logo;
-            this.picNavLogo.Location = new System.Drawing.Point(25, 15);
-            this.picNavLogo.Name = "picNavLogo";
-            this.picNavLogo.Size = new System.Drawing.Size(50, 50);
-            this.picNavLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-
-            this.lblNavBrand.Location = new System.Drawing.Point(85, 25);
-            this.lblNavBrand.Name = "lblNavBrand";
-            this.lblNavBrand.Size = new System.Drawing.Size(90, 30);
-            this.lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
-
-            SetupNavButton(this.btnNavParentHome, "Parent Home", false);
-            this.btnNavParentHome.Click += new System.EventHandler(this.btnNavParentHome_Click);
-            SetupNavButton(this.btnNavBabysitterHome, "Babysitter Home", false);
-            this.btnNavBabysitterHome.Click += new System.EventHandler(this.btnNavBabysitterHome_Click);
-            SetupNavButton(this.btnNavFindBabysitter, "Find a Babysitter", false);
-            this.btnNavFindBabysitter.Click += new System.EventHandler(this.btnNavFindBabysitter_Click);
-            SetupNavButton(this.btnNavBookNow, "Book Now", false);
-            this.btnNavBookNow.Click += new System.EventHandler(this.btnNavBookNow_Click);
-            SetupNavButton(this.btnNavMyProfile, "My Profile", true);
-            this.btnNavMyProfile.Click += new System.EventHandler(this.btnNavMyProfile_Click);
-
-            this.btnLogout.BorderRadius = 8;
-            this.btnLogout.BorderThickness = 0;
-            this.btnLogout.ShadowDecoration.Enabled = false;
-            this.btnLogout.FillColor = System.Drawing.Color.Transparent;
-            this.btnLogout.BackColor = System.Drawing.Color.White;
-            this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(224, 90, 90);
-            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.btnLogout.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 232, 232);
-            this.btnLogout.Location = new System.Drawing.Point(1350, 18);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(125, 45);
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-
-            this.pnlNavbar.Controls.Add(this.picNavLogo);
-            this.pnlNavbar.Controls.Add(this.lblNavBrand);
-            // Role-relevant nav buttons + btnLogout are added in ProfileForm.cs (SetupNavbarForRole).
-
+            pnlNavbar.BackColor = Color.Transparent;
+            pnlNavbar.Controls.Add(picNavLogo);
+            pnlNavbar.Controls.Add(lblNavBrand);
+            pnlNavbar.Dock = DockStyle.Top;
+            pnlNavbar.FillColor = Color.White;
+            pnlNavbar.Location = new Point(0, 0);
+            pnlNavbar.Name = "pnlNavbar";
+            pnlNavbar.Size = new Size(1500, 80);
+            pnlNavbar.TabIndex = 1;
+            //
+            // picNavLogo
+            //
+            picNavLogo.BorderRadius = 10;
+            picNavLogo.Image = Properties.Resources.meraki_logo;
+            picNavLogo.ImageRotate = 0F;
+            picNavLogo.Location = new Point(25, 15);
+            picNavLogo.Name = "picNavLogo";
+            picNavLogo.Size = new Size(50, 50);
+            picNavLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picNavLogo.TabIndex = 0;
+            picNavLogo.TabStop = false;
+            //
+            // lblNavBrand
+            //
+            lblNavBrand.BackColor = Color.Transparent;
+            lblNavBrand.Location = new Point(85, 25);
+            lblNavBrand.Name = "lblNavBrand";
+            lblNavBrand.Size = new Size(90, 30);
+            lblNavBrand.TabIndex = 1;
+            lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
+            //
+            // btnNavParentHome
+            //
+            btnNavParentHome.BackColor = Color.White;
+            btnNavParentHome.BorderRadius = 8;
+            btnNavParentHome.FillColor = Color.Transparent;
+            btnNavParentHome.Font = new Font("Segoe UI", 8.5F);
+            btnNavParentHome.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavParentHome.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavParentHome.Location = new Point(275, 18);
+            btnNavParentHome.Name = "btnNavParentHome";
+            btnNavParentHome.Size = new Size(138, 45);
+            btnNavParentHome.TabIndex = 2;
+            btnNavParentHome.Text = "Parent Home";
+            btnNavParentHome.Click += btnNavParentHome_Click;
+            //
+            // btnNavBabysitterHome
+            //
+            btnNavBabysitterHome.BackColor = Color.White;
+            btnNavBabysitterHome.BorderRadius = 8;
+            btnNavBabysitterHome.FillColor = Color.Transparent;
+            btnNavBabysitterHome.Font = new Font("Segoe UI", 8.5F);
+            btnNavBabysitterHome.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavBabysitterHome.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavBabysitterHome.Location = new Point(275, 18);
+            btnNavBabysitterHome.Name = "btnNavBabysitterHome";
+            btnNavBabysitterHome.Size = new Size(160, 45);
+            btnNavBabysitterHome.TabIndex = 3;
+            btnNavBabysitterHome.Text = "Babysitter Home";
+            btnNavBabysitterHome.Click += btnNavBabysitterHome_Click;
+            //
+            // btnNavFindBabysitter
+            //
+            btnNavFindBabysitter.BackColor = Color.White;
+            btnNavFindBabysitter.BorderRadius = 8;
+            btnNavFindBabysitter.FillColor = Color.Transparent;
+            btnNavFindBabysitter.Font = new Font("Segoe UI", 8.5F);
+            btnNavFindBabysitter.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavFindBabysitter.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavFindBabysitter.Location = new Point(421, 18);
+            btnNavFindBabysitter.Name = "btnNavFindBabysitter";
+            btnNavFindBabysitter.Size = new Size(162, 45);
+            btnNavFindBabysitter.TabIndex = 4;
+            btnNavFindBabysitter.Text = "Find a Babysitter";
+            btnNavFindBabysitter.Click += btnNavFindBabysitter_Click;
+            //
+            // btnNavBookNow
+            //
+            btnNavBookNow.BackColor = Color.White;
+            btnNavBookNow.BorderRadius = 8;
+            btnNavBookNow.FillColor = Color.Transparent;
+            btnNavBookNow.Font = new Font("Segoe UI", 8.5F);
+            btnNavBookNow.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavBookNow.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavBookNow.Location = new Point(591, 18);
+            btnNavBookNow.Name = "btnNavBookNow";
+            btnNavBookNow.Size = new Size(125, 45);
+            btnNavBookNow.TabIndex = 5;
+            btnNavBookNow.Text = "Book Now";
+            btnNavBookNow.Click += btnNavBookNow_Click;
+            //
+            // btnNavMyProfile (active page)
+            //
+            btnNavMyProfile.BackColor = Color.White;
+            btnNavMyProfile.BorderRadius = 8;
+            btnNavMyProfile.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavMyProfile.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            btnNavMyProfile.ForeColor = Color.FromArgb(232, 113, 74);
+            btnNavMyProfile.HoverState.FillColor = Color.FromArgb(250, 226, 216);
+            btnNavMyProfile.Location = new Point(724, 18);
+            btnNavMyProfile.Name = "btnNavMyProfile";
+            btnNavMyProfile.Size = new Size(125, 45);
+            btnNavMyProfile.TabIndex = 6;
+            btnNavMyProfile.Text = "My Profile";
+            btnNavMyProfile.Click += btnNavMyProfile_Click;
+            //
+            // btnLogout
+            //
+            btnLogout.BackColor = Color.White;
+            btnLogout.BorderRadius = 8;
+            btnLogout.FillColor = Color.Transparent;
+            btnLogout.Font = new Font("Segoe UI", 8.5F);
+            btnLogout.ForeColor = Color.FromArgb(224, 90, 90);
+            btnLogout.HoverState.FillColor = Color.FromArgb(253, 232, 232);
+            btnLogout.Location = new Point(1350, 18);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(125, 45);
+            btnLogout.TabIndex = 7;
+            btnLogout.Text = "Logout";
+            btnLogout.Click += btnLogout_Click;
             //
             // pnlContent
             //
-            this.pnlContent.AutoScroll = true;
-            this.pnlContent.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlContent.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlContent.Location = new System.Drawing.Point(0, 80);
-            this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1500, 820);
-
+            pnlContent.AutoScroll = true;
+            pnlContent.BackColor = Color.Transparent;
+            pnlContent.Controls.Add(pnlProfileHeaderCard);
+            pnlContent.Controls.Add(pnlTabsBar);
+            pnlContent.Controls.Add(pnlTabProfile);
+            pnlContent.Controls.Add(pnlTabReviews);
+            pnlContent.Controls.Add(pnlTabSettings);
+            pnlContent.FillColor = Color.FromArgb(253, 238, 232);
+            pnlContent.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlContent.Location = new Point(0, 80);
+            pnlContent.Name = "pnlContent";
+            pnlContent.Size = new Size(1500, 820);
+            pnlContent.TabIndex = 0;
             //
             // pnlProfileHeaderCard
             //
-            this.pnlProfileHeaderCard.BorderRadius = 16;
-            this.pnlProfileHeaderCard.FillColor = System.Drawing.Color.White;
-            this.pnlProfileHeaderCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlProfileHeaderCard.Location = new System.Drawing.Point(30, 30);
-            this.pnlProfileHeaderCard.Name = "pnlProfileHeaderCard";
-            this.pnlProfileHeaderCard.Size = new System.Drawing.Size(900, 280);
-
-            this.pnlBanner.BorderRadius = 16;
-            this.pnlBanner.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.pnlBanner.FillColor2 = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.pnlBanner.Location = new System.Drawing.Point(0, 0);
-            this.pnlBanner.Size = new System.Drawing.Size(900, 90);
-
-            this.pnlAvatarCircle.BorderRadius = 45;
-            this.pnlAvatarCircle.FillColor = System.Drawing.Color.FromArgb(222, 245, 244);
-            this.pnlAvatarCircle.Location = new System.Drawing.Point(24, 60);
-            this.pnlAvatarCircle.Size = new System.Drawing.Size(90, 90);
-
-            this.lblAvatarInitial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAvatarInitial.Text = "E";
-            this.lblAvatarInitial.ForeColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.lblAvatarInitial.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
-            this.lblAvatarInitial.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblAvatarInitial.BackColor = System.Drawing.Color.Transparent;
-            this.pnlAvatarCircle.Controls.Add(this.lblAvatarInitial);
-
-            this.picAvatarPhoto.BorderRadius = 45;
-            this.picAvatarPhoto.Location = new System.Drawing.Point(24, 60);
-            this.picAvatarPhoto.Size = new System.Drawing.Size(90, 90);
-            this.picAvatarPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picAvatarPhoto.Visible = false;
-
-            this.btnChangePhoto.BorderRadius = 15;
-            this.btnChangePhoto.BorderThickness = 0;
-            this.btnChangePhoto.ShadowDecoration.Enabled = false;
-            this.btnChangePhoto.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnChangePhoto.ForeColor = System.Drawing.Color.White;
-            this.btnChangePhoto.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnChangePhoto.Location = new System.Drawing.Point(90, 128);
-            this.btnChangePhoto.Size = new System.Drawing.Size(30, 30);
-            this.btnChangePhoto.Text = "\U0001F4F7";
-            this.btnChangePhoto.Click += new System.EventHandler(this.btnChangePhoto_Click);
-
-            this.btnEditProfile.BorderRadius = 10;
-            this.btnEditProfile.BorderThickness = 0;
-            this.btnEditProfile.ShadowDecoration.Enabled = false;
-            this.btnEditProfile.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.btnEditProfile.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.btnEditProfile.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnEditProfile.Location = new System.Drawing.Point(760, 100);
-            this.btnEditProfile.Size = new System.Drawing.Size(120, 36);
-            this.btnEditProfile.Text = "Edit Profile";
-            this.btnEditProfile.Click += new System.EventHandler(this.btnEditProfile_Click);
-
-            this.lblProfileName.Location = new System.Drawing.Point(126, 100);
-            this.lblProfileName.Size = new System.Drawing.Size(300, 28);
-            this.lblProfileName.Text = "Emma Thompson";
-            this.lblProfileName.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblProfileName.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblProfileName.BackColor = System.Drawing.Color.Transparent;
-
-            this.lblRoleBadge.Location = new System.Drawing.Point(430, 104);
-            this.lblRoleBadge.Size = new System.Drawing.Size(100, 24);
-            this.lblRoleBadge.Text = "<div style=\"background:#DEF5F4;color:#3CA09C;border-radius:10px;padding:2px 10px;font-weight:bold;\">Babysitter</div>";
-
-            this.lblRatingLocation.Location = new System.Drawing.Point(126, 132);
-            this.lblRatingLocation.Size = new System.Drawing.Size(400, 22);
-            this.lblRatingLocation.Text = "★ 4.9 (47 reviews)    \U0001F4CD Downtown, New York";
-            this.lblRatingLocation.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRatingLocation.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblRatingLocation.BackColor = System.Drawing.Color.Transparent;
-
-            SetupHeaderStatCard(this.pnlStatBookings, this.lblStatBookingsValue, this.lblStatBookingsLabel, 126, "47", "Bookings");
-            SetupHeaderStatCard(this.pnlStatExperience, this.lblStatExperienceValue, this.lblStatExperienceLabel, 356, "3yr", "Experience");
-            SetupHeaderStatCard(this.pnlStatRate, this.lblStatRateValue, this.lblStatRateLabel, 586, "$18/hr", "Rate");
-
-            this.pnlProfileHeaderCard.Controls.Add(this.pnlBanner);
-            this.pnlProfileHeaderCard.Controls.Add(this.pnlAvatarCircle);
-            this.pnlProfileHeaderCard.Controls.Add(this.picAvatarPhoto);
-            this.pnlProfileHeaderCard.Controls.Add(this.btnChangePhoto);
-            this.pnlProfileHeaderCard.Controls.Add(this.btnEditProfile);
-            this.pnlProfileHeaderCard.Controls.Add(this.lblProfileName);
-            this.pnlProfileHeaderCard.Controls.Add(this.lblRoleBadge);
-            this.pnlProfileHeaderCard.Controls.Add(this.lblRatingLocation);
-            this.pnlProfileHeaderCard.Controls.Add(this.pnlStatBookings);
-            this.pnlProfileHeaderCard.Controls.Add(this.pnlStatExperience);
-            this.pnlProfileHeaderCard.Controls.Add(this.pnlStatRate);
-
+            pnlProfileHeaderCard.BackColor = Color.Transparent;
+            pnlProfileHeaderCard.BorderRadius = 16;
+            pnlProfileHeaderCard.Controls.Add(pnlBanner);
+            pnlProfileHeaderCard.Controls.Add(pnlAvatarCircle);
+            pnlProfileHeaderCard.Controls.Add(picAvatarPhoto);
+            pnlProfileHeaderCard.Controls.Add(btnChangePhoto);
+            pnlProfileHeaderCard.Controls.Add(btnEditProfile);
+            pnlProfileHeaderCard.Controls.Add(lblProfileName);
+            pnlProfileHeaderCard.Controls.Add(lblRoleBadge);
+            pnlProfileHeaderCard.Controls.Add(lblRatingLocation);
+            pnlProfileHeaderCard.Controls.Add(pnlStatBookings);
+            pnlProfileHeaderCard.Controls.Add(pnlStatExperience);
+            pnlProfileHeaderCard.Controls.Add(pnlStatRate);
+            pnlProfileHeaderCard.FillColor = Color.White;
+            pnlProfileHeaderCard.Location = new Point(30, 30);
+            pnlProfileHeaderCard.Name = "pnlProfileHeaderCard";
+            pnlProfileHeaderCard.Size = new Size(900, 270);
+            pnlProfileHeaderCard.TabIndex = 0;
+            //
+            // pnlBanner
+            //
+            pnlBanner.BackColor = Color.Transparent;
+            pnlBanner.BorderRadius = 16;
+            pnlBanner.FillColor = Color.FromArgb(94, 200, 196);
+            pnlBanner.FillColor2 = Color.FromArgb(232, 113, 74);
+            pnlBanner.Location = new Point(0, 0);
+            pnlBanner.Name = "pnlBanner";
+            pnlBanner.Size = new Size(900, 90);
+            pnlBanner.TabIndex = 0;
+            //
+            // pnlAvatarCircle (sits BELOW the banner - overlapping siblings can't be
+            // rendered transparently in WinForms, so we avoid the overlap entirely)
+            //
+            pnlAvatarCircle.BackColor = Color.White;
+            pnlAvatarCircle.BorderRadius = 34;
+            pnlAvatarCircle.Controls.Add(lblAvatarInitial);
+            pnlAvatarCircle.FillColor = Color.FromArgb(222, 245, 244);
+            pnlAvatarCircle.Location = new Point(24, 104);
+            pnlAvatarCircle.Name = "pnlAvatarCircle";
+            pnlAvatarCircle.Size = new Size(70, 70);
+            pnlAvatarCircle.TabIndex = 1;
+            //
+            // lblAvatarInitial
+            //
+            lblAvatarInitial.BackColor = Color.Transparent;
+            lblAvatarInitial.Dock = DockStyle.Fill;
+            lblAvatarInitial.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblAvatarInitial.ForeColor = Color.FromArgb(94, 200, 196);
+            lblAvatarInitial.Location = new Point(0, 0);
+            lblAvatarInitial.Name = "lblAvatarInitial";
+            lblAvatarInitial.Size = new Size(70, 70);
+            lblAvatarInitial.TabIndex = 0;
+            lblAvatarInitial.Text = "U";
+            lblAvatarInitial.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // picAvatarPhoto (shown instead of the initial once a photo is chosen)
+            //
+            picAvatarPhoto.BackColor = Color.White;
+            picAvatarPhoto.BorderRadius = 34;
+            picAvatarPhoto.ImageRotate = 0F;
+            picAvatarPhoto.Location = new Point(24, 104);
+            picAvatarPhoto.Name = "picAvatarPhoto";
+            picAvatarPhoto.Size = new Size(70, 70);
+            picAvatarPhoto.SizeMode = PictureBoxSizeMode.StretchImage;
+            picAvatarPhoto.TabIndex = 2;
+            picAvatarPhoto.TabStop = false;
+            picAvatarPhoto.Visible = false;
+            //
+            // btnChangePhoto
+            //
+            btnChangePhoto.BackColor = Color.White;
+            btnChangePhoto.BorderRadius = 14;
+            btnChangePhoto.FillColor = Color.FromArgb(232, 113, 74);
+            btnChangePhoto.Font = new Font("Segoe UI", 9F);
+            btnChangePhoto.ForeColor = Color.White;
+            btnChangePhoto.Location = new Point(24, 182);
+            btnChangePhoto.Name = "btnChangePhoto";
+            btnChangePhoto.Size = new Size(70, 28);
+            btnChangePhoto.TabIndex = 3;
+            btnChangePhoto.Text = "📷";
+            btnChangePhoto.Click += btnChangePhoto_Click;
+            //
+            // btnEditProfile
+            //
+            btnEditProfile.BackColor = Color.White;
+            btnEditProfile.BorderRadius = 10;
+            btnEditProfile.FillColor = Color.FromArgb(247, 245, 242);
+            btnEditProfile.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnEditProfile.ForeColor = Color.FromArgb(60, 50, 45);
+            btnEditProfile.Location = new Point(760, 104);
+            btnEditProfile.Name = "btnEditProfile";
+            btnEditProfile.Size = new Size(120, 36);
+            btnEditProfile.TabIndex = 4;
+            btnEditProfile.Text = "Edit Profile";
+            btnEditProfile.Click += btnEditProfile_Click;
+            //
+            // lblProfileName
+            //
+            lblProfileName.BackColor = Color.Transparent;
+            lblProfileName.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblProfileName.ForeColor = Color.FromArgb(60, 50, 45);
+            lblProfileName.Location = new Point(110, 104);
+            lblProfileName.Name = "lblProfileName";
+            lblProfileName.Size = new Size(320, 26);
+            lblProfileName.TabIndex = 5;
+            lblProfileName.Text = "Emma Thompson";
+            //
+            // lblRoleBadge
+            //
+            lblRoleBadge.BackColor = Color.Transparent;
+            lblRoleBadge.Location = new Point(440, 106);
+            lblRoleBadge.Name = "lblRoleBadge";
+            lblRoleBadge.Size = new Size(110, 24);
+            lblRoleBadge.TabIndex = 6;
+            lblRoleBadge.Text = "<div style=\"background:#DEF5F4;color:#3CA09C;border-radius:10px;padding:2px 10px;font-weight:bold;\">Babysitter</div>";
+            //
+            // lblRatingLocation
+            //
+            lblRatingLocation.BackColor = Color.Transparent;
+            lblRatingLocation.Font = new Font("Segoe UI", 8.5F);
+            lblRatingLocation.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRatingLocation.Location = new Point(110, 134);
+            lblRatingLocation.Name = "lblRatingLocation";
+            lblRatingLocation.Size = new Size(430, 20);
+            lblRatingLocation.TabIndex = 7;
+            lblRatingLocation.Text = "★ 4.9 (47 reviews)    📍 Downtown, New York";
+            //
+            // pnlStatBookings
+            //
+            pnlStatBookings.BackColor = Color.White;
+            pnlStatBookings.BorderRadius = 12;
+            pnlStatBookings.Controls.Add(lblStatBookingsValue);
+            pnlStatBookings.Controls.Add(lblStatBookingsLabel);
+            pnlStatBookings.FillColor = Color.FromArgb(253, 238, 232);
+            pnlStatBookings.Location = new Point(110, 178);
+            pnlStatBookings.Name = "pnlStatBookings";
+            pnlStatBookings.Size = new Size(220, 74);
+            pnlStatBookings.TabIndex = 8;
+            //
+            // lblStatBookingsValue
+            //
+            lblStatBookingsValue.BackColor = Color.Transparent;
+            lblStatBookingsValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblStatBookingsValue.ForeColor = Color.FromArgb(232, 113, 74);
+            lblStatBookingsValue.Location = new Point(10, 10);
+            lblStatBookingsValue.Name = "lblStatBookingsValue";
+            lblStatBookingsValue.Size = new Size(200, 26);
+            lblStatBookingsValue.TabIndex = 0;
+            lblStatBookingsValue.Text = "47";
+            //
+            // lblStatBookingsLabel
+            //
+            lblStatBookingsLabel.BackColor = Color.Transparent;
+            lblStatBookingsLabel.Font = new Font("Segoe UI", 8F);
+            lblStatBookingsLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStatBookingsLabel.Location = new Point(10, 40);
+            lblStatBookingsLabel.Name = "lblStatBookingsLabel";
+            lblStatBookingsLabel.Size = new Size(200, 20);
+            lblStatBookingsLabel.TabIndex = 1;
+            lblStatBookingsLabel.Text = "Bookings";
+            //
+            // pnlStatExperience
+            //
+            pnlStatExperience.BackColor = Color.White;
+            pnlStatExperience.BorderRadius = 12;
+            pnlStatExperience.Controls.Add(lblStatExperienceValue);
+            pnlStatExperience.Controls.Add(lblStatExperienceLabel);
+            pnlStatExperience.FillColor = Color.FromArgb(253, 238, 232);
+            pnlStatExperience.Location = new Point(350, 178);
+            pnlStatExperience.Name = "pnlStatExperience";
+            pnlStatExperience.Size = new Size(220, 74);
+            pnlStatExperience.TabIndex = 9;
+            //
+            // lblStatExperienceValue
+            //
+            lblStatExperienceValue.BackColor = Color.Transparent;
+            lblStatExperienceValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblStatExperienceValue.ForeColor = Color.FromArgb(232, 113, 74);
+            lblStatExperienceValue.Location = new Point(10, 10);
+            lblStatExperienceValue.Name = "lblStatExperienceValue";
+            lblStatExperienceValue.Size = new Size(200, 26);
+            lblStatExperienceValue.TabIndex = 0;
+            lblStatExperienceValue.Text = "3yr";
+            //
+            // lblStatExperienceLabel
+            //
+            lblStatExperienceLabel.BackColor = Color.Transparent;
+            lblStatExperienceLabel.Font = new Font("Segoe UI", 8F);
+            lblStatExperienceLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStatExperienceLabel.Location = new Point(10, 40);
+            lblStatExperienceLabel.Name = "lblStatExperienceLabel";
+            lblStatExperienceLabel.Size = new Size(200, 20);
+            lblStatExperienceLabel.TabIndex = 1;
+            lblStatExperienceLabel.Text = "Experience";
+            //
+            // pnlStatRate
+            //
+            pnlStatRate.BackColor = Color.White;
+            pnlStatRate.BorderRadius = 12;
+            pnlStatRate.Controls.Add(lblStatRateValue);
+            pnlStatRate.Controls.Add(lblStatRateLabel);
+            pnlStatRate.FillColor = Color.FromArgb(253, 238, 232);
+            pnlStatRate.Location = new Point(590, 178);
+            pnlStatRate.Name = "pnlStatRate";
+            pnlStatRate.Size = new Size(220, 74);
+            pnlStatRate.TabIndex = 10;
+            //
+            // lblStatRateValue
+            //
+            lblStatRateValue.BackColor = Color.Transparent;
+            lblStatRateValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblStatRateValue.ForeColor = Color.FromArgb(232, 113, 74);
+            lblStatRateValue.Location = new Point(10, 10);
+            lblStatRateValue.Name = "lblStatRateValue";
+            lblStatRateValue.Size = new Size(200, 26);
+            lblStatRateValue.TabIndex = 0;
+            lblStatRateValue.Text = "$18/hr";
+            //
+            // lblStatRateLabel
+            //
+            lblStatRateLabel.BackColor = Color.Transparent;
+            lblStatRateLabel.Font = new Font("Segoe UI", 8F);
+            lblStatRateLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStatRateLabel.Location = new Point(10, 40);
+            lblStatRateLabel.Name = "lblStatRateLabel";
+            lblStatRateLabel.Size = new Size(200, 20);
+            lblStatRateLabel.TabIndex = 1;
+            lblStatRateLabel.Text = "Rate";
             //
             // pnlTabsBar
             //
-            this.pnlTabsBar.BorderRadius = 16;
-            this.pnlTabsBar.FillColor = System.Drawing.Color.White;
-            this.pnlTabsBar.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlTabsBar.Location = new System.Drawing.Point(30, 320);
-            this.pnlTabsBar.Name = "pnlTabsBar";
-            this.pnlTabsBar.Size = new System.Drawing.Size(900, 52);
-
-            SetupTabButton(this.btnTabProfile, "Profile", 4, true);
-            this.btnTabProfile.Click += new System.EventHandler(this.btnTabProfile_Click);
-            SetupTabButton(this.btnTabReviews, "Reviews", 304, false);
-            this.btnTabReviews.Click += new System.EventHandler(this.btnTabReviews_Click);
-            SetupTabButton(this.btnTabSettings, "Settings", 604, false);
-            this.btnTabSettings.Click += new System.EventHandler(this.btnTabSettings_Click);
-
-            this.pnlTabsBar.Controls.Add(this.btnTabProfile);
-            this.pnlTabsBar.Controls.Add(this.btnTabReviews);
-            this.pnlTabsBar.Controls.Add(this.btnTabSettings);
-
+            pnlTabsBar.BackColor = Color.Transparent;
+            pnlTabsBar.BorderRadius = 16;
+            pnlTabsBar.Controls.Add(btnTabProfile);
+            pnlTabsBar.Controls.Add(btnTabReviews);
+            pnlTabsBar.Controls.Add(btnTabSettings);
+            pnlTabsBar.FillColor = Color.White;
+            pnlTabsBar.Location = new Point(30, 316);
+            pnlTabsBar.Name = "pnlTabsBar";
+            pnlTabsBar.Size = new Size(900, 52);
+            pnlTabsBar.TabIndex = 1;
+            //
+            // btnTabProfile
+            //
+            btnTabProfile.BackColor = Color.White;
+            btnTabProfile.BorderRadius = 12;
+            btnTabProfile.FillColor = Color.FromArgb(232, 113, 74);
+            btnTabProfile.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnTabProfile.ForeColor = Color.White;
+            btnTabProfile.Location = new Point(4, 4);
+            btnTabProfile.Name = "btnTabProfile";
+            btnTabProfile.Size = new Size(292, 44);
+            btnTabProfile.TabIndex = 0;
+            btnTabProfile.Text = "Profile";
+            btnTabProfile.Click += btnTabProfile_Click;
+            //
+            // btnTabReviews
+            //
+            btnTabReviews.BackColor = Color.White;
+            btnTabReviews.BorderRadius = 12;
+            btnTabReviews.FillColor = Color.Transparent;
+            btnTabReviews.Font = new Font("Segoe UI", 9.5F);
+            btnTabReviews.ForeColor = Color.FromArgb(154, 136, 128);
+            btnTabReviews.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnTabReviews.Location = new Point(304, 4);
+            btnTabReviews.Name = "btnTabReviews";
+            btnTabReviews.Size = new Size(292, 44);
+            btnTabReviews.TabIndex = 1;
+            btnTabReviews.Text = "Reviews";
+            btnTabReviews.Click += btnTabReviews_Click;
+            //
+            // btnTabSettings
+            //
+            btnTabSettings.BackColor = Color.White;
+            btnTabSettings.BorderRadius = 12;
+            btnTabSettings.FillColor = Color.Transparent;
+            btnTabSettings.Font = new Font("Segoe UI", 9.5F);
+            btnTabSettings.ForeColor = Color.FromArgb(154, 136, 128);
+            btnTabSettings.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnTabSettings.Location = new Point(604, 4);
+            btnTabSettings.Name = "btnTabSettings";
+            btnTabSettings.Size = new Size(292, 44);
+            btnTabSettings.TabIndex = 2;
+            btnTabSettings.Text = "Settings";
+            btnTabSettings.Click += btnTabSettings_Click;
             //
             // pnlTabProfile
             //
-            this.pnlTabProfile.Location = new System.Drawing.Point(30, 384);
-            this.pnlTabProfile.Size = new System.Drawing.Size(900, 600);
-            this.pnlTabProfile.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlPersonalInfoCard.BorderRadius = 16;
-            this.pnlPersonalInfoCard.FillColor = System.Drawing.Color.White;
-            this.pnlPersonalInfoCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlPersonalInfoCard.Location = new System.Drawing.Point(0, 0);
-            this.pnlPersonalInfoCard.Size = new System.Drawing.Size(900, 400);
-
-            this.lblPersonalInfoTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblPersonalInfoTitle.Size = new System.Drawing.Size(300, 24);
-            this.lblPersonalInfoTitle.Text = "Personal Information";
-            this.lblPersonalInfoTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPersonalInfoTitle.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
-            this.lblPersonalInfoTitle.BackColor = System.Drawing.Color.Transparent;
-
-            SetupFieldLabel(this.lblFirstNameCaption, "First Name", 16, 52);
-            SetupFieldBox(this.tbFirstName, 16, 74, 410);
-            SetupFieldLabel(this.lblLastNameCaption, "Last Name", 436, 52);
-            SetupFieldBox(this.tbLastName, 436, 74, 448);
-            SetupFieldLabel(this.lblEmailCaption, "Email", 16, 130);
-            SetupFieldBox(this.tbEmail, 16, 152, 868);
-            SetupFieldLabel(this.lblPhoneCaption, "Phone", 16, 208);
-            SetupFieldBox(this.tbPhone, 16, 230, 868);
-            SetupFieldLabel(this.lblLocationCaption, "Location", 16, 286);
-            SetupFieldBox(this.tbLocation, 16, 308, 868);
-            SetupFieldLabel(this.lblBioCaption, "Bio", 16, 364);
-            this.tbBio.Multiline = true;
-            SetupFieldBox(this.tbBio, 16, 386, 868, 60);
-
-            this.pnlPersonalInfoCard.Controls.Add(this.lblPersonalInfoTitle);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblFirstNameCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbFirstName);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblLastNameCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbLastName);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblEmailCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbEmail);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblPhoneCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbPhone);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblLocationCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbLocation);
-            this.pnlPersonalInfoCard.Controls.Add(this.lblBioCaption);
-            this.pnlPersonalInfoCard.Controls.Add(this.tbBio);
-
-            this.pnlSkillsCard.BorderRadius = 16;
-            this.pnlSkillsCard.FillColor = System.Drawing.Color.White;
-            this.pnlSkillsCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlSkillsCard.Location = new System.Drawing.Point(0, 416);
-            this.pnlSkillsCard.Size = new System.Drawing.Size(900, 150);
-
-            this.lblSkillsTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblSkillsTitle.Size = new System.Drawing.Size(300, 22);
-            this.lblSkillsTitle.Text = "Skills & Specializations";
-            this.lblSkillsTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblSkillsTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblSkillsTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.flpSkills.Location = new System.Drawing.Point(12, 46);
-            this.flpSkills.Size = new System.Drawing.Size(876, 96);
-            this.flpSkills.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this.flpSkills.WrapContents = true;
-            this.flpSkills.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlSkillsCard.Controls.Add(this.lblSkillsTitle);
-            this.pnlSkillsCard.Controls.Add(this.flpSkills);
-
-            this.pnlTabProfile.Controls.Add(this.pnlPersonalInfoCard);
-            this.pnlTabProfile.Controls.Add(this.pnlSkillsCard);
-
+            pnlTabProfile.BackColor = Color.Transparent;
+            pnlTabProfile.Controls.Add(pnlPersonalInfoCard);
+            pnlTabProfile.Controls.Add(pnlSkillsCard);
+            pnlTabProfile.Location = new Point(30, 384);
+            pnlTabProfile.Name = "pnlTabProfile";
+            pnlTabProfile.Size = new Size(900, 640);
+            pnlTabProfile.TabIndex = 2;
+            //
+            // pnlPersonalInfoCard
+            //
+            pnlPersonalInfoCard.BackColor = Color.Transparent;
+            pnlPersonalInfoCard.BorderRadius = 16;
+            pnlPersonalInfoCard.Controls.Add(lblPersonalInfoTitle);
+            pnlPersonalInfoCard.Controls.Add(lblFirstNameCaption);
+            pnlPersonalInfoCard.Controls.Add(tbFirstName);
+            pnlPersonalInfoCard.Controls.Add(lblLastNameCaption);
+            pnlPersonalInfoCard.Controls.Add(tbLastName);
+            pnlPersonalInfoCard.Controls.Add(lblEmailCaption);
+            pnlPersonalInfoCard.Controls.Add(tbEmail);
+            pnlPersonalInfoCard.Controls.Add(lblPhoneCaption);
+            pnlPersonalInfoCard.Controls.Add(tbPhone);
+            pnlPersonalInfoCard.Controls.Add(lblLocationCaption);
+            pnlPersonalInfoCard.Controls.Add(tbLocation);
+            pnlPersonalInfoCard.Controls.Add(lblBioCaption);
+            pnlPersonalInfoCard.Controls.Add(tbBio);
+            pnlPersonalInfoCard.FillColor = Color.White;
+            pnlPersonalInfoCard.Location = new Point(0, 0);
+            pnlPersonalInfoCard.Name = "pnlPersonalInfoCard";
+            pnlPersonalInfoCard.Size = new Size(900, 460);
+            pnlPersonalInfoCard.TabIndex = 0;
+            //
+            // lblPersonalInfoTitle
+            //
+            lblPersonalInfoTitle.BackColor = Color.Transparent;
+            lblPersonalInfoTitle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            lblPersonalInfoTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPersonalInfoTitle.Location = new Point(16, 14);
+            lblPersonalInfoTitle.Name = "lblPersonalInfoTitle";
+            lblPersonalInfoTitle.Size = new Size(300, 24);
+            lblPersonalInfoTitle.TabIndex = 0;
+            lblPersonalInfoTitle.Text = "Personal Information";
+            //
+            // lblFirstNameCaption
+            //
+            lblFirstNameCaption.BackColor = Color.Transparent;
+            lblFirstNameCaption.Font = new Font("Segoe UI", 7.5F);
+            lblFirstNameCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblFirstNameCaption.Location = new Point(16, 50);
+            lblFirstNameCaption.Name = "lblFirstNameCaption";
+            lblFirstNameCaption.Size = new Size(300, 18);
+            lblFirstNameCaption.TabIndex = 1;
+            lblFirstNameCaption.Text = "First Name";
+            //
+            // tbFirstName
+            //
+            tbFirstName.BorderRadius = 10;
+            tbFirstName.DefaultText = "";
+            tbFirstName.FillColor = Color.FromArgb(247, 245, 242);
+            tbFirstName.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbFirstName.Font = new Font("Segoe UI", 9F);
+            tbFirstName.Location = new Point(16, 72);
+            tbFirstName.Name = "tbFirstName";
+            tbFirstName.ReadOnly = true;
+            tbFirstName.SelectedText = "";
+            tbFirstName.Size = new Size(410, 44);
+            tbFirstName.TabIndex = 2;
+            //
+            // lblLastNameCaption
+            //
+            lblLastNameCaption.BackColor = Color.Transparent;
+            lblLastNameCaption.Font = new Font("Segoe UI", 7.5F);
+            lblLastNameCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblLastNameCaption.Location = new Point(436, 50);
+            lblLastNameCaption.Name = "lblLastNameCaption";
+            lblLastNameCaption.Size = new Size(300, 18);
+            lblLastNameCaption.TabIndex = 3;
+            lblLastNameCaption.Text = "Last Name";
+            //
+            // tbLastName
+            //
+            tbLastName.BorderRadius = 10;
+            tbLastName.DefaultText = "";
+            tbLastName.FillColor = Color.FromArgb(247, 245, 242);
+            tbLastName.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbLastName.Font = new Font("Segoe UI", 9F);
+            tbLastName.Location = new Point(436, 72);
+            tbLastName.Name = "tbLastName";
+            tbLastName.ReadOnly = true;
+            tbLastName.SelectedText = "";
+            tbLastName.Size = new Size(448, 44);
+            tbLastName.TabIndex = 4;
+            //
+            // lblEmailCaption
+            //
+            lblEmailCaption.BackColor = Color.Transparent;
+            lblEmailCaption.Font = new Font("Segoe UI", 7.5F);
+            lblEmailCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblEmailCaption.Location = new Point(16, 128);
+            lblEmailCaption.Name = "lblEmailCaption";
+            lblEmailCaption.Size = new Size(300, 18);
+            lblEmailCaption.TabIndex = 5;
+            lblEmailCaption.Text = "Email";
+            //
+            // tbEmail
+            //
+            tbEmail.BorderRadius = 10;
+            tbEmail.DefaultText = "";
+            tbEmail.FillColor = Color.FromArgb(247, 245, 242);
+            tbEmail.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbEmail.Font = new Font("Segoe UI", 9F);
+            tbEmail.Location = new Point(16, 150);
+            tbEmail.Name = "tbEmail";
+            tbEmail.ReadOnly = true;
+            tbEmail.SelectedText = "";
+            tbEmail.Size = new Size(868, 44);
+            tbEmail.TabIndex = 6;
+            //
+            // lblPhoneCaption
+            //
+            lblPhoneCaption.BackColor = Color.Transparent;
+            lblPhoneCaption.Font = new Font("Segoe UI", 7.5F);
+            lblPhoneCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPhoneCaption.Location = new Point(16, 206);
+            lblPhoneCaption.Name = "lblPhoneCaption";
+            lblPhoneCaption.Size = new Size(300, 18);
+            lblPhoneCaption.TabIndex = 7;
+            lblPhoneCaption.Text = "Phone";
+            //
+            // tbPhone
+            //
+            tbPhone.BorderRadius = 10;
+            tbPhone.DefaultText = "";
+            tbPhone.FillColor = Color.FromArgb(247, 245, 242);
+            tbPhone.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbPhone.Font = new Font("Segoe UI", 9F);
+            tbPhone.Location = new Point(16, 228);
+            tbPhone.Name = "tbPhone";
+            tbPhone.ReadOnly = true;
+            tbPhone.SelectedText = "";
+            tbPhone.Size = new Size(868, 44);
+            tbPhone.TabIndex = 8;
+            //
+            // lblLocationCaption
+            //
+            lblLocationCaption.BackColor = Color.Transparent;
+            lblLocationCaption.Font = new Font("Segoe UI", 7.5F);
+            lblLocationCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblLocationCaption.Location = new Point(16, 284);
+            lblLocationCaption.Name = "lblLocationCaption";
+            lblLocationCaption.Size = new Size(300, 18);
+            lblLocationCaption.TabIndex = 9;
+            lblLocationCaption.Text = "Location";
+            //
+            // tbLocation
+            //
+            tbLocation.BorderRadius = 10;
+            tbLocation.DefaultText = "";
+            tbLocation.FillColor = Color.FromArgb(247, 245, 242);
+            tbLocation.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbLocation.Font = new Font("Segoe UI", 9F);
+            tbLocation.Location = new Point(16, 306);
+            tbLocation.Name = "tbLocation";
+            tbLocation.ReadOnly = true;
+            tbLocation.SelectedText = "";
+            tbLocation.Size = new Size(868, 44);
+            tbLocation.TabIndex = 10;
+            //
+            // lblBioCaption
+            //
+            lblBioCaption.BackColor = Color.Transparent;
+            lblBioCaption.Font = new Font("Segoe UI", 7.5F);
+            lblBioCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBioCaption.Location = new Point(16, 362);
+            lblBioCaption.Name = "lblBioCaption";
+            lblBioCaption.Size = new Size(300, 18);
+            lblBioCaption.TabIndex = 11;
+            lblBioCaption.Text = "Bio";
+            //
+            // tbBio
+            //
+            tbBio.BorderRadius = 10;
+            tbBio.DefaultText = "";
+            tbBio.FillColor = Color.FromArgb(247, 245, 242);
+            tbBio.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbBio.Font = new Font("Segoe UI", 9F);
+            tbBio.Location = new Point(16, 384);
+            tbBio.Multiline = true;
+            tbBio.Name = "tbBio";
+            tbBio.ReadOnly = true;
+            tbBio.SelectedText = "";
+            tbBio.Size = new Size(868, 60);
+            tbBio.TabIndex = 12;
+            //
+            // pnlSkillsCard
+            //
+            pnlSkillsCard.BackColor = Color.Transparent;
+            pnlSkillsCard.BorderRadius = 16;
+            pnlSkillsCard.Controls.Add(lblSkillsTitle);
+            pnlSkillsCard.Controls.Add(flpSkills);
+            pnlSkillsCard.FillColor = Color.White;
+            pnlSkillsCard.Location = new Point(0, 476);
+            pnlSkillsCard.Name = "pnlSkillsCard";
+            pnlSkillsCard.Size = new Size(900, 150);
+            pnlSkillsCard.TabIndex = 1;
+            //
+            // lblSkillsTitle
+            //
+            lblSkillsTitle.BackColor = Color.Transparent;
+            lblSkillsTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSkillsTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblSkillsTitle.Location = new Point(16, 14);
+            lblSkillsTitle.Name = "lblSkillsTitle";
+            lblSkillsTitle.Size = new Size(300, 22);
+            lblSkillsTitle.TabIndex = 0;
+            lblSkillsTitle.Text = "Skills & Specializations";
+            //
+            // flpSkills
+            //
+            flpSkills.BackColor = Color.Transparent;
+            flpSkills.Location = new Point(12, 46);
+            flpSkills.Name = "flpSkills";
+            flpSkills.Size = new Size(876, 96);
+            flpSkills.TabIndex = 1;
             //
             // pnlTabReviews
             //
-            this.pnlTabReviews.Location = new System.Drawing.Point(30, 384);
-            this.pnlTabReviews.Size = new System.Drawing.Size(900, 600);
-            this.pnlTabReviews.BackColor = System.Drawing.Color.Transparent;
-            this.pnlTabReviews.Visible = false;
-
-            this.flpReviews.Location = new System.Drawing.Point(0, 0);
-            this.flpReviews.Size = new System.Drawing.Size(900, 600);
-            this.flpReviews.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpReviews.WrapContents = false;
-            this.flpReviews.AutoScroll = true;
-            this.flpReviews.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlTabReviews.Controls.Add(this.flpReviews);
-
+            pnlTabReviews.BackColor = Color.Transparent;
+            pnlTabReviews.Controls.Add(flpReviews);
+            pnlTabReviews.Location = new Point(30, 384);
+            pnlTabReviews.Name = "pnlTabReviews";
+            pnlTabReviews.Size = new Size(900, 560);
+            pnlTabReviews.TabIndex = 3;
+            pnlTabReviews.Visible = false;
             //
-            // pnlTabSettings - built entirely in ProfileForm.cs (BuildSettingsRow)
+            // flpReviews
             //
-            this.pnlTabSettings.Location = new System.Drawing.Point(30, 384);
-            this.pnlTabSettings.Size = new System.Drawing.Size(900, 600);
-            this.pnlTabSettings.BackColor = System.Drawing.Color.Transparent;
-            this.pnlTabSettings.Visible = false;
-
-            this.pnlContent.Controls.Add(this.pnlProfileHeaderCard);
-            this.pnlContent.Controls.Add(this.pnlTabsBar);
-            this.pnlContent.Controls.Add(this.pnlTabProfile);
-            this.pnlContent.Controls.Add(this.pnlTabReviews);
-            this.pnlContent.Controls.Add(this.pnlTabSettings);
-
+            flpReviews.AutoScroll = true;
+            flpReviews.BackColor = Color.Transparent;
+            flpReviews.FlowDirection = FlowDirection.TopDown;
+            flpReviews.Location = new Point(0, 0);
+            flpReviews.Name = "flpReviews";
+            flpReviews.Size = new Size(900, 560);
+            flpReviews.TabIndex = 0;
+            flpReviews.WrapContents = false;
+            //
+            // pnlTabSettings (rows are generated at runtime in ProfileForm.cs)
+            //
+            pnlTabSettings.BackColor = Color.Transparent;
+            pnlTabSettings.Location = new Point(30, 384);
+            pnlTabSettings.Name = "pnlTabSettings";
+            pnlTabSettings.Size = new Size(900, 560);
+            pnlTabSettings.TabIndex = 4;
+            pnlTabSettings.Visible = false;
             //
             // ProfileForm
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1500, 900);
-            this.Controls.Add(this.pnlPageBackground);
-            this.MinimumSize = new System.Drawing.Size(1246, 738);
-            this.Name = "ProfileForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Meraki - My Profile";
-            this.Load += new System.EventHandler(this.ProfileForm_Load);
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picAvatarPhoto)).EndInit();
-            this.pnlTabSettings.ResumeLayout(false);
-            this.pnlTabReviews.ResumeLayout(false);
-            this.pnlSkillsCard.ResumeLayout(false);
-            this.pnlPersonalInfoCard.ResumeLayout(false);
-            this.pnlPersonalInfoCard.PerformLayout();
-            this.pnlTabProfile.ResumeLayout(false);
-            this.pnlTabsBar.ResumeLayout(false);
-            this.pnlStatRate.ResumeLayout(false);
-            this.pnlStatExperience.ResumeLayout(false);
-            this.pnlStatBookings.ResumeLayout(false);
-            this.pnlAvatarCircle.ResumeLayout(false);
-            this.pnlProfileHeaderCard.ResumeLayout(false);
-            this.pnlContent.ResumeLayout(false);
-            this.pnlNavbar.ResumeLayout(false);
-            this.pnlPageBackground.ResumeLayout(false);
-            this.ResumeLayout(false);
-        }
-
-        private static void SetupNavButton(Guna.UI2.WinForms.Guna2Button btn, string text, bool active)
-        {
-            btn.BorderRadius = 8;
-            btn.BorderThickness = 0;
-            btn.ShadowDecoration.Enabled = false;
-            btn.FillColor = active ? System.Drawing.Color.FromArgb(253, 238, 232) : System.Drawing.Color.Transparent;
-            btn.BackColor = System.Drawing.Color.White;
-            btn.ForeColor = active ? System.Drawing.Color.FromArgb(232, 113, 74) : System.Drawing.Color.FromArgb(154, 136, 128);
-            btn.Font = new System.Drawing.Font("Segoe UI", 8.5F, active ? System.Drawing.FontStyle.Bold : System.Drawing.FontStyle.Regular);
-            btn.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            btn.Height = 45;
-            btn.Text = text;
-        }
-
-        private static void SetupHeaderStatCard(Guna.UI2.WinForms.Guna2Panel card, System.Windows.Forms.Label value,
-            System.Windows.Forms.Label caption, int x, string valueText, string captionText)
-        {
-            card.BorderRadius = 12;
-            card.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            card.Location = new System.Drawing.Point(x, 175);
-            card.Size = new System.Drawing.Size(220, 70);
-
-            value.Location = new System.Drawing.Point(10, 10);
-            value.Size = new System.Drawing.Size(200, 26);
-            value.Text = valueText;
-            value.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            value.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            value.BackColor = System.Drawing.Color.Transparent;
-
-            caption.Location = new System.Drawing.Point(10, 38);
-            caption.Size = new System.Drawing.Size(200, 20);
-            caption.Text = captionText;
-            caption.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            caption.Font = new System.Drawing.Font("Segoe UI", 8F);
-            caption.BackColor = System.Drawing.Color.Transparent;
-
-            card.Controls.Add(value);
-            card.Controls.Add(caption);
-        }
-
-        private static void SetupTabButton(Guna.UI2.WinForms.Guna2Button btn, string text, int x, bool active)
-        {
-            btn.BorderRadius = 12;
-            btn.BorderThickness = 0;
-            btn.ShadowDecoration.Enabled = false;
-            btn.FillColor = active ? System.Drawing.Color.FromArgb(232, 113, 74) : System.Drawing.Color.Transparent;
-            btn.ForeColor = active ? System.Drawing.Color.White : System.Drawing.Color.FromArgb(154, 136, 128);
-            btn.Font = new System.Drawing.Font("Segoe UI", 9.5F, active ? System.Drawing.FontStyle.Bold : System.Drawing.FontStyle.Regular);
-            btn.Location = new System.Drawing.Point(x, 4);
-            btn.Size = new System.Drawing.Size(292, 44);
-            btn.Text = text;
-        }
-
-        private static void SetupFieldLabel(System.Windows.Forms.Label label, string text, int x, int y)
-        {
-            label.Location = new System.Drawing.Point(x, y);
-            label.Size = new System.Drawing.Size(300, 18);
-            label.Text = text;
-            label.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            label.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            label.BackColor = System.Drawing.Color.Transparent;
-        }
-
-        private static void SetupFieldBox(Guna.UI2.WinForms.Guna2TextBox box, int x, int y, int width, int height = 40)
-        {
-            box.BorderRadius = 10;
-            box.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            box.Location = new System.Drawing.Point(x, y);
-            box.Size = new System.Drawing.Size(width, height);
-            box.FocusedState.BorderColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            box.ReadOnly = true;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(1500, 900);
+            Controls.Add(pnlPageBackground);
+            MinimumSize = new Size(1246, 738);
+            Name = "ProfileForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Meraki - My Profile";
+            Load += ProfileForm_Load;
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picAvatarPhoto).EndInit();
+            pnlTabReviews.ResumeLayout(false);
+            pnlSkillsCard.ResumeLayout(false);
+            pnlPersonalInfoCard.ResumeLayout(false);
+            pnlTabProfile.ResumeLayout(false);
+            pnlTabsBar.ResumeLayout(false);
+            pnlStatRate.ResumeLayout(false);
+            pnlStatExperience.ResumeLayout(false);
+            pnlStatBookings.ResumeLayout(false);
+            pnlAvatarCircle.ResumeLayout(false);
+            pnlProfileHeaderCard.ResumeLayout(false);
+            pnlContent.ResumeLayout(false);
+            pnlNavbar.ResumeLayout(false);
+            pnlPageBackground.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
@@ -512,7 +827,6 @@
         private Guna.UI2.WinForms.Guna2Button btnNavMyProfile;
         private Guna.UI2.WinForms.Guna2Button btnLogout;
         private Guna.UI2.WinForms.Guna2GradientPanel pnlContent;
-
         private Guna.UI2.WinForms.Guna2Panel pnlProfileHeaderCard;
         private Guna.UI2.WinForms.Guna2GradientPanel pnlBanner;
         private Guna.UI2.WinForms.Guna2Panel pnlAvatarCircle;
@@ -532,12 +846,10 @@
         private Guna.UI2.WinForms.Guna2Panel pnlStatRate;
         private System.Windows.Forms.Label lblStatRateValue;
         private System.Windows.Forms.Label lblStatRateLabel;
-
         private Guna.UI2.WinForms.Guna2Panel pnlTabsBar;
         private Guna.UI2.WinForms.Guna2Button btnTabProfile;
         private Guna.UI2.WinForms.Guna2Button btnTabReviews;
         private Guna.UI2.WinForms.Guna2Button btnTabSettings;
-
         private System.Windows.Forms.Panel pnlTabProfile;
         private Guna.UI2.WinForms.Guna2Panel pnlPersonalInfoCard;
         private System.Windows.Forms.Label lblPersonalInfoTitle;
@@ -556,10 +868,8 @@
         private Guna.UI2.WinForms.Guna2Panel pnlSkillsCard;
         private System.Windows.Forms.Label lblSkillsTitle;
         private System.Windows.Forms.FlowLayoutPanel flpSkills;
-
         private System.Windows.Forms.Panel pnlTabReviews;
         private System.Windows.Forms.FlowLayoutPanel flpReviews;
-
         private System.Windows.Forms.Panel pnlTabSettings;
     }
 }

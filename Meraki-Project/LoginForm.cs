@@ -76,11 +76,7 @@ namespace Meraki_Project
                 _ => new ParentDashboardForm(),
             };
 
-            next.Show();
-            // Never Close() this particular form - Program.cs passes the very first
-            // LoginForm instance to Application.Run(), and closing that instance would
-            // end the whole application even though other forms are still open.
-            this.Hide();
+            Navigation.GoTo(this, next);
         }
 
         // ----- Footer links -----
@@ -94,9 +90,7 @@ namespace Meraki_Project
 
         private void lnkCreateAccount_Click(object sender, EventArgs e)
         {
-            var register = new RegisterForm();
-            register.Show();
-            this.Hide();
+            Navigation.GoTo(this, new RegisterForm());
         }
     }
 }

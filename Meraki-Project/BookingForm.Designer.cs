@@ -17,757 +17,1227 @@
 
         private void InitializeComponent()
         {
-            this.pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
-
-            // Navbar
-            this.pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
-            this.picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.btnNavParentHome = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavFindBabysitter = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavBookNow = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNavMyProfile = new Guna.UI2.WinForms.Guna2Button();
-            this.btnLogout = new Guna.UI2.WinForms.Guna2Button();
-
-            this.pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
-            this.lblPageTitle = new System.Windows.Forms.Label();
-            this.lblPageSubtitle = new System.Windows.Forms.Label();
-
-            // Step indicator
-            this.pnlStepCircle1 = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStepNum1 = new System.Windows.Forms.Label();
-            this.lblStepCaption1 = new System.Windows.Forms.Label();
-            this.pnlStepLine1 = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlStepCircle2 = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStepNum2 = new System.Windows.Forms.Label();
-            this.lblStepCaption2 = new System.Windows.Forms.Label();
-            this.pnlStepLine2 = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlStepCircle3 = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStepNum3 = new System.Windows.Forms.Label();
-            this.lblStepCaption3 = new System.Windows.Forms.Label();
-            this.pnlStepLine3 = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlStepCircle4 = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblStepNum4 = new System.Windows.Forms.Label();
-            this.lblStepCaption4 = new System.Windows.Forms.Label();
-
-            // Step 0: date & time
-            this.pnlStepDateTime = new System.Windows.Forms.Panel();
-            this.pnlCalendarCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblCalTitle = new System.Windows.Forms.Label();
-            this.btnCalPrev = new Guna.UI2.WinForms.Guna2Button();
-            this.lblCalMonthYear = new System.Windows.Forms.Label();
-            this.btnCalNext = new Guna.UI2.WinForms.Guna2Button();
-            this.tlpBookingCalendar = new System.Windows.Forms.TableLayoutPanel();
-            this.lblCalSun = new System.Windows.Forms.Label();
-            this.lblCalMon = new System.Windows.Forms.Label();
-            this.lblCalTue = new System.Windows.Forms.Label();
-            this.lblCalWed = new System.Windows.Forms.Label();
-            this.lblCalThu = new System.Windows.Forms.Label();
-            this.lblCalFri = new System.Windows.Forms.Label();
-            this.lblCalSat = new System.Windows.Forms.Label();
-            this.pnlTimeSlotsCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblTimeSlotsTitle = new System.Windows.Forms.Label();
-            this.flpTimeSlots = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnlDurationCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblDurationTitle = new System.Windows.Forms.Label();
-            this.flpDurations = new System.Windows.Forms.FlowLayoutPanel();
-
-            // Step 1: babysitter
-            this.pnlStepBabysitter = new System.Windows.Forms.Panel();
-            this.flpBabysitterSelect = new System.Windows.Forms.FlowLayoutPanel();
-
-            // Step 2: details
-            this.pnlStepDetails = new System.Windows.Forms.Panel();
-            this.lblDetailsTitle = new System.Windows.Forms.Label();
-            this.lblChildCountCaption = new System.Windows.Forms.Label();
-            this.btnDecChildren = new Guna.UI2.WinForms.Guna2Button();
-            this.lblChildCount = new System.Windows.Forms.Label();
-            this.btnIncChildren = new Guna.UI2.WinForms.Guna2Button();
-            this.lblAddressCaption = new System.Windows.Forms.Label();
-            this.tbAddress = new Guna.UI2.WinForms.Guna2TextBox();
-            this.lblNotesCaption = new System.Windows.Forms.Label();
-            this.tbNotes = new Guna.UI2.WinForms.Guna2TextBox();
-
-            // Step 3: confirm
-            this.pnlStepConfirm = new System.Windows.Forms.Panel();
-            this.lblConfirmTitle = new System.Windows.Forms.Label();
-            this.lblSumDate = new System.Windows.Forms.Label();
-            this.lblSumTime = new System.Windows.Forms.Label();
-            this.lblSumBabysitter = new System.Windows.Forms.Label();
-            this.lblSumChildren = new System.Windows.Forms.Label();
-            this.lblSumAddress = new System.Windows.Forms.Label();
-            this.lblCostSitterLine = new System.Windows.Forms.Label();
-            this.lblCostServiceFee = new System.Windows.Forms.Label();
-            this.lblCostTotal = new System.Windows.Forms.Label();
-            this.lblPaymentNote = new System.Windows.Forms.Label();
-
-            // Bottom nav
-            this.btnBack = new Guna.UI2.WinForms.Guna2Button();
-            this.btnContinue = new Guna.UI2.WinForms.Guna2Button();
-
-            // Confirmation screen (replaces everything above once booked)
-            this.pnlConfirmationScreen = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlCheckCircle = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblCheckIcon = new System.Windows.Forms.Label();
-            this.lblConfirmedTitle = new System.Windows.Forms.Label();
-            this.lblConfirmedMessage = new System.Windows.Forms.Label();
-            this.pnlConfirmedSummaryCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblConfirmedDate = new System.Windows.Forms.Label();
-            this.lblConfirmedTime = new System.Windows.Forms.Label();
-            this.lblConfirmedBabysitter = new System.Windows.Forms.Label();
-            this.lblConfirmedTotal = new System.Windows.Forms.Label();
-            this.btnBackToDashboard = new Guna.UI2.WinForms.Guna2Button();
-            this.btnNewBooking = new Guna.UI2.WinForms.Guna2Button();
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).BeginInit();
-            this.pnlPageBackground.SuspendLayout();
-            this.pnlNavbar.SuspendLayout();
-            this.pnlContent.SuspendLayout();
-            this.pnlStepDateTime.SuspendLayout();
-            this.pnlCalendarCard.SuspendLayout();
-            this.pnlTimeSlotsCard.SuspendLayout();
-            this.pnlDurationCard.SuspendLayout();
-            this.pnlStepBabysitter.SuspendLayout();
-            this.pnlStepDetails.SuspendLayout();
-            this.pnlStepConfirm.SuspendLayout();
-            this.pnlConfirmationScreen.SuspendLayout();
-            this.pnlCheckCircle.SuspendLayout();
-            this.pnlConfirmedSummaryCard.SuspendLayout();
-            this.SuspendLayout();
-
+            pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
+            pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
+            picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
+            lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            btnNavParentHome = new Guna.UI2.WinForms.Guna2Button();
+            btnNavFindBabysitter = new Guna.UI2.WinForms.Guna2Button();
+            btnNavBookNow = new Guna.UI2.WinForms.Guna2Button();
+            btnNavMyProfile = new Guna.UI2.WinForms.Guna2Button();
+            btnLogout = new Guna.UI2.WinForms.Guna2Button();
+            pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
+            lblPageTitle = new Label();
+            lblPageSubtitle = new Label();
+            pnlStepCircle1 = new Guna.UI2.WinForms.Guna2Panel();
+            lblStepNum1 = new Label();
+            lblStepCaption1 = new Label();
+            pnlStepLine1 = new Guna.UI2.WinForms.Guna2Panel();
+            pnlStepCircle2 = new Guna.UI2.WinForms.Guna2Panel();
+            lblStepNum2 = new Label();
+            lblStepCaption2 = new Label();
+            pnlStepLine2 = new Guna.UI2.WinForms.Guna2Panel();
+            pnlStepCircle3 = new Guna.UI2.WinForms.Guna2Panel();
+            lblStepNum3 = new Label();
+            lblStepCaption3 = new Label();
+            pnlStepLine3 = new Guna.UI2.WinForms.Guna2Panel();
+            pnlStepCircle4 = new Guna.UI2.WinForms.Guna2Panel();
+            lblStepNum4 = new Label();
+            lblStepCaption4 = new Label();
+            pnlStepDateTime = new Panel();
+            pnlCalendarCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblCalTitle = new Label();
+            btnCalPrev = new Guna.UI2.WinForms.Guna2Button();
+            lblCalMonthYear = new Label();
+            btnCalNext = new Guna.UI2.WinForms.Guna2Button();
+            tlpBookingCalendar = new TableLayoutPanel();
+            lblCalSun = new Label();
+            lblCalMon = new Label();
+            lblCalTue = new Label();
+            lblCalWed = new Label();
+            lblCalThu = new Label();
+            lblCalFri = new Label();
+            lblCalSat = new Label();
+            pnlTimeSlotsCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblTimeSlotsTitle = new Label();
+            flpTimeSlots = new FlowLayoutPanel();
+            pnlDurationCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblDurationTitle = new Label();
+            flpDurations = new FlowLayoutPanel();
+            pnlStepBabysitter = new Panel();
+            flpBabysitterSelect = new FlowLayoutPanel();
+            pnlStepDetails = new Panel();
+            pnlDetailsCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblDetailsTitle = new Label();
+            lblChildCountCaption = new Label();
+            btnDecChildren = new Guna.UI2.WinForms.Guna2Button();
+            lblChildCount = new Label();
+            btnIncChildren = new Guna.UI2.WinForms.Guna2Button();
+            lblAddressCaption = new Label();
+            tbAddress = new Guna.UI2.WinForms.Guna2TextBox();
+            lblNotesCaption = new Label();
+            tbNotes = new Guna.UI2.WinForms.Guna2TextBox();
+            pnlStepConfirm = new Panel();
+            pnlConfirmCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblConfirmTitle = new Label();
+            lblSumDate = new Label();
+            lblSumTime = new Label();
+            lblSumBabysitter = new Label();
+            lblSumChildren = new Label();
+            lblSumAddress = new Label();
+            lblCostSitterLine = new Label();
+            lblCostServiceFee = new Label();
+            lblCostTotal = new Label();
+            lblPaymentNote = new Label();
+            pnlBottomBar = new Guna.UI2.WinForms.Guna2Panel();
+            btnBack = new Guna.UI2.WinForms.Guna2Button();
+            btnContinue = new Guna.UI2.WinForms.Guna2Button();
+            pnlConfirmationScreen = new Guna.UI2.WinForms.Guna2Panel();
+            pnlCheckCircle = new Guna.UI2.WinForms.Guna2Panel();
+            lblCheckIcon = new Label();
+            lblConfirmedTitle = new Label();
+            lblConfirmedMessage = new Label();
+            pnlConfirmedSummaryCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblConfirmedDate = new Label();
+            lblConfirmedTime = new Label();
+            lblConfirmedBabysitter = new Label();
+            lblConfirmedTotal = new Label();
+            btnBackToDashboard = new Guna.UI2.WinForms.Guna2Button();
+            btnNewBooking = new Guna.UI2.WinForms.Guna2Button();
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).BeginInit();
+            pnlPageBackground.SuspendLayout();
+            pnlNavbar.SuspendLayout();
+            pnlContent.SuspendLayout();
+            pnlStepCircle1.SuspendLayout();
+            pnlStepCircle2.SuspendLayout();
+            pnlStepCircle3.SuspendLayout();
+            pnlStepCircle4.SuspendLayout();
+            pnlStepDateTime.SuspendLayout();
+            pnlCalendarCard.SuspendLayout();
+            tlpBookingCalendar.SuspendLayout();
+            pnlTimeSlotsCard.SuspendLayout();
+            pnlDurationCard.SuspendLayout();
+            pnlStepBabysitter.SuspendLayout();
+            pnlStepDetails.SuspendLayout();
+            pnlDetailsCard.SuspendLayout();
+            pnlStepConfirm.SuspendLayout();
+            pnlConfirmCard.SuspendLayout();
+            pnlBottomBar.SuspendLayout();
+            pnlConfirmationScreen.SuspendLayout();
+            pnlCheckCircle.SuspendLayout();
+            pnlConfirmedSummaryCard.SuspendLayout();
+            SuspendLayout();
             //
             // pnlPageBackground
             //
-            this.pnlPageBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPageBackground.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlPageBackground.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlPageBackground.Name = "pnlPageBackground";
-            this.pnlPageBackground.Size = new System.Drawing.Size(1500, 900);
-            this.pnlPageBackground.Controls.Add(this.pnlContent);
-            this.pnlPageBackground.Controls.Add(this.pnlNavbar);
-
+            pnlPageBackground.Controls.Add(pnlContent);
+            pnlPageBackground.Controls.Add(pnlBottomBar);
+            pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.Dock = DockStyle.Fill;
+            pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
+            pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlPageBackground.Location = new Point(0, 0);
+            pnlPageBackground.Name = "pnlPageBackground";
+            pnlPageBackground.Size = new Size(1500, 900);
+            pnlPageBackground.TabIndex = 0;
             //
             // pnlNavbar
             //
-            this.pnlNavbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNavbar.FillColor = System.Drawing.Color.White;
-            this.pnlNavbar.BackColor = System.Drawing.Color.White;
-            this.pnlNavbar.Name = "pnlNavbar";
-            this.pnlNavbar.Size = new System.Drawing.Size(1500, 80);
-
-            this.picNavLogo.BorderRadius = 10;
-            this.picNavLogo.Image = global::Meraki_Project.Properties.Resources.meraki_logo;
-            this.picNavLogo.Location = new System.Drawing.Point(25, 15);
-            this.picNavLogo.Name = "picNavLogo";
-            this.picNavLogo.Size = new System.Drawing.Size(50, 50);
-            this.picNavLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-
-            this.lblNavBrand.Location = new System.Drawing.Point(85, 25);
-            this.lblNavBrand.Name = "lblNavBrand";
-            this.lblNavBrand.Size = new System.Drawing.Size(90, 30);
-            this.lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
-
-            SetupNavButton(this.btnNavParentHome, "Parent Home", 275, 138, false);
-            this.btnNavParentHome.Click += new System.EventHandler(this.btnNavParentHome_Click);
-            SetupNavButton(this.btnNavFindBabysitter, "Find a Babysitter", 423, 162, false);
-            this.btnNavFindBabysitter.Click += new System.EventHandler(this.btnNavFindBabysitter_Click);
-            SetupNavButton(this.btnNavBookNow, "Book Now", 595, 125, true);
-            this.btnNavBookNow.Click += new System.EventHandler(this.btnNavBookNow_Click);
-            SetupNavButton(this.btnNavMyProfile, "My Profile", 730, 125, false);
-            this.btnNavMyProfile.Click += new System.EventHandler(this.btnNavMyProfile_Click);
-
-            this.btnLogout.BorderRadius = 8;
-            this.btnLogout.BorderThickness = 0;
-            this.btnLogout.ShadowDecoration.Enabled = false;
-            this.btnLogout.FillColor = System.Drawing.Color.Transparent;
-            this.btnLogout.BackColor = System.Drawing.Color.White;
-            this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(224, 90, 90);
-            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.btnLogout.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 232, 232);
-            this.btnLogout.Location = new System.Drawing.Point(1350, 18);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(125, 45);
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-
-            this.pnlNavbar.Controls.Add(this.picNavLogo);
-            this.pnlNavbar.Controls.Add(this.lblNavBrand);
-            this.pnlNavbar.Controls.Add(this.btnNavParentHome);
-            this.pnlNavbar.Controls.Add(this.btnNavFindBabysitter);
-            this.pnlNavbar.Controls.Add(this.btnNavBookNow);
-            this.pnlNavbar.Controls.Add(this.btnNavMyProfile);
-            this.pnlNavbar.Controls.Add(this.btnLogout);
-
+            pnlNavbar.BackColor = Color.Transparent;
+            pnlNavbar.Controls.Add(picNavLogo);
+            pnlNavbar.Controls.Add(lblNavBrand);
+            pnlNavbar.Controls.Add(btnNavParentHome);
+            pnlNavbar.Controls.Add(btnNavFindBabysitter);
+            pnlNavbar.Controls.Add(btnNavBookNow);
+            pnlNavbar.Controls.Add(btnNavMyProfile);
+            pnlNavbar.Controls.Add(btnLogout);
+            pnlNavbar.Dock = DockStyle.Top;
+            pnlNavbar.FillColor = Color.White;
+            pnlNavbar.Location = new Point(0, 0);
+            pnlNavbar.Name = "pnlNavbar";
+            pnlNavbar.Size = new Size(1500, 80);
+            pnlNavbar.TabIndex = 1;
+            //
+            // picNavLogo
+            //
+            picNavLogo.BorderRadius = 10;
+            picNavLogo.Image = Properties.Resources.meraki_logo;
+            picNavLogo.ImageRotate = 0F;
+            picNavLogo.Location = new Point(25, 15);
+            picNavLogo.Name = "picNavLogo";
+            picNavLogo.Size = new Size(50, 50);
+            picNavLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picNavLogo.TabIndex = 0;
+            picNavLogo.TabStop = false;
+            //
+            // lblNavBrand
+            //
+            lblNavBrand.BackColor = Color.Transparent;
+            lblNavBrand.Location = new Point(85, 25);
+            lblNavBrand.Name = "lblNavBrand";
+            lblNavBrand.Size = new Size(90, 30);
+            lblNavBrand.TabIndex = 1;
+            lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
+            //
+            // btnNavParentHome
+            //
+            btnNavParentHome.BackColor = Color.White;
+            btnNavParentHome.BorderRadius = 8;
+            btnNavParentHome.FillColor = Color.Transparent;
+            btnNavParentHome.Font = new Font("Segoe UI", 8.5F);
+            btnNavParentHome.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavParentHome.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavParentHome.Location = new Point(275, 18);
+            btnNavParentHome.Name = "btnNavParentHome";
+            btnNavParentHome.Size = new Size(138, 45);
+            btnNavParentHome.TabIndex = 2;
+            btnNavParentHome.Text = "Parent Home";
+            btnNavParentHome.Click += btnNavParentHome_Click;
+            //
+            // btnNavFindBabysitter
+            //
+            btnNavFindBabysitter.BackColor = Color.White;
+            btnNavFindBabysitter.BorderRadius = 8;
+            btnNavFindBabysitter.FillColor = Color.Transparent;
+            btnNavFindBabysitter.Font = new Font("Segoe UI", 8.5F);
+            btnNavFindBabysitter.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavFindBabysitter.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavFindBabysitter.Location = new Point(423, 18);
+            btnNavFindBabysitter.Name = "btnNavFindBabysitter";
+            btnNavFindBabysitter.Size = new Size(162, 45);
+            btnNavFindBabysitter.TabIndex = 3;
+            btnNavFindBabysitter.Text = "Find a Babysitter";
+            btnNavFindBabysitter.Click += btnNavFindBabysitter_Click;
+            //
+            // btnNavBookNow
+            //
+            btnNavBookNow.BackColor = Color.White;
+            btnNavBookNow.BorderRadius = 8;
+            btnNavBookNow.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavBookNow.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            btnNavBookNow.ForeColor = Color.FromArgb(232, 113, 74);
+            btnNavBookNow.HoverState.FillColor = Color.FromArgb(250, 226, 216);
+            btnNavBookNow.Location = new Point(595, 18);
+            btnNavBookNow.Name = "btnNavBookNow";
+            btnNavBookNow.Size = new Size(125, 45);
+            btnNavBookNow.TabIndex = 4;
+            btnNavBookNow.Text = "Book Now";
+            btnNavBookNow.Click += btnNavBookNow_Click;
+            //
+            // btnNavMyProfile
+            //
+            btnNavMyProfile.BackColor = Color.White;
+            btnNavMyProfile.BorderRadius = 8;
+            btnNavMyProfile.FillColor = Color.Transparent;
+            btnNavMyProfile.Font = new Font("Segoe UI", 8.5F);
+            btnNavMyProfile.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavMyProfile.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavMyProfile.Location = new Point(730, 18);
+            btnNavMyProfile.Name = "btnNavMyProfile";
+            btnNavMyProfile.Size = new Size(125, 45);
+            btnNavMyProfile.TabIndex = 5;
+            btnNavMyProfile.Text = "My Profile";
+            btnNavMyProfile.Click += btnNavMyProfile_Click;
+            //
+            // btnLogout
+            //
+            btnLogout.BackColor = Color.White;
+            btnLogout.BorderRadius = 8;
+            btnLogout.FillColor = Color.Transparent;
+            btnLogout.Font = new Font("Segoe UI", 8.5F);
+            btnLogout.ForeColor = Color.FromArgb(224, 90, 90);
+            btnLogout.HoverState.FillColor = Color.FromArgb(253, 232, 232);
+            btnLogout.Location = new Point(1350, 18);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(125, 45);
+            btnLogout.TabIndex = 6;
+            btnLogout.Text = "Logout";
+            btnLogout.Click += btnLogout_Click;
+            //
+            // pnlBottomBar
+            //
+            pnlBottomBar.BackColor = Color.Transparent;
+            pnlBottomBar.Controls.Add(btnBack);
+            pnlBottomBar.Controls.Add(btnContinue);
+            pnlBottomBar.Dock = DockStyle.Bottom;
+            pnlBottomBar.FillColor = Color.White;
+            pnlBottomBar.Location = new Point(0, 830);
+            pnlBottomBar.Name = "pnlBottomBar";
+            pnlBottomBar.Size = new Size(1500, 70);
+            pnlBottomBar.TabIndex = 2;
+            //
+            // btnBack
+            //
+            btnBack.BackColor = Color.White;
+            btnBack.BorderRadius = 10;
+            btnBack.FillColor = Color.FromArgb(247, 245, 242);
+            btnBack.Font = new Font("Segoe UI", 9.5F);
+            btnBack.ForeColor = Color.FromArgb(154, 136, 128);
+            btnBack.Location = new Point(30, 11);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(140, 48);
+            btnBack.TabIndex = 0;
+            btnBack.Text = "< Back";
+            btnBack.Visible = false;
+            btnBack.Click += btnBack_Click;
+            //
+            // btnContinue
+            //
+            btnContinue.BackColor = Color.White;
+            btnContinue.BorderRadius = 10;
+            btnContinue.FillColor = Color.FromArgb(232, 113, 74);
+            btnContinue.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnContinue.ForeColor = Color.White;
+            btnContinue.Location = new Point(190, 11);
+            btnContinue.Name = "btnContinue";
+            btnContinue.Size = new Size(1280, 48);
+            btnContinue.TabIndex = 1;
+            btnContinue.Text = "Continue >";
+            btnContinue.Click += btnContinue_Click;
             //
             // pnlContent
             //
-            this.pnlContent.AutoScroll = true;
-            this.pnlContent.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlContent.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlContent.Location = new System.Drawing.Point(0, 80);
-            this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1500, 820);
-
-            this.lblPageTitle.Location = new System.Drawing.Point(30, 24);
-            this.lblPageTitle.Size = new System.Drawing.Size(400, 30);
-            this.lblPageTitle.Text = "Book a Babysitter";
-            this.lblPageTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPageTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.lblPageTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.lblPageSubtitle.Location = new System.Drawing.Point(30, 56);
-            this.lblPageSubtitle.Size = new System.Drawing.Size(500, 22);
-            this.lblPageSubtitle.Text = "Complete the steps below to schedule your booking";
-            this.lblPageSubtitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPageSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblPageSubtitle.BackColor = System.Drawing.Color.Transparent;
-
+            pnlContent.AutoScroll = true;
+            pnlContent.BackColor = Color.Transparent;
+            pnlContent.Controls.Add(pnlConfirmationScreen);
+            pnlContent.Controls.Add(lblPageTitle);
+            pnlContent.Controls.Add(lblPageSubtitle);
+            pnlContent.Controls.Add(pnlStepCircle1);
+            pnlContent.Controls.Add(lblStepCaption1);
+            pnlContent.Controls.Add(pnlStepLine1);
+            pnlContent.Controls.Add(pnlStepCircle2);
+            pnlContent.Controls.Add(lblStepCaption2);
+            pnlContent.Controls.Add(pnlStepLine2);
+            pnlContent.Controls.Add(pnlStepCircle3);
+            pnlContent.Controls.Add(lblStepCaption3);
+            pnlContent.Controls.Add(pnlStepLine3);
+            pnlContent.Controls.Add(pnlStepCircle4);
+            pnlContent.Controls.Add(lblStepCaption4);
+            pnlContent.Controls.Add(pnlStepDateTime);
+            pnlContent.Controls.Add(pnlStepBabysitter);
+            pnlContent.Controls.Add(pnlStepDetails);
+            pnlContent.Controls.Add(pnlStepConfirm);
+            pnlContent.FillColor = Color.FromArgb(253, 238, 232);
+            pnlContent.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlContent.Location = new Point(0, 80);
+            pnlContent.Name = "pnlContent";
+            pnlContent.Size = new Size(1500, 750);
+            pnlContent.TabIndex = 0;
             //
-            // Step indicator (4 circles + connecting lines)
+            // lblPageTitle
             //
-            SetupStepCircle(this.pnlStepCircle1, this.lblStepNum1, this.lblStepCaption1, 30, "1", "Select Date & Time", true);
-            SetupStepCircle(this.pnlStepCircle2, this.lblStepNum2, this.lblStepCaption2, 390, "2", "Choose Babysitter", false);
-            SetupStepCircle(this.pnlStepCircle3, this.lblStepNum3, this.lblStepCaption3, 750, "3", "Details", false);
-            SetupStepCircle(this.pnlStepCircle4, this.lblStepNum4, this.lblStepCaption4, 1110, "4", "Confirm", false);
-
-            this.pnlStepLine1.FillColor = System.Drawing.Color.FromArgb(230, 224, 218);
-            this.pnlStepLine1.Location = new System.Drawing.Point(66, 106);
-            this.pnlStepLine1.Size = new System.Drawing.Size(324, 3);
-            this.pnlStepLine2.FillColor = System.Drawing.Color.FromArgb(230, 224, 218);
-            this.pnlStepLine2.Location = new System.Drawing.Point(426, 106);
-            this.pnlStepLine2.Size = new System.Drawing.Size(324, 3);
-            this.pnlStepLine3.FillColor = System.Drawing.Color.FromArgb(230, 224, 218);
-            this.pnlStepLine3.Location = new System.Drawing.Point(786, 106);
-            this.pnlStepLine3.Size = new System.Drawing.Size(324, 3);
-
+            lblPageTitle.BackColor = Color.Transparent;
+            lblPageTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblPageTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPageTitle.Location = new Point(30, 16);
+            lblPageTitle.Name = "lblPageTitle";
+            lblPageTitle.Size = new Size(400, 30);
+            lblPageTitle.TabIndex = 0;
+            lblPageTitle.Text = "Book a Babysitter";
             //
-            // pnlStepDateTime (step 0)
+            // lblPageSubtitle
             //
-            this.pnlStepDateTime.Location = new System.Drawing.Point(30, 180);
-            this.pnlStepDateTime.Name = "pnlStepDateTime";
-            this.pnlStepDateTime.Size = new System.Drawing.Size(1420, 700);
-            this.pnlStepDateTime.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlCalendarCard.BorderRadius = 16;
-            this.pnlCalendarCard.FillColor = System.Drawing.Color.White;
-            this.pnlCalendarCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlCalendarCard.Location = new System.Drawing.Point(0, 0);
-            this.pnlCalendarCard.Size = new System.Drawing.Size(700, 380);
-
-            this.lblCalTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblCalTitle.Size = new System.Drawing.Size(200, 24);
-            this.lblCalTitle.Text = "Select Date";
-            this.lblCalTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblCalTitle.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
-            this.lblCalTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.btnCalPrev.BorderRadius = 8;
-            this.btnCalPrev.BorderThickness = 0;
-            this.btnCalPrev.ShadowDecoration.Enabled = false;
-            this.btnCalPrev.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.btnCalPrev.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnCalPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCalPrev.Location = new System.Drawing.Point(560, 12);
-            this.btnCalPrev.Size = new System.Drawing.Size(34, 32);
-            this.btnCalPrev.Text = "<";
-            this.btnCalPrev.Click += new System.EventHandler(this.btnCalPrev_Click);
-
-            this.lblCalMonthYear.Location = new System.Drawing.Point(600, 14);
-            this.lblCalMonthYear.Size = new System.Drawing.Size(130, 26);
-            this.lblCalMonthYear.Text = "June 2024";
-            this.lblCalMonthYear.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblCalMonthYear.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblCalMonthYear.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblCalMonthYear.BackColor = System.Drawing.Color.Transparent;
-
-            this.btnCalNext.BorderRadius = 8;
-            this.btnCalNext.BorderThickness = 0;
-            this.btnCalNext.ShadowDecoration.Enabled = false;
-            this.btnCalNext.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.btnCalNext.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnCalNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCalNext.Location = new System.Drawing.Point(650, 12);
-            this.btnCalNext.Size = new System.Drawing.Size(34, 32);
-            this.btnCalNext.Text = ">";
-            this.btnCalNext.Click += new System.EventHandler(this.btnCalNext_Click);
-
-            this.tlpBookingCalendar.Location = new System.Drawing.Point(16, 54);
-            this.tlpBookingCalendar.Size = new System.Drawing.Size(668, 310);
-            this.tlpBookingCalendar.ColumnCount = 7;
-            this.tlpBookingCalendar.RowCount = 7;
-            this.tlpBookingCalendar.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.None;
-            this.tlpBookingCalendar.BackColor = System.Drawing.Color.Transparent;
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.285714F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-            this.tlpBookingCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.666666F));
-
-            SetupDayHeaderLabel(this.lblCalSun, "Su");
-            SetupDayHeaderLabel(this.lblCalMon, "Mo");
-            SetupDayHeaderLabel(this.lblCalTue, "Tu");
-            SetupDayHeaderLabel(this.lblCalWed, "We");
-            SetupDayHeaderLabel(this.lblCalThu, "Th");
-            SetupDayHeaderLabel(this.lblCalFri, "Fr");
-            SetupDayHeaderLabel(this.lblCalSat, "Sa");
-            this.tlpBookingCalendar.Controls.Add(this.lblCalSun, 0, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalMon, 1, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalTue, 2, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalWed, 3, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalThu, 4, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalFri, 5, 0);
-            this.tlpBookingCalendar.Controls.Add(this.lblCalSat, 6, 0);
-
-            this.pnlCalendarCard.Controls.Add(this.lblCalTitle);
-            this.pnlCalendarCard.Controls.Add(this.btnCalPrev);
-            this.pnlCalendarCard.Controls.Add(this.lblCalMonthYear);
-            this.pnlCalendarCard.Controls.Add(this.btnCalNext);
-            this.pnlCalendarCard.Controls.Add(this.tlpBookingCalendar);
-
-            this.pnlTimeSlotsCard.BorderRadius = 16;
-            this.pnlTimeSlotsCard.FillColor = System.Drawing.Color.White;
-            this.pnlTimeSlotsCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlTimeSlotsCard.Location = new System.Drawing.Point(0, 395);
-            this.pnlTimeSlotsCard.Size = new System.Drawing.Size(700, 140);
-            this.pnlTimeSlotsCard.Visible = false;
-
-            this.lblTimeSlotsTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblTimeSlotsTitle.Size = new System.Drawing.Size(220, 22);
-            this.lblTimeSlotsTitle.Text = "Select Start Time";
-            this.lblTimeSlotsTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblTimeSlotsTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTimeSlotsTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.flpTimeSlots.Location = new System.Drawing.Point(12, 46);
-            this.flpTimeSlots.Size = new System.Drawing.Size(676, 86);
-            this.flpTimeSlots.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this.flpTimeSlots.WrapContents = true;
-            this.flpTimeSlots.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlTimeSlotsCard.Controls.Add(this.lblTimeSlotsTitle);
-            this.pnlTimeSlotsCard.Controls.Add(this.flpTimeSlots);
-
-            this.pnlDurationCard.BorderRadius = 16;
-            this.pnlDurationCard.FillColor = System.Drawing.Color.White;
-            this.pnlDurationCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlDurationCard.Location = new System.Drawing.Point(0, 550);
-            this.pnlDurationCard.Size = new System.Drawing.Size(700, 110);
-            this.pnlDurationCard.Visible = false;
-
-            this.lblDurationTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblDurationTitle.Size = new System.Drawing.Size(160, 22);
-            this.lblDurationTitle.Text = "Duration";
-            this.lblDurationTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblDurationTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblDurationTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.flpDurations.Location = new System.Drawing.Point(12, 46);
-            this.flpDurations.Size = new System.Drawing.Size(676, 56);
-            this.flpDurations.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this.flpDurations.WrapContents = true;
-            this.flpDurations.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlDurationCard.Controls.Add(this.lblDurationTitle);
-            this.pnlDurationCard.Controls.Add(this.flpDurations);
-
-            this.pnlStepDateTime.Controls.Add(this.pnlCalendarCard);
-            this.pnlStepDateTime.Controls.Add(this.pnlTimeSlotsCard);
-            this.pnlStepDateTime.Controls.Add(this.pnlDurationCard);
-
+            lblPageSubtitle.BackColor = Color.Transparent;
+            lblPageSubtitle.Font = new Font("Segoe UI", 9F);
+            lblPageSubtitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPageSubtitle.Location = new Point(30, 48);
+            lblPageSubtitle.Name = "lblPageSubtitle";
+            lblPageSubtitle.Size = new Size(500, 22);
+            lblPageSubtitle.TabIndex = 1;
+            lblPageSubtitle.Text = "Complete the steps below to schedule your booking";
             //
-            // pnlStepBabysitter (step 1)
+            // pnlStepCircle1
             //
-            this.pnlStepBabysitter.Location = new System.Drawing.Point(30, 180);
-            this.pnlStepBabysitter.Size = new System.Drawing.Size(1420, 500);
-            this.pnlStepBabysitter.BackColor = System.Drawing.Color.Transparent;
-            this.pnlStepBabysitter.Visible = false;
-
-            this.flpBabysitterSelect.Location = new System.Drawing.Point(0, 0);
-            this.flpBabysitterSelect.Size = new System.Drawing.Size(900, 500);
-            this.flpBabysitterSelect.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpBabysitterSelect.WrapContents = false;
-            this.flpBabysitterSelect.AutoScroll = true;
-            this.flpBabysitterSelect.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlStepBabysitter.Controls.Add(this.flpBabysitterSelect);
-
+            pnlStepCircle1.BackColor = Color.Transparent;
+            pnlStepCircle1.BorderRadius = 18;
+            pnlStepCircle1.Controls.Add(lblStepNum1);
+            pnlStepCircle1.FillColor = Color.FromArgb(232, 113, 74);
+            pnlStepCircle1.Location = new Point(30, 84);
+            pnlStepCircle1.Name = "pnlStepCircle1";
+            pnlStepCircle1.Size = new Size(36, 36);
+            pnlStepCircle1.TabIndex = 2;
             //
-            // pnlStepDetails (step 2)
+            // lblStepNum1
             //
-            this.pnlStepDetails.Location = new System.Drawing.Point(30, 180);
-            this.pnlStepDetails.Size = new System.Drawing.Size(1420, 420);
-            this.pnlStepDetails.BackColor = System.Drawing.Color.Transparent;
-            this.pnlStepDetails.Visible = false;
-
-            this.lblDetailsTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblDetailsTitle.Size = new System.Drawing.Size(300, 26);
-            this.lblDetailsTitle.Text = "Booking Details";
-            this.lblDetailsTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblDetailsTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblDetailsTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.lblChildCountCaption.Location = new System.Drawing.Point(0, 50);
-            this.lblChildCountCaption.Size = new System.Drawing.Size(260, 22);
-            this.lblChildCountCaption.Text = "Number of Children";
-            this.lblChildCountCaption.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblChildCountCaption.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblChildCountCaption.BackColor = System.Drawing.Color.Transparent;
-
-            this.btnDecChildren.BorderRadius = 10;
-            this.btnDecChildren.BorderThickness = 0;
-            this.btnDecChildren.ShadowDecoration.Enabled = false;
-            this.btnDecChildren.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnDecChildren.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnDecChildren.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnDecChildren.Location = new System.Drawing.Point(0, 80);
-            this.btnDecChildren.Size = new System.Drawing.Size(44, 40);
-            this.btnDecChildren.Text = "-";
-            this.btnDecChildren.Click += new System.EventHandler(this.btnDecChildren_Click);
-
-            this.lblChildCount.Location = new System.Drawing.Point(54, 80);
-            this.lblChildCount.Size = new System.Drawing.Size(50, 40);
-            this.lblChildCount.Text = "1";
-            this.lblChildCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblChildCount.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblChildCount.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblChildCount.BackColor = System.Drawing.Color.Transparent;
-
-            this.btnIncChildren.BorderRadius = 10;
-            this.btnIncChildren.BorderThickness = 0;
-            this.btnIncChildren.ShadowDecoration.Enabled = false;
-            this.btnIncChildren.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnIncChildren.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnIncChildren.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnIncChildren.Location = new System.Drawing.Point(114, 80);
-            this.btnIncChildren.Size = new System.Drawing.Size(44, 40);
-            this.btnIncChildren.Text = "+";
-            this.btnIncChildren.Click += new System.EventHandler(this.btnIncChildren_Click);
-
-            this.lblAddressCaption.Location = new System.Drawing.Point(0, 150);
-            this.lblAddressCaption.Size = new System.Drawing.Size(260, 22);
-            this.lblAddressCaption.Text = "Address";
-            this.lblAddressCaption.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblAddressCaption.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblAddressCaption.BackColor = System.Drawing.Color.Transparent;
-
-            this.tbAddress.BorderRadius = 10;
-            this.tbAddress.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.tbAddress.PlaceholderText = "123 Main St, City, State";
-            this.tbAddress.Location = new System.Drawing.Point(0, 176);
-            this.tbAddress.Size = new System.Drawing.Size(700, 44);
-            this.tbAddress.FocusedState.BorderColor = System.Drawing.Color.FromArgb(232, 113, 74);
-
-            this.lblNotesCaption.Location = new System.Drawing.Point(0, 238);
-            this.lblNotesCaption.Size = new System.Drawing.Size(400, 22);
-            this.lblNotesCaption.Text = "Special Instructions (optional)";
-            this.lblNotesCaption.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblNotesCaption.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblNotesCaption.BackColor = System.Drawing.Color.Transparent;
-
-            this.tbNotes.BorderRadius = 10;
-            this.tbNotes.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.tbNotes.PlaceholderText = "Allergies, bedtime routines, emergency contacts...";
-            this.tbNotes.Multiline = true;
-            this.tbNotes.Location = new System.Drawing.Point(0, 264);
-            this.tbNotes.Size = new System.Drawing.Size(700, 100);
-            this.tbNotes.FocusedState.BorderColor = System.Drawing.Color.FromArgb(232, 113, 74);
-
-            this.pnlStepDetails.Controls.Add(this.lblDetailsTitle);
-            this.pnlStepDetails.Controls.Add(this.lblChildCountCaption);
-            this.pnlStepDetails.Controls.Add(this.btnDecChildren);
-            this.pnlStepDetails.Controls.Add(this.lblChildCount);
-            this.pnlStepDetails.Controls.Add(this.btnIncChildren);
-            this.pnlStepDetails.Controls.Add(this.lblAddressCaption);
-            this.pnlStepDetails.Controls.Add(this.tbAddress);
-            this.pnlStepDetails.Controls.Add(this.lblNotesCaption);
-            this.pnlStepDetails.Controls.Add(this.tbNotes);
-
+            lblStepNum1.BackColor = Color.Transparent;
+            lblStepNum1.Dock = DockStyle.Fill;
+            lblStepNum1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblStepNum1.ForeColor = Color.White;
+            lblStepNum1.Location = new Point(0, 0);
+            lblStepNum1.Name = "lblStepNum1";
+            lblStepNum1.Size = new Size(36, 36);
+            lblStepNum1.TabIndex = 0;
+            lblStepNum1.Text = "1";
+            lblStepNum1.TextAlign = ContentAlignment.MiddleCenter;
             //
-            // pnlStepConfirm (step 3)
+            // lblStepCaption1
             //
-            this.pnlStepConfirm.Location = new System.Drawing.Point(30, 180);
-            this.pnlStepConfirm.Size = new System.Drawing.Size(1420, 420);
-            this.pnlStepConfirm.BackColor = System.Drawing.Color.Transparent;
-            this.pnlStepConfirm.Visible = false;
-
-            this.lblConfirmTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblConfirmTitle.Size = new System.Drawing.Size(300, 26);
-            this.lblConfirmTitle.Text = "Booking Summary";
-            this.lblConfirmTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblConfirmTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblConfirmTitle.BackColor = System.Drawing.Color.Transparent;
-
-            SetupSummaryRow(this.lblSumDate, 44);
-            SetupSummaryRow(this.lblSumTime, 72);
-            SetupSummaryRow(this.lblSumBabysitter, 100);
-            SetupSummaryRow(this.lblSumChildren, 128);
-            SetupSummaryRow(this.lblSumAddress, 156);
-
-            SetupSummaryRow(this.lblCostSitterLine, 210);
-            SetupSummaryRow(this.lblCostServiceFee, 236);
-
-            this.lblCostTotal.Location = new System.Drawing.Point(0, 268);
-            this.lblCostTotal.Size = new System.Drawing.Size(700, 26);
-            this.lblCostTotal.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblCostTotal.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.lblCostTotal.BackColor = System.Drawing.Color.Transparent;
-
-            this.lblPaymentNote.Location = new System.Drawing.Point(0, 320);
-            this.lblPaymentNote.Size = new System.Drawing.Size(700, 40);
-            this.lblPaymentNote.Text = "Payment will be processed after the babysitter confirms the booking.";
-            this.lblPaymentNote.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPaymentNote.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblPaymentNote.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-
-            this.pnlStepConfirm.Controls.Add(this.lblConfirmTitle);
-            this.pnlStepConfirm.Controls.Add(this.lblSumDate);
-            this.pnlStepConfirm.Controls.Add(this.lblSumTime);
-            this.pnlStepConfirm.Controls.Add(this.lblSumBabysitter);
-            this.pnlStepConfirm.Controls.Add(this.lblSumChildren);
-            this.pnlStepConfirm.Controls.Add(this.lblSumAddress);
-            this.pnlStepConfirm.Controls.Add(this.lblCostSitterLine);
-            this.pnlStepConfirm.Controls.Add(this.lblCostServiceFee);
-            this.pnlStepConfirm.Controls.Add(this.lblCostTotal);
-            this.pnlStepConfirm.Controls.Add(this.lblPaymentNote);
-
+            lblStepCaption1.BackColor = Color.Transparent;
+            lblStepCaption1.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblStepCaption1.ForeColor = Color.FromArgb(232, 113, 74);
+            lblStepCaption1.Location = new Point(74, 92);
+            lblStepCaption1.Name = "lblStepCaption1";
+            lblStepCaption1.Size = new Size(150, 20);
+            lblStepCaption1.TabIndex = 3;
+            lblStepCaption1.Text = "Select Date & Time";
             //
-            // Bottom nav buttons
+            // pnlStepLine1
             //
-            this.btnBack.BorderRadius = 10;
-            this.btnBack.BorderThickness = 0;
-            this.btnBack.ShadowDecoration.Enabled = false;
-            this.btnBack.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.btnBack.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnBack.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.btnBack.Location = new System.Drawing.Point(30, 910);
-            this.btnBack.Size = new System.Drawing.Size(140, 48);
-            this.btnBack.Text = "< Back";
-            this.btnBack.Visible = false;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-
-            this.btnContinue.BorderRadius = 10;
-            this.btnContinue.BorderThickness = 0;
-            this.btnContinue.ShadowDecoration.Enabled = false;
-            this.btnContinue.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnContinue.ForeColor = System.Drawing.Color.White;
-            this.btnContinue.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnContinue.Location = new System.Drawing.Point(180, 910);
-            this.btnContinue.Size = new System.Drawing.Size(1270, 48);
-            this.btnContinue.Text = "Continue >";
-            this.btnContinue.Click += new System.EventHandler(this.btnContinue_Click);
-
+            pnlStepLine1.BackColor = Color.Transparent;
+            pnlStepLine1.FillColor = Color.FromArgb(230, 224, 218);
+            pnlStepLine1.Location = new Point(235, 100);
+            pnlStepLine1.Name = "pnlStepLine1";
+            pnlStepLine1.Size = new Size(145, 3);
+            pnlStepLine1.TabIndex = 4;
             //
-            // pnlConfirmationScreen (shown instead of everything above once booked)
+            // pnlStepCircle2
             //
-            this.pnlConfirmationScreen.FillColor = System.Drawing.Color.Transparent;
-            this.pnlConfirmationScreen.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlConfirmationScreen.Location = new System.Drawing.Point(450, 60);
-            this.pnlConfirmationScreen.Size = new System.Drawing.Size(500, 620);
-            this.pnlConfirmationScreen.Visible = false;
-
-            this.pnlCheckCircle.BorderRadius = 40;
-            this.pnlCheckCircle.FillColor = System.Drawing.Color.FromArgb(222, 245, 244);
-            this.pnlCheckCircle.Location = new System.Drawing.Point(210, 0);
-            this.pnlCheckCircle.Size = new System.Drawing.Size(80, 80);
-            this.lblCheckIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCheckIcon.Text = "✓";
-            this.lblCheckIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblCheckIcon.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold);
-            this.lblCheckIcon.ForeColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.lblCheckIcon.BackColor = System.Drawing.Color.Transparent;
-            this.pnlCheckCircle.Controls.Add(this.lblCheckIcon);
-
-            this.lblConfirmedTitle.Location = new System.Drawing.Point(0, 96);
-            this.lblConfirmedTitle.Size = new System.Drawing.Size(500, 30);
-            this.lblConfirmedTitle.Text = "Booking Confirmed!";
-            this.lblConfirmedTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblConfirmedTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblConfirmedTitle.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblConfirmedTitle.BackColor = System.Drawing.Color.Transparent;
-
-            this.lblConfirmedMessage.Location = new System.Drawing.Point(20, 132);
-            this.lblConfirmedMessage.Size = new System.Drawing.Size(460, 44);
-            this.lblConfirmedMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblConfirmedMessage.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblConfirmedMessage.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblConfirmedMessage.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlConfirmedSummaryCard.BorderRadius = 16;
-            this.pnlConfirmedSummaryCard.FillColor = System.Drawing.Color.White;
-            this.pnlConfirmedSummaryCard.Location = new System.Drawing.Point(0, 190);
-            this.pnlConfirmedSummaryCard.Size = new System.Drawing.Size(500, 200);
-
-            SetupConfirmedRow(this.lblConfirmedDate, 16);
-            SetupConfirmedRow(this.lblConfirmedTime, 48);
-            SetupConfirmedRow(this.lblConfirmedBabysitter, 80);
-            this.lblConfirmedTotal.Location = new System.Drawing.Point(16, 130);
-            this.lblConfirmedTotal.Size = new System.Drawing.Size(468, 26);
-            this.lblConfirmedTotal.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblConfirmedTotal.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.lblConfirmedTotal.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlConfirmedSummaryCard.Controls.Add(this.lblConfirmedDate);
-            this.pnlConfirmedSummaryCard.Controls.Add(this.lblConfirmedTime);
-            this.pnlConfirmedSummaryCard.Controls.Add(this.lblConfirmedBabysitter);
-            this.pnlConfirmedSummaryCard.Controls.Add(this.lblConfirmedTotal);
-
-            this.btnBackToDashboard.BorderRadius = 10;
-            this.btnBackToDashboard.BorderThickness = 0;
-            this.btnBackToDashboard.ShadowDecoration.Enabled = false;
-            this.btnBackToDashboard.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnBackToDashboard.ForeColor = System.Drawing.Color.White;
-            this.btnBackToDashboard.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnBackToDashboard.Location = new System.Drawing.Point(0, 410);
-            this.btnBackToDashboard.Size = new System.Drawing.Size(240, 48);
-            this.btnBackToDashboard.Text = "Back to Dashboard";
-            this.btnBackToDashboard.Click += new System.EventHandler(this.btnBackToDashboard_Click);
-
-            this.btnNewBooking.BorderRadius = 10;
-            this.btnNewBooking.BorderThickness = 0;
-            this.btnNewBooking.ShadowDecoration.Enabled = false;
-            this.btnNewBooking.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.btnNewBooking.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnNewBooking.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnNewBooking.Location = new System.Drawing.Point(260, 410);
-            this.btnNewBooking.Size = new System.Drawing.Size(240, 48);
-            this.btnNewBooking.Text = "New Booking";
-            this.btnNewBooking.Click += new System.EventHandler(this.btnNewBooking_Click);
-
-            this.pnlConfirmationScreen.Controls.Add(this.pnlCheckCircle);
-            this.pnlConfirmationScreen.Controls.Add(this.lblConfirmedTitle);
-            this.pnlConfirmationScreen.Controls.Add(this.lblConfirmedMessage);
-            this.pnlConfirmationScreen.Controls.Add(this.pnlConfirmedSummaryCard);
-            this.pnlConfirmationScreen.Controls.Add(this.btnBackToDashboard);
-            this.pnlConfirmationScreen.Controls.Add(this.btnNewBooking);
-
+            pnlStepCircle2.BackColor = Color.Transparent;
+            pnlStepCircle2.BorderRadius = 18;
+            pnlStepCircle2.Controls.Add(lblStepNum2);
+            pnlStepCircle2.FillColor = Color.FromArgb(247, 245, 242);
+            pnlStepCircle2.Location = new Point(390, 84);
+            pnlStepCircle2.Name = "pnlStepCircle2";
+            pnlStepCircle2.Size = new Size(36, 36);
+            pnlStepCircle2.TabIndex = 5;
             //
-            // pnlContent.Controls
+            // lblStepNum2
             //
-            this.pnlContent.Controls.Add(this.lblPageTitle);
-            this.pnlContent.Controls.Add(this.lblPageSubtitle);
-            this.pnlContent.Controls.Add(this.pnlStepCircle1);
-            this.pnlContent.Controls.Add(this.lblStepCaption1);
-            this.pnlContent.Controls.Add(this.pnlStepLine1);
-            this.pnlContent.Controls.Add(this.pnlStepCircle2);
-            this.pnlContent.Controls.Add(this.lblStepCaption2);
-            this.pnlContent.Controls.Add(this.pnlStepLine2);
-            this.pnlContent.Controls.Add(this.pnlStepCircle3);
-            this.pnlContent.Controls.Add(this.lblStepCaption3);
-            this.pnlContent.Controls.Add(this.pnlStepLine3);
-            this.pnlContent.Controls.Add(this.pnlStepCircle4);
-            this.pnlContent.Controls.Add(this.lblStepCaption4);
-            this.pnlContent.Controls.Add(this.pnlStepDateTime);
-            this.pnlContent.Controls.Add(this.pnlStepBabysitter);
-            this.pnlContent.Controls.Add(this.pnlStepDetails);
-            this.pnlContent.Controls.Add(this.pnlStepConfirm);
-            this.pnlContent.Controls.Add(this.btnBack);
-            this.pnlContent.Controls.Add(this.btnContinue);
-            this.pnlContent.Controls.Add(this.pnlConfirmationScreen);
-
+            lblStepNum2.BackColor = Color.Transparent;
+            lblStepNum2.Dock = DockStyle.Fill;
+            lblStepNum2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblStepNum2.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepNum2.Location = new Point(0, 0);
+            lblStepNum2.Name = "lblStepNum2";
+            lblStepNum2.Size = new Size(36, 36);
+            lblStepNum2.TabIndex = 0;
+            lblStepNum2.Text = "2";
+            lblStepNum2.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblStepCaption2
+            //
+            lblStepCaption2.BackColor = Color.Transparent;
+            lblStepCaption2.Font = new Font("Segoe UI", 8F);
+            lblStepCaption2.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepCaption2.Location = new Point(434, 92);
+            lblStepCaption2.Name = "lblStepCaption2";
+            lblStepCaption2.Size = new Size(150, 20);
+            lblStepCaption2.TabIndex = 6;
+            lblStepCaption2.Text = "Choose Babysitter";
+            //
+            // pnlStepLine2
+            //
+            pnlStepLine2.BackColor = Color.Transparent;
+            pnlStepLine2.FillColor = Color.FromArgb(230, 224, 218);
+            pnlStepLine2.Location = new Point(595, 100);
+            pnlStepLine2.Name = "pnlStepLine2";
+            pnlStepLine2.Size = new Size(145, 3);
+            pnlStepLine2.TabIndex = 7;
+            //
+            // pnlStepCircle3
+            //
+            pnlStepCircle3.BackColor = Color.Transparent;
+            pnlStepCircle3.BorderRadius = 18;
+            pnlStepCircle3.Controls.Add(lblStepNum3);
+            pnlStepCircle3.FillColor = Color.FromArgb(247, 245, 242);
+            pnlStepCircle3.Location = new Point(750, 84);
+            pnlStepCircle3.Name = "pnlStepCircle3";
+            pnlStepCircle3.Size = new Size(36, 36);
+            pnlStepCircle3.TabIndex = 8;
+            //
+            // lblStepNum3
+            //
+            lblStepNum3.BackColor = Color.Transparent;
+            lblStepNum3.Dock = DockStyle.Fill;
+            lblStepNum3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblStepNum3.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepNum3.Location = new Point(0, 0);
+            lblStepNum3.Name = "lblStepNum3";
+            lblStepNum3.Size = new Size(36, 36);
+            lblStepNum3.TabIndex = 0;
+            lblStepNum3.Text = "3";
+            lblStepNum3.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblStepCaption3
+            //
+            lblStepCaption3.BackColor = Color.Transparent;
+            lblStepCaption3.Font = new Font("Segoe UI", 8F);
+            lblStepCaption3.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepCaption3.Location = new Point(794, 92);
+            lblStepCaption3.Name = "lblStepCaption3";
+            lblStepCaption3.Size = new Size(150, 20);
+            lblStepCaption3.TabIndex = 9;
+            lblStepCaption3.Text = "Details";
+            //
+            // pnlStepLine3
+            //
+            pnlStepLine3.BackColor = Color.Transparent;
+            pnlStepLine3.FillColor = Color.FromArgb(230, 224, 218);
+            pnlStepLine3.Location = new Point(955, 100);
+            pnlStepLine3.Name = "pnlStepLine3";
+            pnlStepLine3.Size = new Size(145, 3);
+            pnlStepLine3.TabIndex = 10;
+            //
+            // pnlStepCircle4
+            //
+            pnlStepCircle4.BackColor = Color.Transparent;
+            pnlStepCircle4.BorderRadius = 18;
+            pnlStepCircle4.Controls.Add(lblStepNum4);
+            pnlStepCircle4.FillColor = Color.FromArgb(247, 245, 242);
+            pnlStepCircle4.Location = new Point(1110, 84);
+            pnlStepCircle4.Name = "pnlStepCircle4";
+            pnlStepCircle4.Size = new Size(36, 36);
+            pnlStepCircle4.TabIndex = 11;
+            //
+            // lblStepNum4
+            //
+            lblStepNum4.BackColor = Color.Transparent;
+            lblStepNum4.Dock = DockStyle.Fill;
+            lblStepNum4.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblStepNum4.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepNum4.Location = new Point(0, 0);
+            lblStepNum4.Name = "lblStepNum4";
+            lblStepNum4.Size = new Size(36, 36);
+            lblStepNum4.TabIndex = 0;
+            lblStepNum4.Text = "4";
+            lblStepNum4.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblStepCaption4
+            //
+            lblStepCaption4.BackColor = Color.Transparent;
+            lblStepCaption4.Font = new Font("Segoe UI", 8F);
+            lblStepCaption4.ForeColor = Color.FromArgb(154, 136, 128);
+            lblStepCaption4.Location = new Point(1154, 92);
+            lblStepCaption4.Name = "lblStepCaption4";
+            lblStepCaption4.Size = new Size(150, 20);
+            lblStepCaption4.TabIndex = 12;
+            lblStepCaption4.Text = "Confirm";
+            //
+            // pnlStepDateTime
+            //
+            pnlStepDateTime.BackColor = Color.Transparent;
+            pnlStepDateTime.Controls.Add(pnlCalendarCard);
+            pnlStepDateTime.Controls.Add(pnlTimeSlotsCard);
+            pnlStepDateTime.Controls.Add(pnlDurationCard);
+            pnlStepDateTime.Location = new Point(30, 140);
+            pnlStepDateTime.Name = "pnlStepDateTime";
+            pnlStepDateTime.Size = new Size(1420, 670);
+            pnlStepDateTime.TabIndex = 13;
+            //
+            // pnlCalendarCard
+            //
+            pnlCalendarCard.BackColor = Color.Transparent;
+            pnlCalendarCard.BorderRadius = 16;
+            pnlCalendarCard.Controls.Add(lblCalTitle);
+            pnlCalendarCard.Controls.Add(btnCalPrev);
+            pnlCalendarCard.Controls.Add(lblCalMonthYear);
+            pnlCalendarCard.Controls.Add(btnCalNext);
+            pnlCalendarCard.Controls.Add(tlpBookingCalendar);
+            pnlCalendarCard.FillColor = Color.White;
+            pnlCalendarCard.Location = new Point(0, 0);
+            pnlCalendarCard.Name = "pnlCalendarCard";
+            pnlCalendarCard.Size = new Size(700, 380);
+            pnlCalendarCard.TabIndex = 0;
+            //
+            // lblCalTitle
+            //
+            lblCalTitle.BackColor = Color.Transparent;
+            lblCalTitle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            lblCalTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalTitle.Location = new Point(16, 14);
+            lblCalTitle.Name = "lblCalTitle";
+            lblCalTitle.Size = new Size(200, 24);
+            lblCalTitle.TabIndex = 0;
+            lblCalTitle.Text = "Select Date";
+            //
+            // btnCalPrev
+            //
+            btnCalPrev.BackColor = Color.White;
+            btnCalPrev.BorderRadius = 8;
+            btnCalPrev.FillColor = Color.FromArgb(247, 245, 242);
+            btnCalPrev.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCalPrev.ForeColor = Color.FromArgb(154, 136, 128);
+            btnCalPrev.Location = new Point(560, 12);
+            btnCalPrev.Name = "btnCalPrev";
+            btnCalPrev.Size = new Size(34, 32);
+            btnCalPrev.TabIndex = 1;
+            btnCalPrev.Text = "<";
+            btnCalPrev.Click += btnCalPrev_Click;
+            //
+            // lblCalMonthYear
+            //
+            lblCalMonthYear.BackColor = Color.Transparent;
+            lblCalMonthYear.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblCalMonthYear.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalMonthYear.Location = new Point(598, 14);
+            lblCalMonthYear.Name = "lblCalMonthYear";
+            lblCalMonthYear.Size = new Size(130, 26);
+            lblCalMonthYear.TabIndex = 2;
+            lblCalMonthYear.Text = "June 2024";
+            lblCalMonthYear.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // btnCalNext
+            //
+            btnCalNext.BackColor = Color.White;
+            btnCalNext.BorderRadius = 8;
+            btnCalNext.FillColor = Color.FromArgb(247, 245, 242);
+            btnCalNext.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCalNext.ForeColor = Color.FromArgb(154, 136, 128);
+            btnCalNext.Location = new Point(650, 12);
+            btnCalNext.Name = "btnCalNext";
+            btnCalNext.Size = new Size(34, 32);
+            btnCalNext.TabIndex = 3;
+            btnCalNext.Text = ">";
+            btnCalNext.Click += btnCalNext_Click;
+            //
+            // tlpBookingCalendar
+            //
+            tlpBookingCalendar.BackColor = Color.Transparent;
+            tlpBookingCalendar.ColumnCount = 7;
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
+            tlpBookingCalendar.Controls.Add(lblCalSun, 0, 0);
+            tlpBookingCalendar.Controls.Add(lblCalMon, 1, 0);
+            tlpBookingCalendar.Controls.Add(lblCalTue, 2, 0);
+            tlpBookingCalendar.Controls.Add(lblCalWed, 3, 0);
+            tlpBookingCalendar.Controls.Add(lblCalThu, 4, 0);
+            tlpBookingCalendar.Controls.Add(lblCalFri, 5, 0);
+            tlpBookingCalendar.Controls.Add(lblCalSat, 6, 0);
+            tlpBookingCalendar.Location = new Point(16, 54);
+            tlpBookingCalendar.Name = "tlpBookingCalendar";
+            tlpBookingCalendar.RowCount = 7;
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+            tlpBookingCalendar.Size = new Size(668, 310);
+            tlpBookingCalendar.TabIndex = 4;
+            //
+            // lblCalSun
+            //
+            lblCalSun.BackColor = Color.Transparent;
+            lblCalSun.Dock = DockStyle.Fill;
+            lblCalSun.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalSun.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalSun.Name = "lblCalSun";
+            lblCalSun.TabIndex = 0;
+            lblCalSun.Text = "Su";
+            lblCalSun.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalMon
+            //
+            lblCalMon.BackColor = Color.Transparent;
+            lblCalMon.Dock = DockStyle.Fill;
+            lblCalMon.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalMon.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalMon.Name = "lblCalMon";
+            lblCalMon.TabIndex = 1;
+            lblCalMon.Text = "Mo";
+            lblCalMon.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalTue
+            //
+            lblCalTue.BackColor = Color.Transparent;
+            lblCalTue.Dock = DockStyle.Fill;
+            lblCalTue.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalTue.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalTue.Name = "lblCalTue";
+            lblCalTue.TabIndex = 2;
+            lblCalTue.Text = "Tu";
+            lblCalTue.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalWed
+            //
+            lblCalWed.BackColor = Color.Transparent;
+            lblCalWed.Dock = DockStyle.Fill;
+            lblCalWed.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalWed.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalWed.Name = "lblCalWed";
+            lblCalWed.TabIndex = 3;
+            lblCalWed.Text = "We";
+            lblCalWed.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalThu
+            //
+            lblCalThu.BackColor = Color.Transparent;
+            lblCalThu.Dock = DockStyle.Fill;
+            lblCalThu.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalThu.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalThu.Name = "lblCalThu";
+            lblCalThu.TabIndex = 4;
+            lblCalThu.Text = "Th";
+            lblCalThu.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalFri
+            //
+            lblCalFri.BackColor = Color.Transparent;
+            lblCalFri.Dock = DockStyle.Fill;
+            lblCalFri.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalFri.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalFri.Name = "lblCalFri";
+            lblCalFri.TabIndex = 5;
+            lblCalFri.Text = "Fr";
+            lblCalFri.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblCalSat
+            //
+            lblCalSat.BackColor = Color.Transparent;
+            lblCalSat.Dock = DockStyle.Fill;
+            lblCalSat.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            lblCalSat.ForeColor = Color.FromArgb(154, 136, 128);
+            lblCalSat.Name = "lblCalSat";
+            lblCalSat.TabIndex = 6;
+            lblCalSat.Text = "Sa";
+            lblCalSat.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // pnlTimeSlotsCard
+            //
+            pnlTimeSlotsCard.BackColor = Color.Transparent;
+            pnlTimeSlotsCard.BorderRadius = 16;
+            pnlTimeSlotsCard.Controls.Add(lblTimeSlotsTitle);
+            pnlTimeSlotsCard.Controls.Add(flpTimeSlots);
+            pnlTimeSlotsCard.FillColor = Color.White;
+            pnlTimeSlotsCard.Location = new Point(0, 395);
+            pnlTimeSlotsCard.Name = "pnlTimeSlotsCard";
+            pnlTimeSlotsCard.Size = new Size(700, 145);
+            pnlTimeSlotsCard.TabIndex = 1;
+            pnlTimeSlotsCard.Visible = false;
+            //
+            // lblTimeSlotsTitle
+            //
+            lblTimeSlotsTitle.BackColor = Color.Transparent;
+            lblTimeSlotsTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTimeSlotsTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblTimeSlotsTitle.Location = new Point(16, 14);
+            lblTimeSlotsTitle.Name = "lblTimeSlotsTitle";
+            lblTimeSlotsTitle.Size = new Size(220, 22);
+            lblTimeSlotsTitle.TabIndex = 0;
+            lblTimeSlotsTitle.Text = "Select Start Time";
+            //
+            // flpTimeSlots
+            //
+            flpTimeSlots.BackColor = Color.Transparent;
+            flpTimeSlots.Location = new Point(12, 46);
+            flpTimeSlots.Name = "flpTimeSlots";
+            flpTimeSlots.Size = new Size(676, 90);
+            flpTimeSlots.TabIndex = 1;
+            //
+            // pnlDurationCard
+            //
+            pnlDurationCard.BackColor = Color.Transparent;
+            pnlDurationCard.BorderRadius = 16;
+            pnlDurationCard.Controls.Add(lblDurationTitle);
+            pnlDurationCard.Controls.Add(flpDurations);
+            pnlDurationCard.FillColor = Color.White;
+            pnlDurationCard.Location = new Point(0, 555);
+            pnlDurationCard.Name = "pnlDurationCard";
+            pnlDurationCard.Size = new Size(700, 110);
+            pnlDurationCard.TabIndex = 2;
+            pnlDurationCard.Visible = false;
+            //
+            // lblDurationTitle
+            //
+            lblDurationTitle.BackColor = Color.Transparent;
+            lblDurationTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblDurationTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblDurationTitle.Location = new Point(16, 14);
+            lblDurationTitle.Name = "lblDurationTitle";
+            lblDurationTitle.Size = new Size(160, 22);
+            lblDurationTitle.TabIndex = 0;
+            lblDurationTitle.Text = "Duration";
+            //
+            // flpDurations
+            //
+            flpDurations.BackColor = Color.Transparent;
+            flpDurations.Location = new Point(12, 46);
+            flpDurations.Name = "flpDurations";
+            flpDurations.Size = new Size(676, 56);
+            flpDurations.TabIndex = 1;
+            //
+            // pnlStepBabysitter
+            //
+            pnlStepBabysitter.BackColor = Color.Transparent;
+            pnlStepBabysitter.Controls.Add(flpBabysitterSelect);
+            pnlStepBabysitter.Location = new Point(30, 140);
+            pnlStepBabysitter.Name = "pnlStepBabysitter";
+            pnlStepBabysitter.Size = new Size(1420, 600);
+            pnlStepBabysitter.TabIndex = 14;
+            pnlStepBabysitter.Visible = false;
+            //
+            // flpBabysitterSelect
+            //
+            flpBabysitterSelect.AutoScroll = true;
+            flpBabysitterSelect.BackColor = Color.Transparent;
+            flpBabysitterSelect.FlowDirection = FlowDirection.TopDown;
+            flpBabysitterSelect.Location = new Point(0, 0);
+            flpBabysitterSelect.Name = "flpBabysitterSelect";
+            flpBabysitterSelect.Size = new Size(900, 600);
+            flpBabysitterSelect.TabIndex = 0;
+            flpBabysitterSelect.WrapContents = false;
+            //
+            // pnlStepDetails
+            //
+            pnlStepDetails.BackColor = Color.Transparent;
+            pnlStepDetails.Controls.Add(pnlDetailsCard);
+            pnlStepDetails.Location = new Point(30, 140);
+            pnlStepDetails.Name = "pnlStepDetails";
+            pnlStepDetails.Size = new Size(1420, 480);
+            pnlStepDetails.TabIndex = 15;
+            pnlStepDetails.Visible = false;
+            //
+            // pnlDetailsCard
+            //
+            pnlDetailsCard.BackColor = Color.Transparent;
+            pnlDetailsCard.BorderRadius = 16;
+            pnlDetailsCard.Controls.Add(lblDetailsTitle);
+            pnlDetailsCard.Controls.Add(lblChildCountCaption);
+            pnlDetailsCard.Controls.Add(btnDecChildren);
+            pnlDetailsCard.Controls.Add(lblChildCount);
+            pnlDetailsCard.Controls.Add(btnIncChildren);
+            pnlDetailsCard.Controls.Add(lblAddressCaption);
+            pnlDetailsCard.Controls.Add(tbAddress);
+            pnlDetailsCard.Controls.Add(lblNotesCaption);
+            pnlDetailsCard.Controls.Add(tbNotes);
+            pnlDetailsCard.FillColor = Color.White;
+            pnlDetailsCard.Location = new Point(0, 0);
+            pnlDetailsCard.Name = "pnlDetailsCard";
+            pnlDetailsCard.Size = new Size(740, 440);
+            pnlDetailsCard.TabIndex = 0;
+            //
+            // lblDetailsTitle
+            //
+            lblDetailsTitle.BackColor = Color.Transparent;
+            lblDetailsTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblDetailsTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblDetailsTitle.Location = new Point(20, 16);
+            lblDetailsTitle.Name = "lblDetailsTitle";
+            lblDetailsTitle.Size = new Size(300, 26);
+            lblDetailsTitle.TabIndex = 0;
+            lblDetailsTitle.Text = "Booking Details";
+            //
+            // lblChildCountCaption
+            //
+            lblChildCountCaption.BackColor = Color.Transparent;
+            lblChildCountCaption.Font = new Font("Segoe UI", 9F);
+            lblChildCountCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblChildCountCaption.Location = new Point(20, 58);
+            lblChildCountCaption.Name = "lblChildCountCaption";
+            lblChildCountCaption.Size = new Size(260, 22);
+            lblChildCountCaption.TabIndex = 1;
+            lblChildCountCaption.Text = "Number of Children";
+            //
+            // btnDecChildren
+            //
+            btnDecChildren.BackColor = Color.White;
+            btnDecChildren.BorderRadius = 10;
+            btnDecChildren.FillColor = Color.FromArgb(253, 238, 232);
+            btnDecChildren.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnDecChildren.ForeColor = Color.FromArgb(232, 113, 74);
+            btnDecChildren.Location = new Point(20, 86);
+            btnDecChildren.Name = "btnDecChildren";
+            btnDecChildren.Size = new Size(44, 40);
+            btnDecChildren.TabIndex = 2;
+            btnDecChildren.Text = "-";
+            btnDecChildren.Click += btnDecChildren_Click;
+            //
+            // lblChildCount
+            //
+            lblChildCount.BackColor = Color.Transparent;
+            lblChildCount.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblChildCount.ForeColor = Color.FromArgb(60, 50, 45);
+            lblChildCount.Location = new Point(74, 86);
+            lblChildCount.Name = "lblChildCount";
+            lblChildCount.Size = new Size(50, 40);
+            lblChildCount.TabIndex = 3;
+            lblChildCount.Text = "1";
+            lblChildCount.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // btnIncChildren
+            //
+            btnIncChildren.BackColor = Color.White;
+            btnIncChildren.BorderRadius = 10;
+            btnIncChildren.FillColor = Color.FromArgb(253, 238, 232);
+            btnIncChildren.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnIncChildren.ForeColor = Color.FromArgb(232, 113, 74);
+            btnIncChildren.Location = new Point(134, 86);
+            btnIncChildren.Name = "btnIncChildren";
+            btnIncChildren.Size = new Size(44, 40);
+            btnIncChildren.TabIndex = 4;
+            btnIncChildren.Text = "+";
+            btnIncChildren.Click += btnIncChildren_Click;
+            //
+            // lblAddressCaption
+            //
+            lblAddressCaption.BackColor = Color.Transparent;
+            lblAddressCaption.Font = new Font("Segoe UI", 9F);
+            lblAddressCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblAddressCaption.Location = new Point(20, 152);
+            lblAddressCaption.Name = "lblAddressCaption";
+            lblAddressCaption.Size = new Size(260, 22);
+            lblAddressCaption.TabIndex = 5;
+            lblAddressCaption.Text = "Address";
+            //
+            // tbAddress
+            //
+            tbAddress.BorderRadius = 10;
+            tbAddress.DefaultText = "";
+            tbAddress.FillColor = Color.FromArgb(247, 245, 242);
+            tbAddress.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbAddress.Font = new Font("Segoe UI", 9F);
+            tbAddress.Location = new Point(20, 178);
+            tbAddress.Name = "tbAddress";
+            tbAddress.PlaceholderText = "123 Main St, City, State";
+            tbAddress.SelectedText = "";
+            tbAddress.Size = new Size(700, 44);
+            tbAddress.TabIndex = 6;
+            //
+            // lblNotesCaption
+            //
+            lblNotesCaption.BackColor = Color.Transparent;
+            lblNotesCaption.Font = new Font("Segoe UI", 9F);
+            lblNotesCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblNotesCaption.Location = new Point(20, 244);
+            lblNotesCaption.Name = "lblNotesCaption";
+            lblNotesCaption.Size = new Size(400, 22);
+            lblNotesCaption.TabIndex = 7;
+            lblNotesCaption.Text = "Special Instructions (optional)";
+            //
+            // tbNotes
+            //
+            tbNotes.BorderRadius = 10;
+            tbNotes.DefaultText = "";
+            tbNotes.FillColor = Color.FromArgb(247, 245, 242);
+            tbNotes.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbNotes.Font = new Font("Segoe UI", 9F);
+            tbNotes.Location = new Point(20, 270);
+            tbNotes.Multiline = true;
+            tbNotes.Name = "tbNotes";
+            tbNotes.PlaceholderText = "Allergies, bedtime routines, emergency contacts...";
+            tbNotes.SelectedText = "";
+            tbNotes.Size = new Size(700, 140);
+            tbNotes.TabIndex = 8;
+            //
+            // pnlStepConfirm
+            //
+            pnlStepConfirm.BackColor = Color.Transparent;
+            pnlStepConfirm.Controls.Add(pnlConfirmCard);
+            pnlStepConfirm.Location = new Point(30, 140);
+            pnlStepConfirm.Name = "pnlStepConfirm";
+            pnlStepConfirm.Size = new Size(1420, 500);
+            pnlStepConfirm.TabIndex = 16;
+            pnlStepConfirm.Visible = false;
+            //
+            // pnlConfirmCard
+            //
+            pnlConfirmCard.BackColor = Color.Transparent;
+            pnlConfirmCard.BorderRadius = 16;
+            pnlConfirmCard.Controls.Add(lblConfirmTitle);
+            pnlConfirmCard.Controls.Add(lblSumDate);
+            pnlConfirmCard.Controls.Add(lblSumTime);
+            pnlConfirmCard.Controls.Add(lblSumBabysitter);
+            pnlConfirmCard.Controls.Add(lblSumChildren);
+            pnlConfirmCard.Controls.Add(lblSumAddress);
+            pnlConfirmCard.Controls.Add(lblCostSitterLine);
+            pnlConfirmCard.Controls.Add(lblCostServiceFee);
+            pnlConfirmCard.Controls.Add(lblCostTotal);
+            pnlConfirmCard.Controls.Add(lblPaymentNote);
+            pnlConfirmCard.FillColor = Color.White;
+            pnlConfirmCard.Location = new Point(0, 0);
+            pnlConfirmCard.Name = "pnlConfirmCard";
+            pnlConfirmCard.Size = new Size(740, 460);
+            pnlConfirmCard.TabIndex = 0;
+            //
+            // lblConfirmTitle
+            //
+            lblConfirmTitle.BackColor = Color.Transparent;
+            lblConfirmTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblConfirmTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblConfirmTitle.Location = new Point(20, 16);
+            lblConfirmTitle.Name = "lblConfirmTitle";
+            lblConfirmTitle.Size = new Size(300, 26);
+            lblConfirmTitle.TabIndex = 0;
+            lblConfirmTitle.Text = "Booking Summary";
+            //
+            // lblSumDate
+            //
+            lblSumDate.BackColor = Color.Transparent;
+            lblSumDate.Font = new Font("Segoe UI", 9F);
+            lblSumDate.ForeColor = Color.FromArgb(60, 50, 45);
+            lblSumDate.Location = new Point(20, 56);
+            lblSumDate.Name = "lblSumDate";
+            lblSumDate.Size = new Size(700, 24);
+            lblSumDate.TabIndex = 1;
+            //
+            // lblSumTime
+            //
+            lblSumTime.BackColor = Color.Transparent;
+            lblSumTime.Font = new Font("Segoe UI", 9F);
+            lblSumTime.ForeColor = Color.FromArgb(60, 50, 45);
+            lblSumTime.Location = new Point(20, 84);
+            lblSumTime.Name = "lblSumTime";
+            lblSumTime.Size = new Size(700, 24);
+            lblSumTime.TabIndex = 2;
+            //
+            // lblSumBabysitter
+            //
+            lblSumBabysitter.BackColor = Color.Transparent;
+            lblSumBabysitter.Font = new Font("Segoe UI", 9F);
+            lblSumBabysitter.ForeColor = Color.FromArgb(60, 50, 45);
+            lblSumBabysitter.Location = new Point(20, 112);
+            lblSumBabysitter.Name = "lblSumBabysitter";
+            lblSumBabysitter.Size = new Size(700, 24);
+            lblSumBabysitter.TabIndex = 3;
+            //
+            // lblSumChildren
+            //
+            lblSumChildren.BackColor = Color.Transparent;
+            lblSumChildren.Font = new Font("Segoe UI", 9F);
+            lblSumChildren.ForeColor = Color.FromArgb(60, 50, 45);
+            lblSumChildren.Location = new Point(20, 140);
+            lblSumChildren.Name = "lblSumChildren";
+            lblSumChildren.Size = new Size(700, 24);
+            lblSumChildren.TabIndex = 4;
+            //
+            // lblSumAddress
+            //
+            lblSumAddress.BackColor = Color.Transparent;
+            lblSumAddress.Font = new Font("Segoe UI", 9F);
+            lblSumAddress.ForeColor = Color.FromArgb(60, 50, 45);
+            lblSumAddress.Location = new Point(20, 168);
+            lblSumAddress.Name = "lblSumAddress";
+            lblSumAddress.Size = new Size(700, 24);
+            lblSumAddress.TabIndex = 5;
+            //
+            // lblCostSitterLine
+            //
+            lblCostSitterLine.BackColor = Color.Transparent;
+            lblCostSitterLine.Font = new Font("Segoe UI", 9F);
+            lblCostSitterLine.ForeColor = Color.FromArgb(60, 50, 45);
+            lblCostSitterLine.Location = new Point(20, 222);
+            lblCostSitterLine.Name = "lblCostSitterLine";
+            lblCostSitterLine.Size = new Size(700, 24);
+            lblCostSitterLine.TabIndex = 6;
+            //
+            // lblCostServiceFee
+            //
+            lblCostServiceFee.BackColor = Color.Transparent;
+            lblCostServiceFee.Font = new Font("Segoe UI", 9F);
+            lblCostServiceFee.ForeColor = Color.FromArgb(60, 50, 45);
+            lblCostServiceFee.Location = new Point(20, 248);
+            lblCostServiceFee.Name = "lblCostServiceFee";
+            lblCostServiceFee.Size = new Size(700, 24);
+            lblCostServiceFee.TabIndex = 7;
+            //
+            // lblCostTotal
+            //
+            lblCostTotal.BackColor = Color.Transparent;
+            lblCostTotal.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblCostTotal.ForeColor = Color.FromArgb(232, 113, 74);
+            lblCostTotal.Location = new Point(20, 282);
+            lblCostTotal.Name = "lblCostTotal";
+            lblCostTotal.Size = new Size(700, 26);
+            lblCostTotal.TabIndex = 8;
+            //
+            // lblPaymentNote
+            //
+            lblPaymentNote.BackColor = Color.FromArgb(253, 238, 232);
+            lblPaymentNote.Font = new Font("Segoe UI", 8.5F);
+            lblPaymentNote.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPaymentNote.Location = new Point(20, 330);
+            lblPaymentNote.Name = "lblPaymentNote";
+            lblPaymentNote.Size = new Size(700, 40);
+            lblPaymentNote.TabIndex = 9;
+            lblPaymentNote.Text = "  Payment will be processed after the babysitter confirms the booking.";
+            lblPaymentNote.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // pnlConfirmationScreen
+            //
+            pnlConfirmationScreen.BackColor = Color.Transparent;
+            pnlConfirmationScreen.BorderRadius = 16;
+            pnlConfirmationScreen.Controls.Add(pnlCheckCircle);
+            pnlConfirmationScreen.Controls.Add(lblConfirmedTitle);
+            pnlConfirmationScreen.Controls.Add(lblConfirmedMessage);
+            pnlConfirmationScreen.Controls.Add(pnlConfirmedSummaryCard);
+            pnlConfirmationScreen.Controls.Add(btnBackToDashboard);
+            pnlConfirmationScreen.Controls.Add(btnNewBooking);
+            pnlConfirmationScreen.FillColor = Color.White;
+            pnlConfirmationScreen.Location = new Point(450, 60);
+            pnlConfirmationScreen.Name = "pnlConfirmationScreen";
+            pnlConfirmationScreen.Size = new Size(500, 520);
+            pnlConfirmationScreen.TabIndex = 17;
+            pnlConfirmationScreen.Visible = false;
+            //
+            // pnlCheckCircle
+            //
+            pnlCheckCircle.BackColor = Color.White;
+            pnlCheckCircle.BorderRadius = 40;
+            pnlCheckCircle.Controls.Add(lblCheckIcon);
+            pnlCheckCircle.FillColor = Color.FromArgb(222, 245, 244);
+            pnlCheckCircle.Location = new Point(210, 30);
+            pnlCheckCircle.Name = "pnlCheckCircle";
+            pnlCheckCircle.Size = new Size(80, 80);
+            pnlCheckCircle.TabIndex = 0;
+            //
+            // lblCheckIcon
+            //
+            lblCheckIcon.BackColor = Color.Transparent;
+            lblCheckIcon.Dock = DockStyle.Fill;
+            lblCheckIcon.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            lblCheckIcon.ForeColor = Color.FromArgb(94, 200, 196);
+            lblCheckIcon.Location = new Point(0, 0);
+            lblCheckIcon.Name = "lblCheckIcon";
+            lblCheckIcon.Size = new Size(80, 80);
+            lblCheckIcon.TabIndex = 0;
+            lblCheckIcon.Text = "✓";
+            lblCheckIcon.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblConfirmedTitle
+            //
+            lblConfirmedTitle.BackColor = Color.Transparent;
+            lblConfirmedTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblConfirmedTitle.ForeColor = Color.FromArgb(60, 50, 45);
+            lblConfirmedTitle.Location = new Point(0, 126);
+            lblConfirmedTitle.Name = "lblConfirmedTitle";
+            lblConfirmedTitle.Size = new Size(500, 30);
+            lblConfirmedTitle.TabIndex = 1;
+            lblConfirmedTitle.Text = "Booking Confirmed!";
+            lblConfirmedTitle.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // lblConfirmedMessage
+            //
+            lblConfirmedMessage.BackColor = Color.Transparent;
+            lblConfirmedMessage.Font = new Font("Segoe UI", 9F);
+            lblConfirmedMessage.ForeColor = Color.FromArgb(154, 136, 128);
+            lblConfirmedMessage.Location = new Point(20, 162);
+            lblConfirmedMessage.Name = "lblConfirmedMessage";
+            lblConfirmedMessage.Size = new Size(460, 44);
+            lblConfirmedMessage.TabIndex = 2;
+            lblConfirmedMessage.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // pnlConfirmedSummaryCard
+            //
+            pnlConfirmedSummaryCard.BackColor = Color.White;
+            pnlConfirmedSummaryCard.BorderRadius = 12;
+            pnlConfirmedSummaryCard.Controls.Add(lblConfirmedDate);
+            pnlConfirmedSummaryCard.Controls.Add(lblConfirmedTime);
+            pnlConfirmedSummaryCard.Controls.Add(lblConfirmedBabysitter);
+            pnlConfirmedSummaryCard.Controls.Add(lblConfirmedTotal);
+            pnlConfirmedSummaryCard.FillColor = Color.FromArgb(247, 245, 242);
+            pnlConfirmedSummaryCard.Location = new Point(30, 226);
+            pnlConfirmedSummaryCard.Name = "pnlConfirmedSummaryCard";
+            pnlConfirmedSummaryCard.Size = new Size(440, 170);
+            pnlConfirmedSummaryCard.TabIndex = 3;
+            //
+            // lblConfirmedDate
+            //
+            lblConfirmedDate.BackColor = Color.Transparent;
+            lblConfirmedDate.Font = new Font("Segoe UI", 9F);
+            lblConfirmedDate.ForeColor = Color.FromArgb(60, 50, 45);
+            lblConfirmedDate.Location = new Point(16, 16);
+            lblConfirmedDate.Name = "lblConfirmedDate";
+            lblConfirmedDate.Size = new Size(408, 24);
+            lblConfirmedDate.TabIndex = 0;
+            //
+            // lblConfirmedTime
+            //
+            lblConfirmedTime.BackColor = Color.Transparent;
+            lblConfirmedTime.Font = new Font("Segoe UI", 9F);
+            lblConfirmedTime.ForeColor = Color.FromArgb(60, 50, 45);
+            lblConfirmedTime.Location = new Point(16, 48);
+            lblConfirmedTime.Name = "lblConfirmedTime";
+            lblConfirmedTime.Size = new Size(408, 24);
+            lblConfirmedTime.TabIndex = 1;
+            //
+            // lblConfirmedBabysitter
+            //
+            lblConfirmedBabysitter.BackColor = Color.Transparent;
+            lblConfirmedBabysitter.Font = new Font("Segoe UI", 9F);
+            lblConfirmedBabysitter.ForeColor = Color.FromArgb(60, 50, 45);
+            lblConfirmedBabysitter.Location = new Point(16, 80);
+            lblConfirmedBabysitter.Name = "lblConfirmedBabysitter";
+            lblConfirmedBabysitter.Size = new Size(408, 24);
+            lblConfirmedBabysitter.TabIndex = 2;
+            //
+            // lblConfirmedTotal
+            //
+            lblConfirmedTotal.BackColor = Color.Transparent;
+            lblConfirmedTotal.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblConfirmedTotal.ForeColor = Color.FromArgb(232, 113, 74);
+            lblConfirmedTotal.Location = new Point(16, 122);
+            lblConfirmedTotal.Name = "lblConfirmedTotal";
+            lblConfirmedTotal.Size = new Size(408, 26);
+            lblConfirmedTotal.TabIndex = 3;
+            //
+            // btnBackToDashboard
+            //
+            btnBackToDashboard.BackColor = Color.White;
+            btnBackToDashboard.BorderRadius = 10;
+            btnBackToDashboard.FillColor = Color.FromArgb(232, 113, 74);
+            btnBackToDashboard.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnBackToDashboard.ForeColor = Color.White;
+            btnBackToDashboard.Location = new Point(30, 420);
+            btnBackToDashboard.Name = "btnBackToDashboard";
+            btnBackToDashboard.Size = new Size(210, 48);
+            btnBackToDashboard.TabIndex = 4;
+            btnBackToDashboard.Text = "Back to Dashboard";
+            btnBackToDashboard.Click += btnBackToDashboard_Click;
+            //
+            // btnNewBooking
+            //
+            btnNewBooking.BackColor = Color.White;
+            btnNewBooking.BorderRadius = 10;
+            btnNewBooking.FillColor = Color.FromArgb(247, 245, 242);
+            btnNewBooking.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnNewBooking.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNewBooking.Location = new Point(260, 420);
+            btnNewBooking.Name = "btnNewBooking";
+            btnNewBooking.Size = new Size(210, 48);
+            btnNewBooking.TabIndex = 5;
+            btnNewBooking.Text = "New Booking";
+            btnNewBooking.Click += btnNewBooking_Click;
             //
             // BookingForm
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1500, 900);
-            this.Controls.Add(this.pnlPageBackground);
-            this.MinimumSize = new System.Drawing.Size(1246, 738);
-            this.Name = "BookingForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Meraki - Book a Babysitter";
-            this.Load += new System.EventHandler(this.BookingForm_Load);
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).EndInit();
-            this.pnlConfirmedSummaryCard.ResumeLayout(false);
-            this.pnlCheckCircle.ResumeLayout(false);
-            this.pnlConfirmationScreen.ResumeLayout(false);
-            this.pnlStepConfirm.ResumeLayout(false);
-            this.pnlStepDetails.ResumeLayout(false);
-            this.pnlStepBabysitter.ResumeLayout(false);
-            this.pnlDurationCard.ResumeLayout(false);
-            this.pnlTimeSlotsCard.ResumeLayout(false);
-            this.pnlCalendarCard.ResumeLayout(false);
-            this.pnlStepDateTime.ResumeLayout(false);
-            this.pnlContent.ResumeLayout(false);
-            this.pnlNavbar.ResumeLayout(false);
-            this.pnlPageBackground.ResumeLayout(false);
-            this.ResumeLayout(false);
-        }
-
-        private static void SetupNavButton(Guna.UI2.WinForms.Guna2Button btn, string text, int x, int width, bool active)
-        {
-            btn.BorderRadius = 8;
-            btn.BorderThickness = 0;
-            btn.ShadowDecoration.Enabled = false;
-            btn.FillColor = active ? System.Drawing.Color.FromArgb(253, 238, 232) : System.Drawing.Color.Transparent;
-            btn.BackColor = System.Drawing.Color.White;
-            btn.ForeColor = active ? System.Drawing.Color.FromArgb(232, 113, 74) : System.Drawing.Color.FromArgb(154, 136, 128);
-            btn.Font = new System.Drawing.Font("Segoe UI", 8.5F, active ? System.Drawing.FontStyle.Bold : System.Drawing.FontStyle.Regular);
-            btn.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            btn.Location = new System.Drawing.Point(x, 18);
-            btn.Size = new System.Drawing.Size(width, 45);
-            btn.Text = text;
-        }
-
-        private static void SetupStepCircle(Guna.UI2.WinForms.Guna2Panel circle, System.Windows.Forms.Label num,
-            System.Windows.Forms.Label caption, int x, string number, string captionText, bool active)
-        {
-            circle.BorderRadius = 18;
-            circle.FillColor = active ? System.Drawing.Color.FromArgb(232, 113, 74) : System.Drawing.Color.FromArgb(247, 245, 242);
-            circle.Location = new System.Drawing.Point(x, 90);
-            circle.Size = new System.Drawing.Size(36, 36);
-            num.Dock = System.Windows.Forms.DockStyle.Fill;
-            num.Text = number;
-            num.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            num.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            num.ForeColor = active ? System.Drawing.Color.White : System.Drawing.Color.FromArgb(154, 136, 128);
-            num.BackColor = System.Drawing.Color.Transparent;
-            circle.Controls.Add(num);
-
-            caption.Location = new System.Drawing.Point(x - 20, 130);
-            caption.Size = new System.Drawing.Size(340, 20);
-            caption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            caption.Text = captionText;
-            caption.Font = new System.Drawing.Font("Segoe UI", 8F, active ? System.Drawing.FontStyle.Bold : System.Drawing.FontStyle.Regular);
-            caption.ForeColor = active ? System.Drawing.Color.FromArgb(232, 113, 74) : System.Drawing.Color.FromArgb(154, 136, 128);
-            caption.BackColor = System.Drawing.Color.Transparent;
-        }
-
-        private static void SetupDayHeaderLabel(System.Windows.Forms.Label label, string text)
-        {
-            label.Text = text;
-            label.Dock = System.Windows.Forms.DockStyle.Fill;
-            label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            label.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            label.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            label.BackColor = System.Drawing.Color.Transparent;
-        }
-
-        private static void SetupSummaryRow(System.Windows.Forms.Label label, int y)
-        {
-            label.Location = new System.Drawing.Point(0, y);
-            label.Size = new System.Drawing.Size(700, 24);
-            label.Font = new System.Drawing.Font("Segoe UI", 9F);
-            label.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            label.BackColor = System.Drawing.Color.Transparent;
-        }
-
-        private static void SetupConfirmedRow(System.Windows.Forms.Label label, int y)
-        {
-            label.Location = new System.Drawing.Point(16, y);
-            label.Size = new System.Drawing.Size(468, 24);
-            label.Font = new System.Drawing.Font("Segoe UI", 9F);
-            label.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            label.BackColor = System.Drawing.Color.Transparent;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(1500, 900);
+            Controls.Add(pnlPageBackground);
+            MinimumSize = new Size(1246, 738);
+            Name = "BookingForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Meraki - Book a Babysitter";
+            Load += BookingForm_Load;
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
+            pnlConfirmedSummaryCard.ResumeLayout(false);
+            pnlCheckCircle.ResumeLayout(false);
+            pnlConfirmationScreen.ResumeLayout(false);
+            pnlBottomBar.ResumeLayout(false);
+            pnlConfirmCard.ResumeLayout(false);
+            pnlStepConfirm.ResumeLayout(false);
+            pnlDetailsCard.ResumeLayout(false);
+            pnlStepDetails.ResumeLayout(false);
+            pnlStepBabysitter.ResumeLayout(false);
+            pnlDurationCard.ResumeLayout(false);
+            pnlTimeSlotsCard.ResumeLayout(false);
+            tlpBookingCalendar.ResumeLayout(false);
+            pnlCalendarCard.ResumeLayout(false);
+            pnlStepDateTime.ResumeLayout(false);
+            pnlStepCircle4.ResumeLayout(false);
+            pnlStepCircle3.ResumeLayout(false);
+            pnlStepCircle2.ResumeLayout(false);
+            pnlStepCircle1.ResumeLayout(false);
+            pnlContent.ResumeLayout(false);
+            pnlNavbar.ResumeLayout(false);
+            pnlPageBackground.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
@@ -784,7 +1254,6 @@
         private Guna.UI2.WinForms.Guna2GradientPanel pnlContent;
         private System.Windows.Forms.Label lblPageTitle;
         private System.Windows.Forms.Label lblPageSubtitle;
-
         private Guna.UI2.WinForms.Guna2Panel pnlStepCircle1;
         private System.Windows.Forms.Label lblStepNum1;
         private System.Windows.Forms.Label lblStepCaption1;
@@ -800,7 +1269,6 @@
         private Guna.UI2.WinForms.Guna2Panel pnlStepCircle4;
         private System.Windows.Forms.Label lblStepNum4;
         private System.Windows.Forms.Label lblStepCaption4;
-
         private System.Windows.Forms.Panel pnlStepDateTime;
         private Guna.UI2.WinForms.Guna2Panel pnlCalendarCard;
         private System.Windows.Forms.Label lblCalTitle;
@@ -821,11 +1289,10 @@
         private Guna.UI2.WinForms.Guna2Panel pnlDurationCard;
         private System.Windows.Forms.Label lblDurationTitle;
         private System.Windows.Forms.FlowLayoutPanel flpDurations;
-
         private System.Windows.Forms.Panel pnlStepBabysitter;
         private System.Windows.Forms.FlowLayoutPanel flpBabysitterSelect;
-
         private System.Windows.Forms.Panel pnlStepDetails;
+        private Guna.UI2.WinForms.Guna2Panel pnlDetailsCard;
         private System.Windows.Forms.Label lblDetailsTitle;
         private System.Windows.Forms.Label lblChildCountCaption;
         private Guna.UI2.WinForms.Guna2Button btnDecChildren;
@@ -835,8 +1302,8 @@
         private Guna.UI2.WinForms.Guna2TextBox tbAddress;
         private System.Windows.Forms.Label lblNotesCaption;
         private Guna.UI2.WinForms.Guna2TextBox tbNotes;
-
         private System.Windows.Forms.Panel pnlStepConfirm;
+        private Guna.UI2.WinForms.Guna2Panel pnlConfirmCard;
         private System.Windows.Forms.Label lblConfirmTitle;
         private System.Windows.Forms.Label lblSumDate;
         private System.Windows.Forms.Label lblSumTime;
@@ -847,10 +1314,9 @@
         private System.Windows.Forms.Label lblCostServiceFee;
         private System.Windows.Forms.Label lblCostTotal;
         private System.Windows.Forms.Label lblPaymentNote;
-
+        private Guna.UI2.WinForms.Guna2Panel pnlBottomBar;
         private Guna.UI2.WinForms.Guna2Button btnBack;
         private Guna.UI2.WinForms.Guna2Button btnContinue;
-
         private Guna.UI2.WinForms.Guna2Panel pnlConfirmationScreen;
         private Guna.UI2.WinForms.Guna2Panel pnlCheckCircle;
         private System.Windows.Forms.Label lblCheckIcon;

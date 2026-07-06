@@ -11,6 +11,7 @@ namespace Meraki_Project
     {
         private static readonly Color ColorCoral = Color.FromArgb(232, 113, 74);
         private static readonly Color ColorWarmBrown = Color.FromArgb(154, 136, 128);
+        private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
         private static readonly Color ColorActiveTabFill = Color.FromArgb(253, 238, 232);
 
         // name, role, email, status, joined - same shape as the grid columns.
@@ -24,6 +25,7 @@ namespace Meraki_Project
 
         private void AdminDashboardForm_Load(object sender, EventArgs e)
         {
+            ApplyDesignPolish();
             LoadSampleUsers();
 
             // Example only - replace these arrays with real values from your database.
@@ -44,10 +46,20 @@ namespace Meraki_Project
         }
 
         /// <summary>
+        /// Small readability improvements applied at runtime so the existing
+        /// Designer file doesn't need to be regenerated: section headings get the
+        /// dark warm-brown used across the newer pages instead of the pale gray.
+        /// </summary>
+        private void ApplyDesignPolish()
+        {
+            lblPageTitle.ForeColor = ColorHeading;
+            lblBookingsChartTitle.ForeColor = ColorHeading;
+            lblRevenueChartTitle.ForeColor = ColorHeading;
+            lblUserTableTitle.ForeColor = ColorHeading;
+        }
+
+        /// <summary>
         /// Loads sample/fake rows into the user management grid for design preview.
-        /// This lives in the code-behind (not the Designer file) on purpose: the VS
-        /// Designer regenerates AdminDashboardForm.Designer.cs on every property edit
-        /// and would silently delete any hand-typed Rows.Add() calls placed there.
         /// Replace this with a real database query when you wire up data access.
         /// </summary>
         private void LoadSampleUsers()
@@ -86,10 +98,8 @@ namespace Meraki_Project
 
         /// <summary>
         /// Recalculates bar heights/positions inside a chart panel based on real values.
-        /// Call this after fetching data from the database (e.g. monthly booking counts,
-        /// revenue totals) instead of relying on the static design-time bar sizes.
-        /// Bars and labels must be passed in left-to-right order; chartAreaHeight is the
-        /// usable vertical space in pixels (bottom-aligned at y = chartAreaHeight + topOffset).
+        /// Call this after fetching data from the database instead of relying on the
+        /// static design-time bar sizes. Bars and labels must be passed left-to-right.
         /// </summary>
         private void UpdateBarChart(Guna.UI2.WinForms.Guna2Panel[] bars, Label[] labels, int[] values,
             int chartAreaTop = 38, int chartAreaHeight = 141)
@@ -119,9 +129,8 @@ namespace Meraki_Project
         }
 
         // ----- Sidebar navigation -----
-        // Only "Overview" has real content right now (the KPI cards / charts / user
-        // table already on this form). The other sections are placeholders until their
-        // own views get built - clicking them just restyles the sidebar and says so.
+        // Only "Overview" has real content right now. The other sections are
+        // placeholders until their own views get built.
 
         private void btnSidebarOverview_Click(object sender, EventArgs e) => SetActiveSidebarButton(btnSidebarOverview);
 
@@ -134,7 +143,7 @@ namespace Meraki_Project
         private void btnSidebarBookings_Click(object sender, EventArgs e)
         {
             SetActiveSidebarButton(btnSidebarBookings);
-            MessageBox.Show("A dedicated Bookings view isn't built yet - for now, booking data will show up here once the database is wired up.",
+            MessageBox.Show("A dedicated Bookings view isn't built yet - booking data will show up here once the database is wired up.",
                 "Coming soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -164,9 +173,7 @@ namespace Meraki_Project
         private void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            var login = new LoginForm();
-            login.Show();
-            this.Close();
+            Navigation.GoTo(this, new LoginForm());
         }
     }
 }

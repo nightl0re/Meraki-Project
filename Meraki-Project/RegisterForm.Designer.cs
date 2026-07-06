@@ -79,9 +79,9 @@
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             pnlRoleTabs.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // pnlBackground
-            // 
+            //
             pnlBackground.AutoScroll = true;
             pnlBackground.Controls.Add(pnlRegisterCard);
             pnlBackground.CustomizableEdges = customizableEdges29;
@@ -94,9 +94,9 @@
             pnlBackground.ShadowDecoration.CustomizableEdges = customizableEdges30;
             pnlBackground.Size = new Size(1250, 1000);
             pnlBackground.TabIndex = 0;
-            // 
+            //
             // pnlRegisterCard
-            // 
+            //
             pnlRegisterCard.BackColor = Color.Transparent;
             pnlRegisterCard.BorderRadius = 24;
             pnlRegisterCard.Controls.Add(picLogo);
@@ -132,9 +132,9 @@
             pnlRegisterCard.ShadowDecoration.Enabled = true;
             pnlRegisterCard.Size = new Size(500, 875);
             pnlRegisterCard.TabIndex = 0;
-            // 
+            //
             // picLogo
-            // 
+            //
             picLogo.BorderRadius = 12;
             picLogo.CustomizableEdges = customizableEdges1;
             picLogo.Image = (Image)resources.GetObject("picLogo.Image");
@@ -147,9 +147,9 @@
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 0;
             picLogo.TabStop = false;
-            // 
+            //
             // lblFormTitle
-            // 
+            //
             lblFormTitle.BackColor = Color.Transparent;
             lblFormTitle.Location = new Point(112, 30);
             lblFormTitle.Margin = new Padding(4, 4, 4, 4);
@@ -157,9 +157,9 @@
             lblFormTitle.Size = new Size(162, 32);
             lblFormTitle.TabIndex = 1;
             lblFormTitle.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:13pt;\">Create Account</div>";
-            // 
+            //
             // lblFormSubtitle
-            // 
+            //
             lblFormSubtitle.BackColor = Color.Transparent;
             lblFormSubtitle.Location = new Point(112, 62);
             lblFormSubtitle.Margin = new Padding(4, 4, 4, 4);
@@ -167,9 +167,9 @@
             lblFormSubtitle.Size = new Size(220, 22);
             lblFormSubtitle.TabIndex = 2;
             lblFormSubtitle.Text = "<div style=\"color:#9A8880;font-size:9pt;\">Join Meraki — Caring Babysitters</div>";
-            // 
+            //
             // pnlRoleTabs
-            // 
+            //
             pnlRoleTabs.BorderRadius = 12;
             pnlRoleTabs.Controls.Add(rbParent);
             pnlRoleTabs.Controls.Add(rbBabysitter);
@@ -181,9 +181,10 @@
             pnlRoleTabs.ShadowDecoration.CustomizableEdges = customizableEdges8;
             pnlRoleTabs.Size = new Size(425, 50);
             pnlRoleTabs.TabIndex = 3;
-            // 
+            //
             // rbParent
-            // 
+            //
+            rbParent.BackColor = Color.Transparent;
             rbParent.BorderRadius = 8;
             rbParent.CustomizableEdges = customizableEdges3;
             rbParent.FillColor = Color.White;
@@ -197,9 +198,10 @@
             rbParent.TabIndex = 0;
             rbParent.Text = "I am a Parent";
             rbParent.Click += rbParent_Click;
-            // 
+            //
             // rbBabysitter
-            // 
+            //
+            rbBabysitter.BackColor = Color.Transparent;
             rbBabysitter.BorderRadius = 8;
             rbBabysitter.CustomizableEdges = customizableEdges5;
             rbBabysitter.FillColor = Color.Transparent;
@@ -213,9 +215,10 @@
             rbBabysitter.TabIndex = 1;
             rbBabysitter.Text = "I am a Babysitter";
             rbBabysitter.Click += rbBabysitter_Click;
-            // 
+            //
             // lblFirstName
-            // 
+            //
+            lblFirstName.BackColor = Color.Transparent;
             lblFirstName.ForeColor = Color.FromArgb(154, 136, 128);
             lblFirstName.Location = new Point(38, 175);
             lblFirstName.Margin = new Padding(4, 0, 4, 0);
@@ -223,9 +226,9 @@
             lblFirstName.Size = new Size(200, 22);
             lblFirstName.TabIndex = 4;
             lblFirstName.Text = "First Name";
-            // 
+            //
             // tbFirstName
-            // 
+            //
             tbFirstName.BorderRadius = 10;
             tbFirstName.CustomizableEdges = customizableEdges9;
             tbFirstName.DefaultText = "";
@@ -240,9 +243,10 @@
             tbFirstName.ShadowDecoration.CustomizableEdges = customizableEdges10;
             tbFirstName.Size = new Size(200, 48);
             tbFirstName.TabIndex = 5;
-            // 
+            //
             // lblLastName
-            // 
+            //
+            lblLastName.BackColor = Color.Transparent;
             lblLastName.ForeColor = Color.FromArgb(154, 136, 128);
             lblLastName.Location = new Point(262, 175);
             lblLastName.Margin = new Padding(4, 0, 4, 0);
@@ -250,9 +254,9 @@
             lblLastName.Size = new Size(200, 22);
             lblLastName.TabIndex = 6;
             lblLastName.Text = "Last Name";
-            // 
+            //
             // tbLastName
-            // 
+            //
             tbLastName.BorderRadius = 10;
             tbLastName.CustomizableEdges = customizableEdges11;
             tbLastName.DefaultText = "";
@@ -267,9 +271,10 @@
             tbLastName.ShadowDecoration.CustomizableEdges = customizableEdges12;
             tbLastName.Size = new Size(200, 48);
             tbLastName.TabIndex = 7;
-            // 
+            //
             // lblEmail
-            // 
+            //
+            lblEmail.BackColor = Color.Transparent;
             lblEmail.ForeColor = Color.FromArgb(154, 136, 128);
             lblEmail.Location = new Point(38, 262);
             lblEmail.Margin = new Padding(4, 0, 4, 0);
@@ -277,9 +282,9 @@
             lblEmail.Size = new Size(425, 22);
             lblEmail.TabIndex = 8;
             lblEmail.Text = "Email Address";
-            // 
+            //
             // tbEmail
-            // 
+            //
             tbEmail.BorderRadius = 10;
             tbEmail.CustomizableEdges = customizableEdges13;
             tbEmail.DefaultText = "";
@@ -294,9 +299,10 @@
             tbEmail.ShadowDecoration.CustomizableEdges = customizableEdges14;
             tbEmail.Size = new Size(425, 48);
             tbEmail.TabIndex = 9;
-            // 
+            //
             // lblPhone
-            // 
+            //
+            lblPhone.BackColor = Color.Transparent;
             lblPhone.ForeColor = Color.FromArgb(154, 136, 128);
             lblPhone.Location = new Point(38, 350);
             lblPhone.Margin = new Padding(4, 0, 4, 0);
@@ -304,9 +310,9 @@
             lblPhone.Size = new Size(425, 22);
             lblPhone.TabIndex = 10;
             lblPhone.Text = "Phone Number";
-            // 
+            //
             // tbPhone
-            // 
+            //
             tbPhone.BorderRadius = 10;
             tbPhone.CustomizableEdges = customizableEdges15;
             tbPhone.DefaultText = "";
@@ -321,9 +327,10 @@
             tbPhone.ShadowDecoration.CustomizableEdges = customizableEdges16;
             tbPhone.Size = new Size(425, 48);
             tbPhone.TabIndex = 11;
-            // 
+            //
             // lblPassword
-            // 
+            //
+            lblPassword.BackColor = Color.Transparent;
             lblPassword.ForeColor = Color.FromArgb(154, 136, 128);
             lblPassword.Location = new Point(38, 438);
             lblPassword.Margin = new Padding(4, 0, 4, 0);
@@ -331,9 +338,9 @@
             lblPassword.Size = new Size(425, 22);
             lblPassword.TabIndex = 12;
             lblPassword.Text = "Password";
-            // 
+            //
             // tbPassword
-            // 
+            //
             tbPassword.BorderRadius = 10;
             tbPassword.CustomizableEdges = customizableEdges17;
             tbPassword.DefaultText = "";
@@ -350,9 +357,10 @@
             tbPassword.Size = new Size(425, 48);
             tbPassword.TabIndex = 13;
             tbPassword.UseSystemPasswordChar = true;
-            // 
-            // pnlStrengthBar
-            // 
+            tbPassword.TextChanged += tbPassword_TextChanged;
+            //
+            // pnlStrengthBar (hidden until the user starts typing a password)
+            //
             pnlStrengthBar.BorderRadius = 4;
             pnlStrengthBar.CustomizableEdges = customizableEdges19;
             pnlStrengthBar.FillColor = Color.FromArgb(229, 231, 235);
@@ -362,9 +370,11 @@
             pnlStrengthBar.ShadowDecoration.CustomizableEdges = customizableEdges20;
             pnlStrengthBar.Size = new Size(325, 8);
             pnlStrengthBar.TabIndex = 14;
-            // 
+            pnlStrengthBar.Visible = false;
+            //
             // lblStrengthLabel
-            // 
+            //
+            lblStrengthLabel.BackColor = Color.Transparent;
             lblStrengthLabel.Font = new Font("Segoe UI", 7.5F);
             lblStrengthLabel.ForeColor = Color.FromArgb(154, 136, 128);
             lblStrengthLabel.Location = new Point(370, 506);
@@ -372,10 +382,11 @@
             lblStrengthLabel.Name = "lblStrengthLabel";
             lblStrengthLabel.Size = new Size(92, 22);
             lblStrengthLabel.TabIndex = 15;
-            lblStrengthLabel.Text = "Strength";
-            // 
+            lblStrengthLabel.Text = "";
+            //
             // lblConfirmPassword
-            // 
+            //
+            lblConfirmPassword.BackColor = Color.Transparent;
             lblConfirmPassword.ForeColor = Color.FromArgb(154, 136, 128);
             lblConfirmPassword.Location = new Point(38, 540);
             lblConfirmPassword.Margin = new Padding(4, 0, 4, 0);
@@ -383,9 +394,9 @@
             lblConfirmPassword.Size = new Size(425, 22);
             lblConfirmPassword.TabIndex = 16;
             lblConfirmPassword.Text = "Confirm Password";
-            // 
+            //
             // tbConfirmPassword
-            // 
+            //
             tbConfirmPassword.BorderRadius = 10;
             tbConfirmPassword.CustomizableEdges = customizableEdges21;
             tbConfirmPassword.DefaultText = "";
@@ -402,10 +413,11 @@
             tbConfirmPassword.Size = new Size(425, 48);
             tbConfirmPassword.TabIndex = 17;
             tbConfirmPassword.UseSystemPasswordChar = true;
-            // 
+            //
             // cbAgreeTerms
-            // 
-            cbAgreeTerms.CheckedState.BorderRadius = 0;
+            //
+            cbAgreeTerms.CheckedState.BorderColor = Color.FromArgb(232, 113, 74);
+            cbAgreeTerms.CheckedState.BorderRadius = 4;
             cbAgreeTerms.CheckedState.BorderThickness = 0;
             cbAgreeTerms.CheckedState.FillColor = Color.FromArgb(232, 113, 74);
             cbAgreeTerms.CustomizableEdges = customizableEdges23;
@@ -415,11 +427,13 @@
             cbAgreeTerms.ShadowDecoration.CustomizableEdges = customizableEdges24;
             cbAgreeTerms.Size = new Size(25, 25);
             cbAgreeTerms.TabIndex = 18;
-            cbAgreeTerms.UncheckedState.BorderRadius = 0;
-            cbAgreeTerms.UncheckedState.BorderThickness = 0;
-            // 
+            cbAgreeTerms.UncheckedState.BorderColor = Color.FromArgb(200, 190, 185);
+            cbAgreeTerms.UncheckedState.BorderRadius = 4;
+            cbAgreeTerms.UncheckedState.BorderThickness = 1;
+            cbAgreeTerms.UncheckedState.FillColor = Color.FromArgb(247, 245, 242);
+            //
             // lblAgreeTerms
-            // 
+            //
             lblAgreeTerms.BackColor = Color.Transparent;
             lblAgreeTerms.Location = new Point(70, 630);
             lblAgreeTerms.Margin = new Padding(4, 4, 4, 4);
@@ -427,14 +441,16 @@
             lblAgreeTerms.Size = new Size(327, 22);
             lblAgreeTerms.TabIndex = 19;
             lblAgreeTerms.Text = "<div style=\"color:#9A8880;font-size:9pt;\">I agree to the <a href=\"terms\" style=\"color:#E8714A;\">Terms of Service</a> and <a href=\"privacy\" style=\"color:#E8714A;\">Privacy Policy</a></div>";
-            // 
+            //
             // btnCreateAccount
-            // 
+            //
+            btnCreateAccount.BackColor = Color.Transparent;
             btnCreateAccount.BorderRadius = 12;
             btnCreateAccount.CustomizableEdges = customizableEdges25;
             btnCreateAccount.FillColor = Color.FromArgb(232, 113, 74);
             btnCreateAccount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCreateAccount.ForeColor = Color.White;
+            btnCreateAccount.HoverState.FillColor = Color.FromArgb(214, 96, 58);
             btnCreateAccount.Location = new Point(38, 700);
             btnCreateAccount.Margin = new Padding(4, 4, 4, 4);
             btnCreateAccount.Name = "btnCreateAccount";
@@ -443,19 +459,21 @@
             btnCreateAccount.TabIndex = 20;
             btnCreateAccount.Text = "Create Account";
             btnCreateAccount.Click += btnCreateAccount_Click;
-            // 
+            //
             // lnkSignIn
-            // 
+            //
             lnkSignIn.BackColor = Color.Transparent;
+            lnkSignIn.Cursor = Cursors.Hand;
             lnkSignIn.Location = new Point(38, 775);
             lnkSignIn.Margin = new Padding(4, 4, 4, 4);
             lnkSignIn.Name = "lnkSignIn";
             lnkSignIn.Size = new Size(224, 22);
             lnkSignIn.TabIndex = 21;
             lnkSignIn.Text = "<div style=\"text-align:center;color:#9A8880;\">Already have an account? <a href=\"signin\" style=\"color:#5EC8C4;font-weight:bold;\">Sign In</a></div>";
-            // 
+            lnkSignIn.Click += lnkSignIn_Click;
+            //
             // RegisterForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1250, 1000);

@@ -1,8 +1,8 @@
 ﻿using Guna.UI2.WinForms;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Meraki_Project
 {
@@ -16,15 +16,15 @@ namespace Meraki_Project
             public string Date = "";
         }
 
-        // TODO (Phase 2): `SELECT skill FROM babysitter_skills JOIN skills ...` and
-        // `SELECT ... FROM reviews WHERE booking_id IN (SELECT booking_id FROM bookings WHERE babysitter_user_id = ...)`
+        // TODO (Phase 2): `SELECT name FROM skills` and the babysitter's selected ones
+        // from `babysitter_skills`; reviews from the `reviews` table.
         private static readonly string[] AllSkills =
         {
             "Infant Care", "Toddler Care", "Homework Help", "CPR Certified", "First Aid",
             "Cooking", "Arts & Crafts", "Music", "Swimming", "Special Needs",
         };
 
-        private readonly System.Collections.Generic.HashSet<string> _selectedSkills = new()
+        private readonly HashSet<string> _selectedSkills = new()
         {
             "Infant Care", "Toddler Care", "Arts & Crafts", "CPR Certified",
         };
@@ -37,6 +37,7 @@ namespace Meraki_Project
         };
 
         private bool _editing;
+        private bool _loaded;
 
         public ProfileForm()
         {
@@ -45,6 +46,9 @@ namespace Meraki_Project
 
         private void ProfileForm_Load(object sender, EventArgs e)
         {
+            if (_loaded) return;
+            _loaded = true;
+
             SetupNavbarForRole();
 
             string name = string.IsNullOrWhiteSpace(Session.CurrentUserName) ? "User" : Session.CurrentUserName;
@@ -68,7 +72,7 @@ namespace Meraki_Project
             {
                 tbBio.Text = "Hi! I'm a certified babysitter with 3 years of experience. I love working with " +
                               "children of all ages and creating fun, educational activities.";
-                lblRatingLocation.Text = "★ 4.9 (47 reviews)    \U0001F4CD Downtown, New York";
+                lblRatingLocation.Text = "★ 4.9 (47 reviews)    📍 Downtown, New York";
                 lblStatBookingsValue.Text = "47";
                 lblStatExperienceValue.Text = "3yr";
                 lblStatExperienceLabel.Text = "Experience";
@@ -80,14 +84,13 @@ namespace Meraki_Project
             else
             {
                 tbBio.Text = "Parent of two looking for reliable, caring babysitters for date nights and after-school care.";
-                lblRatingLocation.Text = "\U0001F4CD Downtown, New York";
+                lblRatingLocation.Text = "📍 Downtown, New York";
                 lblStatBookingsValue.Text = "12";
                 lblStatExperienceValue.Text = "2";
                 lblStatExperienceLabel.Text = "Children";
                 lblStatRateValue.Text = "2024";
                 lblStatRateLabel.Text = "Member Since";
                 pnlSkillsCard.Visible = false;
-                pnlPersonalInfoCard.Size = new Size(pnlPersonalInfoCard.Width, pnlPersonalInfoCard.Height + 166);
             }
 
             ApplyEditingStyle(false);
@@ -96,6 +99,9 @@ namespace Meraki_Project
         }
 
         // ----- Navbar built per-role -----
+        // Babysitters see: Babysitter Home / My Profile / Logout.
+        // Parents see: Parent Home / Find a Babysitter / Book Now / My Profile / Logout.
+        // Admin never lands here (admin has its own dashboard) - treated like Parent as a fallback.
 
         private void SetupNavbarForRole()
         {
@@ -104,30 +110,25 @@ namespace Meraki_Project
             if (Session.CurrentRole == UserRole.Babysitter)
             {
                 btnNavBabysitterHome.Location = new Point(x, 18);
-                btnNavBabysitterHome.Width = 160;
                 pnlNavbar.Controls.Add(btnNavBabysitterHome);
-                x += 160 + 8;
+                x += btnNavBabysitterHome.Width + 8;
             }
             else
             {
                 btnNavParentHome.Location = new Point(x, 18);
-                btnNavParentHome.Width = 138;
                 pnlNavbar.Controls.Add(btnNavParentHome);
-                x += 138 + 8;
+                x += btnNavParentHome.Width + 8;
 
                 btnNavFindBabysitter.Location = new Point(x, 18);
-                btnNavFindBabysitter.Width = 162;
                 pnlNavbar.Controls.Add(btnNavFindBabysitter);
-                x += 162 + 8;
+                x += btnNavFindBabysitter.Width + 8;
 
                 btnNavBookNow.Location = new Point(x, 18);
-                btnNavBookNow.Width = 125;
                 pnlNavbar.Controls.Add(btnNavBookNow);
-                x += 125 + 8;
+                x += btnNavBookNow.Width + 8;
             }
 
             btnNavMyProfile.Location = new Point(x, 18);
-            btnNavMyProfile.Width = 125;
             pnlNavbar.Controls.Add(btnNavMyProfile);
 
             pnlNavbar.Controls.Add(btnLogout);
@@ -156,9 +157,8 @@ namespace Meraki_Project
             if (!editing)
             {
                 lblProfileName.Text = $"{tbFirstName.Text} {tbLastName.Text}".Trim();
-                // TODO (Phase 2): UPDATE users SET first_name = ..., last_name = ..., phone = ...,
+                // TODO (Phase 2): UPDATE users SET first_name = ..., last_name = ..., phone = ...
                 // and UPDATE babysitter_profiles SET bio = ..., location = ... WHERE user_id = ...
-                // instead of just leaving the new values sitting in the textboxes.
             }
         }
 
@@ -176,8 +176,8 @@ namespace Meraki_Project
             {
                 picAvatarPhoto.Image = Image.FromFile(dialog.FileName);
                 picAvatarPhoto.Visible = true;
-                // TODO (Phase 2): upload dialog.FileName somewhere durable and save its
-                // path/URL to `babysitter_profiles.photo_path` (or a `users` photo column).
+                picAvatarPhoto.BringToFront();
+                // TODO (Phase 2): save the chosen file's path to babysitter_profiles.photo_path.
             }
         }
 
@@ -185,27 +185,28 @@ namespace Meraki_Project
 
         private void RenderSkills()
         {
+            flpSkills.SuspendLayout();
             flpSkills.Controls.Clear();
             foreach (var skill in AllSkills)
                 flpSkills.Controls.Add(BuildSkillChip(skill));
+            flpSkills.ResumeLayout();
         }
 
         private Control BuildSkillChip(string skill)
         {
             bool active = _selectedSkills.Contains(skill);
+            int width = TextRenderer.MeasureText(skill, new Font("Segoe UI", 8.5F)).Width + 28;
             var chip = new Guna2Button
             {
                 Text = skill,
-                AutoSize = true,
-                Padding = new Padding(12, 6, 12, 6),
+                Size = new Size(width, 32),
                 Margin = new Padding(0, 0, 8, 8),
                 BorderRadius = 14,
-                BorderThickness = 0,
                 FillColor = active ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242),
                 ForeColor = active ? Color.White : Color.FromArgb(154, 136, 128),
                 Font = new Font("Segoe UI", 8.5F),
+                BackColor = Color.White,
             };
-            chip.ShadowDecoration.Enabled = false;
             chip.Click += (s, e) =>
             {
                 if (!_editing) return;
@@ -219,6 +220,7 @@ namespace Meraki_Project
 
         private void RenderReviews()
         {
+            flpReviews.SuspendLayout();
             flpReviews.Controls.Clear();
 
             if (Session.CurrentRole != UserRole.Babysitter)
@@ -230,12 +232,15 @@ namespace Meraki_Project
                     Height = 30,
                     ForeColor = Color.FromArgb(154, 136, 128),
                     Font = new Font("Segoe UI", 9F),
+                    BackColor = Color.Transparent,
                 });
-                return;
             }
-
-            foreach (var r in _mockReviews)
-                flpReviews.Controls.Add(BuildReviewCard(r));
+            else
+            {
+                foreach (var r in _mockReviews)
+                    flpReviews.Controls.Add(BuildReviewCard(r));
+            }
+            flpReviews.ResumeLayout();
         }
 
         private Control BuildReviewCard(ReviewItem r)
@@ -247,7 +252,7 @@ namespace Meraki_Project
                 Margin = new Padding(0, 0, 0, 12),
                 BorderRadius = 16,
                 FillColor = Color.White,
-                BackColor = Color.FromArgb(253, 238, 232),
+                BackColor = Color.Transparent,
             };
             card.Controls.Add(new Label
             {
@@ -256,6 +261,7 @@ namespace Meraki_Project
                 Size = new Size(300, 22),
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(60, 50, 45),
+                BackColor = Color.Transparent,
             });
             card.Controls.Add(new Label
             {
@@ -265,6 +271,7 @@ namespace Meraki_Project
                 Font = new Font("Segoe UI", 10F),
                 ForeColor = Color.FromArgb(255, 209, 102),
                 TextAlign = ContentAlignment.MiddleRight,
+                BackColor = Color.Transparent,
             });
             card.Controls.Add(new Label
             {
@@ -273,6 +280,7 @@ namespace Meraki_Project
                 Size = new Size(820, 36),
                 Font = new Font("Segoe UI", 8.5F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             });
             card.Controls.Add(new Label
             {
@@ -281,6 +289,7 @@ namespace Meraki_Project
                 Size = new Size(200, 18),
                 Font = new Font("Segoe UI", 7.5F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             });
             return card;
         }
@@ -315,7 +324,7 @@ namespace Meraki_Project
                 Size = new Size(900, 66),
                 BorderRadius = 14,
                 FillColor = Color.White,
-                BackColor = Color.FromArgb(253, 238, 232),
+                BackColor = Color.Transparent,
                 Cursor = Cursors.Hand,
             };
             var titleLabel = new Label
@@ -325,6 +334,7 @@ namespace Meraki_Project
                 Size = new Size(400, 22),
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(60, 50, 45),
+                BackColor = Color.Transparent,
             };
             var descLabel = new Label
             {
@@ -333,10 +343,11 @@ namespace Meraki_Project
                 Size = new Size(600, 20),
                 Font = new Font("Segoe UI", 8F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             };
 
             EventHandler openPlaceholder = (s, e) => MessageBox.Show(
-                $"{title} isn't wired up yet - this will let you manage it once the database is in place.",
+                $"{title} isn't wired up yet - this will be manageable once the database is in place.",
                 title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             card.Click += openPlaceholder;
             titleLabel.Click += openPlaceholder;
@@ -373,28 +384,23 @@ namespace Meraki_Project
 
         // ----- Navigation -----
 
-        private void btnNavParentHome_Click(object sender, EventArgs e) => GoTo(new ParentDashboardForm());
+        private void btnNavParentHome_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ParentDashboardForm());
 
-        private void btnNavBabysitterHome_Click(object sender, EventArgs e) => GoTo(new BabysitterDashboardForm());
+        private void btnNavBabysitterHome_Click(object sender, EventArgs e) => Navigation.GoTo(this, new BabysitterDashboardForm());
 
-        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => GoTo(new SearchBabysitterForm());
+        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => Navigation.GoTo(this, new SearchBabysitterForm());
 
-        private void btnNavBookNow_Click(object sender, EventArgs e) => GoTo(new BookingForm());
+        private void btnNavBookNow_Click(object sender, EventArgs e) => Navigation.GoTo(this, new BookingForm());
 
-        private void btnNavMyProfile_Click(object sender, EventArgs e) => ProfileForm_Load(sender, e);
+        private void btnNavMyProfile_Click(object sender, EventArgs e)
+        {
+            // Already on this page - no-op.
+        }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            var login = new LoginForm();
-            login.Show();
-            this.Close();
-        }
-
-        private void GoTo(Form next)
-        {
-            next.Show();
-            this.Close();
+            Navigation.GoTo(this, new LoginForm());
         }
     }
 }

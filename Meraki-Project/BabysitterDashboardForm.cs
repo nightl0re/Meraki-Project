@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Meraki_Project
 {
@@ -28,7 +27,7 @@ namespace Meraki_Project
 
         // ----- Mock data - all of this becomes real queries in Phase 2 -----
 
-        private DateTime _displayedMonth = new(2024, 6, 1);
+        private DateTime _displayedMonth;
 
         // Keyed by day-of-month; same fixed set of "example bookings" regardless of
         // which month is showing, purely so the calendar isn't empty in the demo.
@@ -71,6 +70,7 @@ namespace Meraki_Project
             lblQuickName.Text = name;
             lblQuickAvatarInitial.Text = name.Length > 0 ? name.Substring(0, 1).ToUpper() : "B";
 
+            _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             RenderCalendar();
             RenderPendingRequests();
         }
@@ -150,6 +150,7 @@ namespace Meraki_Project
                     BackColor = Color.Transparent,
                 };
                 cell.Controls.Add(timeLabel);
+                timeLabel.BringToFront();
                 _calendarToolTip.SetToolTip(cell, $"{booking.Family} - {booking.Time}");
                 _calendarToolTip.SetToolTip(timeLabel, $"{booking.Family} - {booking.Time}");
             }
@@ -171,7 +172,10 @@ namespace Meraki_Project
         {
             pnlNotificationsDropdown.Visible = !pnlNotificationsDropdown.Visible;
             if (pnlNotificationsDropdown.Visible)
+            {
+                pnlNotificationsDropdown.BringToFront();
                 RenderNotifications();
+            }
         }
 
         private void RenderNotifications()
@@ -185,7 +189,7 @@ namespace Meraki_Project
         {
             var panel = new Panel
             {
-                Width = flpNotificationsList.ClientSize.Width - 4,
+                Width = flpNotificationsList.ClientSize.Width - 8,
                 Height = 46,
                 Margin = new Padding(0, 0, 0, 4),
                 BackColor = n.Unread ? Color.FromArgb(253, 238, 232) : Color.Transparent,
@@ -194,17 +198,19 @@ namespace Meraki_Project
             {
                 Text = n.Message,
                 Location = new Point(8, 4),
-                Size = new Size(panel.Width - 16, 28),
+                Size = new Size(panel.Width - 16, 26),
                 Font = new Font("Segoe UI", 8F),
                 ForeColor = Color.FromArgb(60, 50, 45),
+                BackColor = Color.Transparent,
             });
             panel.Controls.Add(new Label
             {
                 Text = n.Time,
-                Location = new Point(8, 30),
+                Location = new Point(8, 29),
                 Size = new Size(panel.Width - 16, 14),
                 Font = new Font("Segoe UI", 7F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             });
             return panel;
         }
@@ -227,10 +233,11 @@ namespace Meraki_Project
                 flpPendingRequests.Controls.Add(new Label
                 {
                     Text = "No pending requests right now.",
-                    Width = flpPendingRequests.ClientSize.Width - 4,
+                    Width = flpPendingRequests.ClientSize.Width - 8,
                     Height = 30,
                     ForeColor = Color.FromArgb(154, 136, 128),
                     Font = new Font("Segoe UI", 8.5F),
+                    BackColor = Color.Transparent,
                 });
                 return;
             }
@@ -243,11 +250,12 @@ namespace Meraki_Project
         {
             var card = new Guna2Panel
             {
-                Width = flpPendingRequests.ClientSize.Width - 4,
+                Width = flpPendingRequests.ClientSize.Width - 8,
                 Height = 100,
                 Margin = new Padding(0, 0, 0, 8),
                 BorderRadius = 12,
                 FillColor = Color.FromArgb(253, 238, 232),
+                BackColor = Color.Transparent,
             };
 
             card.Controls.Add(new Label
@@ -257,6 +265,7 @@ namespace Meraki_Project
                 Size = new Size(300, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(60, 50, 45),
+                BackColor = Color.Transparent,
             });
             card.Controls.Add(new Label
             {
@@ -265,6 +274,7 @@ namespace Meraki_Project
                 Size = new Size(300, 18),
                 Font = new Font("Segoe UI", 8F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             });
             card.Controls.Add(new Label
             {
@@ -273,6 +283,7 @@ namespace Meraki_Project
                 Size = new Size(300, 18),
                 Font = new Font("Segoe UI", 8F),
                 ForeColor = Color.FromArgb(154, 136, 128),
+                BackColor = Color.Transparent,
             });
 
             var acceptBtn = new Guna2Button
@@ -281,12 +292,11 @@ namespace Meraki_Project
                 Location = new Point(12, 68),
                 Size = new Size(150, 26),
                 BorderRadius = 8,
-                BorderThickness = 0,
                 FillColor = Color.FromArgb(232, 113, 74),
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                BackColor = Color.Transparent,
             };
-            acceptBtn.ShadowDecoration.Enabled = false;
             acceptBtn.Click += (s, e) => RespondToRequest(r, accepted: true);
 
             var declineBtn = new Guna2Button
@@ -295,12 +305,11 @@ namespace Meraki_Project
                 Location = new Point(170, 68),
                 Size = new Size(150, 26),
                 BorderRadius = 8,
-                BorderThickness = 0,
                 FillColor = Color.White,
                 ForeColor = Color.FromArgb(224, 90, 90),
                 Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                BackColor = Color.Transparent,
             };
-            declineBtn.ShadowDecoration.Enabled = false;
             declineBtn.Click += (s, e) => RespondToRequest(r, accepted: false);
 
             card.Controls.Add(acceptBtn);
@@ -321,26 +330,23 @@ namespace Meraki_Project
 
         // ----- Navigation -----
 
-        private void btnNavBabysitterHome_Click(object sender, EventArgs e) => BabysitterDashboardForm_Load(sender, e);
+        private void btnNavBabysitterHome_Click(object sender, EventArgs e)
+        {
+            // Already home - refresh the data on this same form.
+            RenderCalendar();
+            RenderPendingRequests();
+        }
 
-        private void btnNavMyProfile_Click(object sender, EventArgs e) => GoTo(new ProfileForm());
+        private void btnNavMyProfile_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ProfileForm());
 
-        private void btnMyProfileIcon_Click(object sender, EventArgs e) => GoTo(new ProfileForm());
+        private void btnMyProfileIcon_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ProfileForm());
 
-        private void pnlProfileQuickView_Click(object sender, EventArgs e) => GoTo(new ProfileForm());
+        private void pnlProfileQuickView_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ProfileForm());
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            var login = new LoginForm();
-            login.Show();
-            this.Close();
-        }
-
-        private void GoTo(Form next)
-        {
-            next.Show();
-            this.Close();
+            Navigation.GoTo(this, new LoginForm());
         }
     }
 }

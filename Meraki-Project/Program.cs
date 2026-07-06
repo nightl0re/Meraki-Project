@@ -11,7 +11,12 @@ namespace Meraki_Project
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new SearchBabysitterForm());
+
+            // Navigation.Start runs a message loop that is NOT tied to any single
+            // form, so navigating between forms (which closes the current one)
+            // never accidentally exits the application. The app quits when the
+            // last open window is closed.
+            Navigation.Start(new LoginForm());
         }
     }
 }
