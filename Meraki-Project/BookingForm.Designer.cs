@@ -130,9 +130,9 @@
             //
             // pnlPageBackground
             //
-            pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlBottomBar);
             pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -519,9 +519,9 @@
             pnlStepDateTime.Controls.Add(pnlCalendarCard);
             pnlStepDateTime.Controls.Add(pnlTimeSlotsCard);
             pnlStepDateTime.Controls.Add(pnlDurationCard);
-            pnlStepDateTime.Location = new Point(30, 140);
+            pnlStepDateTime.Location = new Point(30, 136);
             pnlStepDateTime.Name = "pnlStepDateTime";
-            pnlStepDateTime.Size = new Size(1420, 670);
+            pnlStepDateTime.Size = new Size(1420, 610);
             pnlStepDateTime.TabIndex = 13;
             //
             // pnlCalendarCard
@@ -536,7 +536,7 @@
             pnlCalendarCard.FillColor = Color.White;
             pnlCalendarCard.Location = new Point(0, 0);
             pnlCalendarCard.Name = "pnlCalendarCard";
-            pnlCalendarCard.Size = new Size(700, 380);
+            pnlCalendarCard.Size = new Size(700, 480);
             pnlCalendarCard.TabIndex = 0;
             //
             // lblCalTitle
@@ -608,7 +608,7 @@
             tlpBookingCalendar.Controls.Add(lblCalThu, 4, 0);
             tlpBookingCalendar.Controls.Add(lblCalFri, 5, 0);
             tlpBookingCalendar.Controls.Add(lblCalSat, 6, 0);
-            tlpBookingCalendar.Location = new Point(16, 54);
+            tlpBookingCalendar.Location = new Point(16, 52);
             tlpBookingCalendar.Name = "tlpBookingCalendar";
             tlpBookingCalendar.RowCount = 7;
             tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
@@ -618,7 +618,7 @@
             tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
             tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
             tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.Size = new Size(668, 310);
+            tlpBookingCalendar.Size = new Size(668, 412);
             tlpBookingCalendar.TabIndex = 4;
             //
             // lblCalSun
@@ -705,11 +705,10 @@
             pnlTimeSlotsCard.Controls.Add(lblTimeSlotsTitle);
             pnlTimeSlotsCard.Controls.Add(flpTimeSlots);
             pnlTimeSlotsCard.FillColor = Color.White;
-            pnlTimeSlotsCard.Location = new Point(0, 395);
+            pnlTimeSlotsCard.Location = new Point(720, 0);
             pnlTimeSlotsCard.Name = "pnlTimeSlotsCard";
-            pnlTimeSlotsCard.Size = new Size(700, 145);
+            pnlTimeSlotsCard.Size = new Size(680, 300);
             pnlTimeSlotsCard.TabIndex = 1;
-            pnlTimeSlotsCard.Visible = false;
             //
             // lblTimeSlotsTitle
             //
@@ -725,9 +724,9 @@
             // flpTimeSlots
             //
             flpTimeSlots.BackColor = Color.Transparent;
-            flpTimeSlots.Location = new Point(12, 46);
+            flpTimeSlots.Location = new Point(12, 44);
             flpTimeSlots.Name = "flpTimeSlots";
-            flpTimeSlots.Size = new Size(676, 90);
+            flpTimeSlots.Size = new Size(656, 244);
             flpTimeSlots.TabIndex = 1;
             //
             // pnlDurationCard
@@ -737,11 +736,10 @@
             pnlDurationCard.Controls.Add(lblDurationTitle);
             pnlDurationCard.Controls.Add(flpDurations);
             pnlDurationCard.FillColor = Color.White;
-            pnlDurationCard.Location = new Point(0, 555);
+            pnlDurationCard.Location = new Point(720, 312);
             pnlDurationCard.Name = "pnlDurationCard";
-            pnlDurationCard.Size = new Size(700, 110);
+            pnlDurationCard.Size = new Size(680, 168);
             pnlDurationCard.TabIndex = 2;
-            pnlDurationCard.Visible = false;
             //
             // lblDurationTitle
             //
@@ -757,9 +755,9 @@
             // flpDurations
             //
             flpDurations.BackColor = Color.Transparent;
-            flpDurations.Location = new Point(12, 46);
+            flpDurations.Location = new Point(12, 44);
             flpDurations.Name = "flpDurations";
-            flpDurations.Size = new Size(676, 56);
+            flpDurations.Size = new Size(656, 112);
             flpDurations.TabIndex = 1;
             //
             // pnlStepBabysitter

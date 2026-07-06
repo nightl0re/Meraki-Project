@@ -1,5 +1,6 @@
 ﻿using Guna.UI2.WinForms;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,6 +17,12 @@ namespace Meraki_Project
         };
         private static readonly string[] Durations = { "2 hours", "3 hours", "4 hours", "5 hours", "6+ hours" };
 
+        private static readonly Color Coral = Color.FromArgb(232, 113, 74);
+        private static readonly Color Teal = Color.FromArgb(94, 200, 196);
+        private static readonly Color InputGray = Color.FromArgb(247, 245, 242);
+        private static readonly Color TextDark = Color.FromArgb(60, 50, 45);
+        private static readonly Color TextMuted = Color.FromArgb(154, 136, 128);
+
         private readonly int? _preselectedBabysitterId;
 
         private int _step;
@@ -25,6 +32,16 @@ namespace Meraki_Project
         private string? _selectedDuration;
         private int? _selectedBabysitterId;
         private int _childCount = 1;
+
+        // Controls are built ONCE and only restyled on selection. Rebuilding
+        // (and especially disposing) dozens of Guna2 buttons on every click is
+        // what froze the form before - never do that inside a click handler.
+        private readonly Dictionary<int, Label> _dayCells = new();
+        private readonly Dictionary<string, Guna2Button> _timeButtons = new();
+        private readonly Dictionary<string, Guna2Button> _durationButtons = new();
+        private readonly Dictionary<int, Guna2Panel> _sitterRows = new();
+        private readonly Dictionary<int, Label> _sitterChecks = new();
+        private bool _sitterRowsBuilt;
 
         public BookingForm() : this(null) { }
 
@@ -40,38 +57,35 @@ namespace Meraki_Project
             if (_preselectedBabysitterId.HasValue)
                 _selectedBabysitterId = _preselectedBabysitterId;
 
-            RenderCalendar();
+            BuildMonthCalendar();
+            BuildTimeSlotButtons();
+            BuildDurationButtons();
             GoToStep(0);
         }
 
-        // ----- Calendar (step 0) -----
+        // ----- Step 0: calendar (built once per month, cells are cheap Labels) -----
 
         private void btnCalPrev_Click(object sender, EventArgs e)
         {
             _displayedMonth = _displayedMonth.AddMonths(-1);
-            ResetDateTimeSelection();
-            RenderCalendar();
+            _selectedDay = null;
+            BuildMonthCalendar();
+            UpdateContinueAppearance();
         }
 
         private void btnCalNext_Click(object sender, EventArgs e)
         {
             _displayedMonth = _displayedMonth.AddMonths(1);
-            ResetDateTimeSelection();
-            RenderCalendar();
-        }
-
-        private void ResetDateTimeSelection()
-        {
             _selectedDay = null;
-            _selectedTime = null;
-            _selectedDuration = null;
-            pnlTimeSlotsCard.Visible = false;
-            pnlDurationCard.Visible = false;
-            UpdateContinueEnabled();
+            BuildMonthCalendar();
+            UpdateContinueAppearance();
         }
 
-        private void RenderCalendar()
+        private void BuildMonthCalendar()
         {
+            tlpBookingCalendar.SuspendLayout();
+
+            // Remove previous month's day cells (everything below the Su..Sa header row).
             for (int i = tlpBookingCalendar.Controls.Count - 1; i >= 0; i--)
             {
                 Control ctrl = tlpBookingCalendar.Controls[i];
@@ -81,6 +95,7 @@ namespace Meraki_Project
                     ctrl.Dispose();
                 }
             }
+            _dayCells.Clear();
 
             lblCalMonthYear.Text = _displayedMonth.ToString("MMMM yyyy");
 
@@ -93,127 +108,155 @@ namespace Meraki_Project
                 int startCol = row == 1 ? firstDayOfWeek : 0;
                 for (int col = startCol; col < 7 && day <= daysInMonth; col++)
                 {
-                    tlpBookingCalendar.Controls.Add(BuildDayButton(day), col, row);
+                    var cell = BuildDayCell(day);
+                    _dayCells[day] = cell;
+                    tlpBookingCalendar.Controls.Add(cell, col, row);
                     day++;
                 }
             }
+
+            tlpBookingCalendar.ResumeLayout();
         }
 
-        private Control BuildDayButton(int day)
+        private Label BuildDayCell(int day)
         {
             var date = new DateTime(_displayedMonth.Year, _displayedMonth.Month, day);
             bool isPast = date.Date < DateTime.Today;
-            bool isSelected = _selectedDay == day;
 
-            var btn = new Guna2Button
+            var cell = new Label
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(2),
+                Margin = new Padding(3),
                 Text = day.ToString(),
-                BorderRadius = 8,
-                Font = new Font("Segoe UI", 8.5F, isSelected ? FontStyle.Bold : FontStyle.Regular),
-                Enabled = !isPast,
-                BackColor = Color.White,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 9F),
+                Cursor = isPast ? Cursors.Default : Cursors.Hand,
             };
+            StyleDayCell(cell, day, isPast);
 
-            if (isSelected)
+            if (!isPast)
             {
-                btn.FillColor = Color.FromArgb(232, 113, 74);
-                btn.ForeColor = Color.White;
+                // Selection only RESTYLES the two affected cells - no rebuild, no dispose.
+                cell.Click += (s, e) => SelectDay(day);
             }
-            else if (isPast)
+            return cell;
+        }
+
+        private void SelectDay(int day)
+        {
+            int? previous = _selectedDay;
+            _selectedDay = day;
+
+            if (previous.HasValue && _dayCells.TryGetValue(previous.Value, out var prevCell))
+                StyleDayCell(prevCell, previous.Value, isPast: false);
+            if (_dayCells.TryGetValue(day, out var newCell))
+                StyleDayCell(newCell, day, isPast: false);
+
+            UpdateContinueAppearance();
+        }
+
+        private void StyleDayCell(Label cell, int day, bool isPast)
+        {
+            bool selected = _selectedDay == day;
+            if (selected)
             {
-                btn.FillColor = Color.White;
-                btn.ForeColor = Color.FromArgb(200, 200, 200);
+                cell.BackColor = Coral;
+                cell.ForeColor = Color.White;
+                cell.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             }
             else
             {
-                btn.FillColor = Color.White;
-                btn.ForeColor = Color.FromArgb(60, 50, 45);
-                btn.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+                cell.BackColor = isPast ? Color.White : InputGray;
+                cell.ForeColor = isPast ? Color.FromArgb(210, 205, 200) : TextDark;
+                cell.Font = new Font("Segoe UI", 9F);
             }
-
-            btn.Click += (s, e) =>
-            {
-                _selectedDay = day;
-                RenderCalendar();
-                RenderTimeSlots();
-                UpdateContinueEnabled();
-            };
-            return btn;
         }
 
-        private void RenderTimeSlots()
-        {
-            pnlTimeSlotsCard.Visible = _selectedDay.HasValue;
-            if (!_selectedDay.HasValue) return;
+        // ----- Step 0: time slots + duration (built once, restyled on click) -----
 
+        private void BuildTimeSlotButtons()
+        {
             flpTimeSlots.SuspendLayout();
             flpTimeSlots.Controls.Clear();
+            _timeButtons.Clear();
+
             foreach (var slot in TimeSlots)
             {
-                bool selected = _selectedTime == slot;
                 var btn = new Guna2Button
                 {
                     Text = slot,
-                    Size = new Size(96, 34),
+                    Size = new Size(140, 40),
                     Margin = new Padding(4),
                     BorderRadius = 8,
-                    FillColor = selected ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242),
-                    ForeColor = selected ? Color.White : Color.FromArgb(60, 50, 45),
-                    Font = new Font("Segoe UI", 8F, selected ? FontStyle.Bold : FontStyle.Regular),
+                    Font = new Font("Segoe UI", 8.5F),
                     BackColor = Color.White,
                 };
-                btn.Click += (s, e) =>
-                {
-                    _selectedTime = slot;
-                    RenderTimeSlots();
-                    RenderDurations();
-                    UpdateContinueEnabled();
-                };
+                string captured = slot;
+                btn.Click += (s, e) => SelectTime(captured);
+                _timeButtons[slot] = btn;
                 flpTimeSlots.Controls.Add(btn);
+                StyleChoiceButton(btn, selected: false, Coral);
             }
             flpTimeSlots.ResumeLayout();
         }
 
-        private void RenderDurations()
+        private void SelectTime(string slot)
         {
-            pnlDurationCard.Visible = _selectedTime != null;
-            if (_selectedTime == null) return;
+            _selectedTime = slot;
+            foreach (var pair in _timeButtons)
+                StyleChoiceButton(pair.Value, pair.Key == slot, Coral);
+            UpdateContinueAppearance();
+        }
 
+        private void BuildDurationButtons()
+        {
             flpDurations.SuspendLayout();
             flpDurations.Controls.Clear();
+            _durationButtons.Clear();
+
             foreach (var d in Durations)
             {
-                bool selected = _selectedDuration == d;
                 var btn = new Guna2Button
                 {
                     Text = d,
-                    Size = new Size(110, 34),
+                    Size = new Size(120, 40),
                     Margin = new Padding(4),
                     BorderRadius = 8,
-                    FillColor = selected ? Color.FromArgb(94, 200, 196) : Color.FromArgb(247, 245, 242),
-                    ForeColor = selected ? Color.White : Color.FromArgb(60, 50, 45),
-                    Font = new Font("Segoe UI", 8F, selected ? FontStyle.Bold : FontStyle.Regular),
+                    Font = new Font("Segoe UI", 8.5F),
                     BackColor = Color.White,
                 };
-                btn.Click += (s, e) =>
-                {
-                    _selectedDuration = d;
-                    RenderDurations();
-                    UpdateContinueEnabled();
-                };
+                string captured = d;
+                btn.Click += (s, e) => SelectDuration(captured);
+                _durationButtons[d] = btn;
                 flpDurations.Controls.Add(btn);
+                StyleChoiceButton(btn, selected: false, Teal);
             }
             flpDurations.ResumeLayout();
         }
 
-        // ----- Babysitter choice (step 1) -----
-
-        private void RenderBabysitterChoices()
+        private void SelectDuration(string duration)
         {
+            _selectedDuration = duration;
+            foreach (var pair in _durationButtons)
+                StyleChoiceButton(pair.Value, pair.Key == duration, Teal);
+            UpdateContinueAppearance();
+        }
+
+        private static void StyleChoiceButton(Guna2Button btn, bool selected, Color accent)
+        {
+            btn.FillColor = selected ? accent : InputGray;
+            btn.ForeColor = selected ? Color.White : TextDark;
+            btn.Font = new Font("Segoe UI", 8.5F, selected ? FontStyle.Bold : FontStyle.Regular);
+        }
+
+        // ----- Step 1: babysitter (rows built once, restyled on selection) -----
+
+        private void EnsureBabysitterRows()
+        {
+            if (_sitterRowsBuilt) return;
+            _sitterRowsBuilt = true;
+
             flpBabysitterSelect.SuspendLayout();
-            flpBabysitterSelect.Controls.Clear();
             foreach (var b in MockData.Babysitters)
                 flpBabysitterSelect.Controls.Add(BuildBabysitterChoiceRow(b));
             flpBabysitterSelect.ResumeLayout();
@@ -221,17 +264,13 @@ namespace Meraki_Project
 
         private Control BuildBabysitterChoiceRow(Babysitter b)
         {
-            bool selected = _selectedBabysitterId == b.Id;
-
             var card = new Guna2Panel
             {
                 Width = 860,
                 Height = 90,
                 Margin = new Padding(0, 0, 0, 12),
                 BorderRadius = 14,
-                // Tint the whole card when selected - uses only the FillColor/BackColor
-                // properties proven everywhere else in the project.
-                FillColor = selected ? Color.FromArgb(253, 238, 232) : Color.White,
+                FillColor = Color.White,
                 BackColor = Color.Transparent,
                 Cursor = b.Available ? Cursors.Hand : Cursors.No,
             };
@@ -260,7 +299,7 @@ namespace Meraki_Project
                 Location = new Point(84, 20),
                 Size = new Size(400, 22),
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
-                ForeColor = b.Available ? Color.FromArgb(60, 50, 45) : Color.FromArgb(153, 153, 153),
+                ForeColor = b.Available ? TextDark : Color.FromArgb(153, 153, 153),
                 BackColor = Color.Transparent,
             };
             var detailLabel = new Label
@@ -269,42 +308,54 @@ namespace Meraki_Project
                 Location = new Point(84, 46),
                 Size = new Size(300, 20),
                 Font = new Font("Segoe UI", 8.5F),
-                ForeColor = Color.FromArgb(154, 136, 128),
+                ForeColor = TextMuted,
                 BackColor = Color.Transparent,
+            };
+            var checkLabel = new Label
+            {
+                Text = "✓",
+                Location = new Point(800, 30),
+                Size = new Size(30, 30),
+                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                ForeColor = Coral,
+                BackColor = Color.Transparent,
+                Visible = false,
             };
 
             card.Controls.Add(avatar);
             card.Controls.Add(nameLabel);
             card.Controls.Add(detailLabel);
+            card.Controls.Add(checkLabel);
 
-            if (selected)
-            {
-                card.Controls.Add(new Label
-                {
-                    Text = "✓",
-                    Location = new Point(800, 30),
-                    Size = new Size(30, 30),
-                    Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(232, 113, 74),
-                    BackColor = Color.Transparent,
-                });
-            }
+            _sitterRows[b.Id] = card;
+            _sitterChecks[b.Id] = checkLabel;
 
             if (b.Available)
             {
-                EventHandler selectHandler = (s, e) =>
-                {
-                    _selectedBabysitterId = b.Id;
-                    RenderBabysitterChoices();
-                    UpdateContinueEnabled();
-                };
+                EventHandler selectHandler = (s, e) => SelectBabysitter(b.Id);
                 card.Click += selectHandler;
                 nameLabel.Click += selectHandler;
                 detailLabel.Click += selectHandler;
                 avatar.Click += selectHandler;
             }
 
+            RestyleSitterRow(b.Id);
             return card;
+        }
+
+        private void SelectBabysitter(int id)
+        {
+            _selectedBabysitterId = id;
+            foreach (var sitterId in _sitterRows.Keys)
+                RestyleSitterRow(sitterId);
+            UpdateContinueAppearance();
+        }
+
+        private void RestyleSitterRow(int id)
+        {
+            bool selected = _selectedBabysitterId == id;
+            _sitterRows[id].FillColor = selected ? Color.FromArgb(253, 238, 232) : Color.White;
+            _sitterChecks[id].Visible = selected;
         }
 
         private static Color LightenColor(Color c, double amount)
@@ -315,7 +366,7 @@ namespace Meraki_Project
             return Color.FromArgb(r, g, b);
         }
 
-        // ----- Details (step 2) -----
+        // ----- Step 2: details -----
 
         private void btnDecChildren_Click(object sender, EventArgs e)
         {
@@ -335,7 +386,7 @@ namespace Meraki_Project
             }
         }
 
-        // ----- Confirm (step 3) -----
+        // ----- Step 3: confirm -----
 
         private void RenderConfirmSummary()
         {
@@ -367,8 +418,7 @@ namespace Meraki_Project
         private void ConfirmBooking()
         {
             // TODO (Phase 2): INSERT INTO bookings (parent_user_id, babysitter_user_id,
-            // booking_date, start_time, duration_hours, address, notes, status, ...)
-            // instead of just switching to the static confirmation screen below.
+            // booking_date, start_time, duration_hours, address, notes, status, ...).
             var sitter = MockData.Babysitters.FirstOrDefault(b => b.Id == _selectedBabysitterId);
             DateTime date = new(_displayedMonth.Year, _displayedMonth.Month, _selectedDay ?? 1);
             int hours = ParseDurationHours(_selectedDuration);
@@ -429,7 +479,13 @@ namespace Meraki_Project
             SetWizardChromeVisible(true);
 
             _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            RenderCalendar();
+            BuildMonthCalendar();
+            SelectTime(_selectedTime ?? "");   // clears highlight
+            _selectedTime = null;
+            SelectDuration(_selectedDuration ?? "");
+            _selectedDuration = null;
+            foreach (var id in _sitterRows.Keys)
+                RestyleSitterRow(id);
             GoToStep(0);
         }
 
@@ -439,10 +495,19 @@ namespace Meraki_Project
         {
             if (_step == 0)
             {
-                if (!_selectedDay.HasValue || _selectedTime == null || _selectedDuration == null)
+                if (!_selectedDay.HasValue)
                 {
-                    MessageBox.Show("Please select a date, time, and duration.", "Meraki",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please pick a date on the calendar.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (_selectedTime == null)
+                {
+                    MessageBox.Show("Please pick a start time.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (_selectedDuration == null)
+                {
+                    MessageBox.Show("Please pick a duration.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 GoToStep(1);
@@ -451,8 +516,7 @@ namespace Meraki_Project
             {
                 if (!_selectedBabysitterId.HasValue)
                 {
-                    MessageBox.Show("Please choose a babysitter.", "Meraki",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please choose a babysitter.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 GoToStep(2);
@@ -461,8 +525,7 @@ namespace Meraki_Project
             {
                 if (string.IsNullOrWhiteSpace(tbAddress.Text))
                 {
-                    MessageBox.Show("Please enter an address.", "Meraki",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please enter an address.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 GoToStep(3);
@@ -488,6 +551,9 @@ namespace Meraki_Project
             pnlStepDetails.Visible = step == 2;
             pnlStepConfirm.Visible = step == 3;
 
+            if (step == 1) EnsureBabysitterRows();
+            if (step == 3) RenderConfirmSummary();
+
             btnBack.Visible = step > 0;
             btnContinue.Location = new Point(step > 0 ? 190 : 30, 11);
             btnContinue.Width = step > 0 ? 1280 : 1440;
@@ -497,36 +563,33 @@ namespace Meraki_Project
             StyleStepCircle(pnlStepCircle2, lblStepNum2, lblStepCaption2, step >= 1, step == 1);
             StyleStepCircle(pnlStepCircle3, lblStepNum3, lblStepCaption3, step >= 2, step == 2);
             StyleStepCircle(pnlStepCircle4, lblStepNum4, lblStepCaption4, step >= 3, step == 3);
-            pnlStepLine1.FillColor = step >= 1 ? Color.FromArgb(232, 113, 74) : Color.FromArgb(230, 224, 218);
-            pnlStepLine2.FillColor = step >= 2 ? Color.FromArgb(232, 113, 74) : Color.FromArgb(230, 224, 218);
-            pnlStepLine3.FillColor = step >= 3 ? Color.FromArgb(232, 113, 74) : Color.FromArgb(230, 224, 218);
+            pnlStepLine1.FillColor = step >= 1 ? Coral : Color.FromArgb(230, 224, 218);
+            pnlStepLine2.FillColor = step >= 2 ? Coral : Color.FromArgb(230, 224, 218);
+            pnlStepLine3.FillColor = step >= 3 ? Coral : Color.FromArgb(230, 224, 218);
 
-            if (step == 0) RenderTimeSlots();
-            if (step == 1) RenderBabysitterChoices();
-            if (step == 3) RenderConfirmSummary();
-
-            UpdateContinueEnabled();
+            UpdateContinueAppearance();
         }
 
         private static void StyleStepCircle(Guna2Panel circle, Label num, Label caption, bool reachedOrCurrent, bool current)
         {
-            circle.FillColor = reachedOrCurrent ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242);
-            num.ForeColor = reachedOrCurrent ? Color.White : Color.FromArgb(154, 136, 128);
-            caption.ForeColor = current ? Color.FromArgb(232, 113, 74) : Color.FromArgb(154, 136, 128);
+            circle.FillColor = reachedOrCurrent ? Coral : InputGray;
+            num.ForeColor = reachedOrCurrent ? Color.White : TextMuted;
+            caption.ForeColor = current ? Coral : TextMuted;
             caption.Font = new Font("Segoe UI", 8F, current ? FontStyle.Bold : FontStyle.Regular);
         }
 
-        private void UpdateContinueEnabled()
+        // The button stays ENABLED so a click can always explain what's missing;
+        // only its color hints at readiness.
+        private void UpdateContinueAppearance()
         {
-            bool enabled = _step switch
+            bool ready = _step switch
             {
                 0 => _selectedDay.HasValue && _selectedTime != null && _selectedDuration != null,
                 1 => _selectedBabysitterId.HasValue,
                 _ => true,
             };
-            btnContinue.Enabled = enabled;
-            btnContinue.FillColor = enabled ? Color.FromArgb(232, 113, 74) : Color.FromArgb(229, 231, 235);
-            btnContinue.ForeColor = enabled ? Color.White : Color.FromArgb(170, 170, 170);
+            btnContinue.FillColor = ready ? Coral : Color.FromArgb(240, 190, 170);
+            btnContinue.ForeColor = Color.White;
         }
 
         // ----- Navigation -----
