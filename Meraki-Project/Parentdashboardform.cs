@@ -11,9 +11,10 @@ namespace Meraki_Project
     public partial class ParentDashboardForm : Form
     {
         private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
+        private static readonly Color Coral = Color.FromArgb(232, 113, 74);
+        private static readonly Color TextMuted = Color.FromArgb(154, 136, 128);
 
-        private Guna2Button? _reviewButton;
-        private BookingInfo? _bookingToReview;
+        private FlowLayoutPanel? _flpBookings;
 
         public ParentDashboardForm()
         {
@@ -42,10 +43,19 @@ namespace Meraki_Project
 
         private void LoadBookings()
         {
+            // Past confirmed bookings are finished - promote them so they count and
+            // so a review can be left. Best-effort; never block the dashboard.
+            try { BookingRepository.AutoCompletePastBookings(); } catch { }
+
             var all = BookingRepository.GetForParent(Session.CurrentUserId);
             var upcoming = all
                 .Where(b => (b.Status == "pending" || b.Status == "confirmed") && b.Date >= DateTime.Today)
                 .OrderBy(b => b.Date).ThenBy(b => b.Start)
+                .ToList();
+            var reviewable = all
+                .Where(b => !b.HasReview && b.Date < DateTime.Today
+                            && (b.Status == "confirmed" || b.Status == "completed"))
+                .OrderByDescending(b => b.Date).ThenByDescending(b => b.Start)
                 .ToList();
 
             int thisWeek = upcoming.Count(b => b.Date < DateTime.Today.AddDays(7));
@@ -53,74 +63,236 @@ namespace Meraki_Project
                 ? "You have no upcoming bookings - time to book a babysitter!"
                 : $"You have {thisWeek} upcoming booking{(thisWeek == 1 ? "" : "s")} this week.";
 
-            FillBookingCard(upcoming.ElementAtOrDefault(0), pnlBookingCard1,
-                lblBookingSitterName1, lblBookingStatus1, lblBookingDateTime1, lblBookingChildren1, lblAvatarInitial1);
-            FillBookingCard(upcoming.ElementAtOrDefault(1), pnlBookingCard2,
-                lblBookingSitterName2, lblBookingStatus2, lblBookingDateTime2, lblBookingChildren2, lblAvatarInitial2);
+            // The two static Designer cards are replaced by one scrollable list so
+            // *every* booking shows up, not just the first two.
+            pnlBookingCard1.Visible = false;
+            pnlBookingCard2.Visible = false;
 
-            // Offer a review for the most recent completed booking without one.
-            _bookingToReview = all.FirstOrDefault(b => b.Status == "completed" && !b.HasReview);
-            ShowOrHideReviewButton();
-        }
+            EnsureBookingList();
+            _flpBookings!.SuspendLayout();
+            _flpBookings.Controls.Clear();
 
-        private void FillBookingCard(BookingInfo? b, Guna2Panel card, Label nameLabel,
-            Guna2HtmlLabel statusLabel, Label dateTimeLabel, Label childrenLabel, Label avatarInitial)
-        {
-            if (b == null)
+            if (upcoming.Count == 0 && reviewable.Count == 0)
             {
-                card.Visible = false;
-                return;
+                _flpBookings.Controls.Add(EmptyLabel("No bookings yet. Tap \"Book a Babysitter\" to get started."));
             }
-            card.Visible = true;
-            nameLabel.Text = b.SitterName;
-            avatarInitial.Text = b.SitterName.Length > 0 ? b.SitterName.Substring(0, 1).ToUpper() : "?";
-            dateTimeLabel.Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}";
-            childrenLabel.Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}";
-            statusLabel.Text = b.Status == "confirmed"
-                ? "<div style=\"background:#E8F7F7;color:#2A7070;border-radius:10px;padding:2px 10px;font-weight:bold;\">Confirmed</div>"
-                : "<div style=\"background:#FFF8E0;color:#A07000;border-radius:10px;padding:2px 10px;font-weight:bold;\">Pending</div>";
-        }
-
-        private void ShowOrHideReviewButton()
-        {
-            if (_bookingToReview == null)
+            else
             {
-                if (_reviewButton != null) _reviewButton.Visible = false;
-                return;
-            }
+                foreach (var b in upcoming)
+                    _flpBookings.Controls.Add(BuildBookingCard(b, reviewable: false));
 
-            if (_reviewButton == null)
-            {
-                _reviewButton = new Guna2Button
+                if (reviewable.Count > 0)
                 {
-                    Location = new Point(30, 610),
-                    Size = new Size(560, 48),
-                    BorderRadius = 12,
-                    FillColor = Color.FromArgb(255, 244, 217),
-                    ForeColor = Color.FromArgb(160, 112, 0),
-                    Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                    _flpBookings.Controls.Add(SectionLabel("Leave a review"));
+                    foreach (var b in reviewable)
+                        _flpBookings.Controls.Add(BuildBookingCard(b, reviewable: true));
+                }
+            }
+            _flpBookings.ResumeLayout();
+        }
+
+        private void EnsureBookingList()
+        {
+            if (_flpBookings != null) return;
+            _flpBookings = new FlowLayoutPanel
+            {
+                Location = new Point(30, 388),
+                Size = new Size(1440, 400),
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoScroll = true,
+                // A standard panel can't render the Guna gradient through "Transparent"
+                // (it falls back to the form's grey), so paint it the page's peach.
+                BackColor = Color.FromArgb(253, 238, 232),
+            };
+            pnlContent.Controls.Add(_flpBookings);
+            _flpBookings.BringToFront();
+        }
+
+        private Label EmptyLabel(string text) => new()
+        {
+            Text = text,
+            Width = 1400,
+            Height = 40,
+            Margin = new Padding(0, 6, 0, 0),
+            ForeColor = TextMuted,
+            Font = new Font("Segoe UI", 10F),
+            BackColor = Color.Transparent,
+        };
+
+        private Label SectionLabel(string text) => new()
+        {
+            Text = text,
+            Width = 1400,
+            Height = 30,
+            Margin = new Padding(0, 12, 0, 2),
+            ForeColor = TextMuted,
+            Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+            BackColor = Color.Transparent,
+        };
+
+        private Control BuildBookingCard(BookingInfo b, bool reviewable)
+        {
+            var card = new Guna2Panel
+            {
+                Width = 1400,
+                Height = 96,
+                Margin = new Padding(0, 0, 0, 12),
+                BorderRadius = 16,
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(238, 230, 224),
+                FillColor = Color.White,
+                BackColor = Color.Transparent,
+                Cursor = Cursors.Hand,
+            };
+
+            bool confirmedCard = b.Status == "confirmed";
+            Color accent = confirmedCard ? Color.FromArgb(94, 200, 196) : Color.FromArgb(244, 168, 124);
+
+            // Left accent bar (rounded) - the fresh look from the design.
+            var accentBar = new Guna2Panel
+            {
+                Location = new Point(12, 16),
+                Size = new Size(5, 64),
+                BorderRadius = 3,
+                FillColor = accent,
+                BackColor = Color.Transparent,
+            };
+            // Avatar with the sitter's initial.
+            var avatar = new Guna2Panel
+            {
+                Location = new Point(28, 20),
+                Size = new Size(56, 56),
+                BorderRadius = 16,
+                FillColor = LightenColor(accent, 0.78),
+                BackColor = Color.Transparent,
+            };
+            avatar.Controls.Add(new Label
+            {
+                Text = b.SitterName.Length > 0 ? b.SitterName.Substring(0, 1).ToUpper() : "?",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                ForeColor = accent,
+                BackColor = Color.Transparent,
+            });
+
+            var nameLabel = new Label
+            {
+                Text = b.SitterName,
+                Location = new Point(100, 16),
+                Size = new Size(480, 24),
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = ColorHeading,
+                BackColor = Color.Transparent,
+            };
+            var dateLabel = new Label
+            {
+                Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}",
+                Location = new Point(100, 44),
+                Size = new Size(480, 20),
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+            };
+            var detailLabel = new Label
+            {
+                Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}  ·  tap for receipt",
+                Location = new Point(100, 66),
+                Size = new Size(580, 20),
+                Font = new Font("Segoe UI", 8.5F),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+            };
+
+            card.Controls.Add(accentBar);
+            card.Controls.Add(avatar);
+            card.Controls.Add(nameLabel);
+            card.Controls.Add(dateLabel);
+            card.Controls.Add(detailLabel);
+
+            EventHandler openReceipt = (s, e) =>
+            {
+                using var dlg = new ReceiptDialog(b, showParentSide: true);
+                dlg.ShowDialog(this);
+            };
+            card.Click += openReceipt;
+            nameLabel.Click += openReceipt;
+            dateLabel.Click += openReceipt;
+            detailLabel.Click += openReceipt;
+
+            if (reviewable)
+            {
+                var reviewBtn = new Guna2Button
+                {
+                    Text = "★  Leave a review",
+                    Location = new Point(1180, 28),
+                    Size = new Size(190, 40),
+                    BorderRadius = 10,
+                    FillColor = Color.FromArgb(255, 209, 102),
+                    ForeColor = Color.FromArgb(90, 66, 0),
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                     BackColor = Color.Transparent,
                 };
-                _reviewButton.Click += ReviewButton_Click;
-                pnlContent.Controls.Add(_reviewButton);
-                _reviewButton.BringToFront();
+                reviewBtn.Click += (s, e) => LeaveReview(b);
+                card.Controls.Add(reviewBtn);
+            }
+            else
+            {
+                bool confirmed = b.Status == "confirmed";
+                var badge = new Label
+                {
+                    Text = confirmed ? "Confirmed" : "Pending",
+                    Location = new Point(1230, 34),
+                    Size = new Size(140, 30),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    BackColor = confirmed ? Color.FromArgb(232, 247, 247) : Color.FromArgb(255, 248, 224),
+                    ForeColor = confirmed ? Color.FromArgb(42, 112, 112) : Color.FromArgb(160, 112, 0),
+                    Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+                };
+                badge.Click += openReceipt;
+                card.Controls.Add(badge);
             }
 
-            _reviewButton.Text = $"★  How was your booking with {_bookingToReview.SitterName}?  Leave a review";
-            _reviewButton.Visible = true;
+            // View the babysitter's profile / reviews straight from the booking.
+            var profileBtn = new Guna2Button
+            {
+                Text = "View Profile",
+                Location = new Point(1010, 28),
+                Size = new Size(150, 40),
+                BorderRadius = 10,
+                FillColor = Color.FromArgb(247, 245, 242),
+                ForeColor = Coral,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = Color.Transparent,
+            };
+            profileBtn.Click += (s, e) => OpenBabysitterProfile(b.BabysitterId);
+            card.Controls.Add(profileBtn);
+
+            return card;
         }
 
-        private void ReviewButton_Click(object? sender, EventArgs e)
+        private void OpenBabysitterProfile(int babysitterId)
         {
-            if (_bookingToReview == null) return;
+            using var dlg = new BabysitterProfileDialog(babysitterId);
+            dlg.ShowDialog(this);
+            if (dlg.BookRequested)
+            {
+                Navigation.GoTo(this, new BookingForm(babysitterId));
+                return;
+            }
+            LoadBookings();
+        }
 
-            using var dialog = new ReviewDialog(_bookingToReview.SitterName);
+        private void LeaveReview(BookingInfo booking)
+        {
+            using var dialog = new ReviewDialog(booking.SitterName);
             if (dialog.ShowDialog(this) != DialogResult.OK) return;
 
             try
             {
-                ReviewRepository.Add(_bookingToReview.BookingId, dialog.Rating, dialog.Comment);
-                ExtrasRepository.AddNotification(_bookingToReview.BabysitterId,
+                ReviewRepository.Add(booking.BookingId, dialog.Rating, dialog.Comment);
+                ExtrasRepository.AddNotification(booking.BabysitterId,
                     $"{Session.CurrentUserName} left you a {dialog.Rating}-star review!");
                 MessageBox.Show("Thank you! Your review was saved.", "Meraki",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -152,6 +324,14 @@ namespace Meraki_Project
             if (hour < 12) return "Good morning,";
             if (hour < 18) return "Good afternoon,";
             return "Good evening,";
+        }
+
+        private static Color LightenColor(Color c, double amount)
+        {
+            int r = (int)(c.R + (255 - c.R) * amount);
+            int g = (int)(c.G + (255 - c.G) * amount);
+            int b = (int)(c.B + (255 - c.B) * amount);
+            return Color.FromArgb(r, g, b);
         }
 
         // ----- Quick actions -----

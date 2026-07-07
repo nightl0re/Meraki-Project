@@ -33,6 +33,7 @@ namespace Meraki_Project
 
         private void SearchBabysitterForm_Load(object sender, EventArgs e)
         {
+            tbSearch.PlaceholderText = "Search by name...";
             try
             {
                 _all = BabysitterRepository.GetActiveBabysitters();
@@ -62,6 +63,10 @@ namespace Meraki_Project
             int top = pnlFiltersPanel.Visible ? 310 : 166;
             flpResults.SetBounds(30, top, 1420, 806 - top);
             lblNoResults.Top = top + 90;
+
+            // Keep the filter panel above the results list so it never renders behind
+            // the cards when it expands.
+            if (pnlFiltersPanel.Visible) pnlFiltersPanel.BringToFront();
         }
 
         // ----- Filters -----
@@ -108,11 +113,10 @@ namespace Meraki_Project
         {
             string search = tbSearch.Text.Trim();
 
+            // Search by name only for now (location/skill search comes later).
             var filtered = _all.Where(b =>
                 (search.Length == 0
-                    || b.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-                    || b.Location.Contains(search, StringComparison.OrdinalIgnoreCase)
-                    || b.Skills.Any(t => t.Contains(search, StringComparison.OrdinalIgnoreCase)))
+                    || b.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
                 && b.HourlyRate <= _maxRate
                 && (_minRating == 0 || b.AvgRating >= _minRating)
                 && (!_availableOnly || b.Available)
@@ -139,6 +143,8 @@ namespace Meraki_Project
                 Size = new Size(450, 310),
                 Margin = new Padding(0, 0, 20, 20),
                 BorderRadius = 16,
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(238, 230, 224),
                 FillColor = Color.White,
                 BackColor = Color.Transparent,
             };
@@ -269,11 +275,24 @@ namespace Meraki_Project
                 ForeColor = b.Available ? Color.FromArgb(42, 112, 112) : Color.FromArgb(153, 153, 153),
             };
 
+            var profileBtn = new Guna2Button
+            {
+                Text = "View Profile",
+                Location = new Point(16, 244),
+                Size = new Size(198, 44),
+                BorderRadius = 10,
+                FillColor = Color.FromArgb(247, 245, 242),
+                ForeColor = Color.FromArgb(232, 113, 74),
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                BackColor = Color.White,
+            };
+            profileBtn.Click += (s, e) => OpenProfile(b.UserId);
+
             var bookBtn = new Guna2Button
             {
                 Text = b.Available ? "Book Now" : "Unavailable",
-                Location = new Point(16, 244),
-                Size = new Size(418, 44),
+                Location = new Point(222, 244),
+                Size = new Size(212, 44),
                 BorderRadius = 10,
                 FillColor = b.Available ? Color.FromArgb(232, 113, 74) : Color.FromArgb(229, 231, 235),
                 ForeColor = b.Available ? Color.White : Color.FromArgb(170, 170, 170),
@@ -292,6 +311,7 @@ namespace Meraki_Project
             card.Controls.Add(ratingLabel);
             card.Controls.Add(rateLabel);
             card.Controls.Add(availabilityLabel);
+            card.Controls.Add(profileBtn);
             card.Controls.Add(bookBtn);
             return card;
         }
@@ -302,6 +322,19 @@ namespace Meraki_Project
             int g = (int)(c.G + (255 - c.G) * amount);
             int b = (int)(c.B + (255 - c.B) * amount);
             return Color.FromArgb(r, g, b);
+        }
+
+        private void OpenProfile(int babysitterId)
+        {
+            using var dlg = new BabysitterProfileDialog(babysitterId);
+            dlg.ShowDialog(this);
+            if (dlg.BookRequested)
+            {
+                Navigation.GoTo(this, new BookingForm(babysitterId));
+                return;
+            }
+            // A review may have been added - refresh ratings.
+            SearchBabysitterForm_Load(this, EventArgs.Empty);
         }
 
         // ----- Navigation -----

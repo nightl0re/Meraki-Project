@@ -37,16 +37,18 @@ namespace Meraki_Project
         private List<BabysitterInfo> _sitters = new();
 
         private int _step;
-        private DateTime _displayedMonth;
-        private int? _selectedDay;
+        private DateTime? _selectedDate;
         private string? _selectedTime;
         private string? _selectedDuration;
         private int? _selectedBabysitterId;
         private int _childCount = 1;
 
+        // A native MonthCalendar replaced the old hand-built grid: it is instant to
+        // navigate between months and can't be left on a past date (MinDate = today).
+        private MonthCalendar? _monthCalendar;
+
         // Controls are built ONCE and only restyled on selection - rebuilding
         // heavy Guna2 controls inside their own click handlers froze the form.
-        private readonly Dictionary<int, Label> _dayCells = new();
         private readonly Dictionary<string, Guna2Button> _timeButtons = new();
         private readonly Dictionary<string, Guna2Button> _durationButtons = new();
         private readonly Dictionary<int, Guna2Panel> _sitterRows = new();
@@ -63,7 +65,6 @@ namespace Meraki_Project
 
         private void BookingForm_Load(object sender, EventArgs e)
         {
-            _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             if (_preselectedBabysitterId.HasValue)
                 _selectedBabysitterId = _preselectedBabysitterId;
 
@@ -80,7 +81,7 @@ namespace Meraki_Project
                 _sitters = new List<BabysitterInfo>();
             }
 
-            BuildMonthCalendar();
+            BuildDateCalendar();
             BuildTimeSlotButtons();
             BuildDurationButtons();
             GoToStep(0);
@@ -89,109 +90,45 @@ namespace Meraki_Project
         private BabysitterInfo? SelectedSitter =>
             _sitters.FirstOrDefault(b => b.UserId == _selectedBabysitterId);
 
-        // ----- Step 0: calendar -----
+        // ----- Step 0: date (native MonthCalendar) -----
 
-        private void btnCalPrev_Click(object sender, EventArgs e)
+        // The old grid used < / > buttons; the native calendar has its own, so these
+        // Designer-wired handlers are now no-ops.
+        private void btnCalPrev_Click(object sender, EventArgs e) { }
+
+        private void btnCalNext_Click(object sender, EventArgs e) { }
+
+        private void BuildDateCalendar()
         {
-            _displayedMonth = _displayedMonth.AddMonths(-1);
-            _selectedDay = null;
-            BuildMonthCalendar();
-            UpdateContinueAppearance();
-        }
+            // Hide the old hand-built grid and its chrome.
+            tlpBookingCalendar.Visible = false;
+            btnCalPrev.Visible = false;
+            btnCalNext.Visible = false;
+            lblCalMonthYear.Visible = false;
 
-        private void btnCalNext_Click(object sender, EventArgs e)
-        {
-            _displayedMonth = _displayedMonth.AddMonths(1);
-            _selectedDay = null;
-            BuildMonthCalendar();
-            UpdateContinueAppearance();
-        }
-
-        private void BuildMonthCalendar()
-        {
-            tlpBookingCalendar.SuspendLayout();
-
-            for (int i = tlpBookingCalendar.Controls.Count - 1; i >= 0; i--)
+            if (_monthCalendar == null)
             {
-                Control ctrl = tlpBookingCalendar.Controls[i];
-                if (tlpBookingCalendar.GetRow(ctrl) > 0)
+                _monthCalendar = new MonthCalendar
                 {
-                    tlpBookingCalendar.Controls.Remove(ctrl);
-                    ctrl.Dispose();
-                }
-            }
-            _dayCells.Clear();
-
-            lblCalMonthYear.Text = _displayedMonth.ToString("MMMM yyyy");
-
-            int daysInMonth = DateTime.DaysInMonth(_displayedMonth.Year, _displayedMonth.Month);
-            int firstDayOfWeek = (int)new DateTime(_displayedMonth.Year, _displayedMonth.Month, 1).DayOfWeek;
-
-            int day = 1;
-            for (int row = 1; row <= 6 && day <= daysInMonth; row++)
-            {
-                int startCol = row == 1 ? firstDayOfWeek : 0;
-                for (int col = startCol; col < 7 && day <= daysInMonth; col++)
+                    Location = new Point(28, 44),
+                    MinDate = DateTime.Today,
+                    MaxSelectionCount = 1,
+                    CalendarDimensions = new Size(2, 2),
+                    TitleBackColor = Coral,
+                    TitleForeColor = Color.White,
+                    ForeColor = TextDark,
+                };
+                _monthCalendar.DateSelected += (s, e) =>
                 {
-                    var cell = BuildDayCell(day);
-                    _dayCells[day] = cell;
-                    tlpBookingCalendar.Controls.Add(cell, col, row);
-                    day++;
-                }
+                    _selectedDate = e.Start.Date;
+                    UpdateContinueAppearance();
+                };
+                pnlCalendarCard.Controls.Add(_monthCalendar);
+                _monthCalendar.BringToFront();
             }
 
-            tlpBookingCalendar.ResumeLayout();
-        }
-
-        private Label BuildDayCell(int day)
-        {
-            var date = new DateTime(_displayedMonth.Year, _displayedMonth.Month, day);
-            bool isPast = date.Date < DateTime.Today;
-
-            var cell = new Label
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Padding(3),
-                Text = day.ToString(),
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 9F),
-                Cursor = isPast ? Cursors.Default : Cursors.Hand,
-            };
-            StyleDayCell(cell, day, isPast);
-
-            if (!isPast)
-                cell.Click += (s, e) => SelectDay(day);
-            return cell;
-        }
-
-        private void SelectDay(int day)
-        {
-            int? previous = _selectedDay;
-            _selectedDay = day;
-
-            if (previous.HasValue && _dayCells.TryGetValue(previous.Value, out var prevCell))
-                StyleDayCell(prevCell, previous.Value, isPast: false);
-            if (_dayCells.TryGetValue(day, out var newCell))
-                StyleDayCell(newCell, day, isPast: false);
-
-            UpdateContinueAppearance();
-        }
-
-        private void StyleDayCell(Label cell, int day, bool isPast)
-        {
-            bool selected = _selectedDay == day;
-            if (selected)
-            {
-                cell.BackColor = Coral;
-                cell.ForeColor = Color.White;
-                cell.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            }
-            else
-            {
-                cell.BackColor = isPast ? Color.White : InputGray;
-                cell.ForeColor = isPast ? Color.FromArgb(210, 205, 200) : TextDark;
-                cell.Font = new Font("Segoe UI", 9F);
-            }
+            // Default to today so "Continue" works as soon as time + duration are set.
+            _selectedDate = DateTime.Today;
         }
 
         // ----- Step 0: time slots + duration -----
@@ -421,7 +358,7 @@ namespace Meraki_Project
         private void RenderConfirmSummary()
         {
             var sitter = SelectedSitter;
-            DateTime date = new(_displayedMonth.Year, _displayedMonth.Month, _selectedDay ?? 1);
+            DateTime date = _selectedDate ?? DateTime.Today;
             int hours = ParseDurationHours(_selectedDuration);
             decimal rate = sitter?.HourlyRate ?? 0;
             decimal sitterTotal = rate * hours;
@@ -453,7 +390,7 @@ namespace Meraki_Project
             var sitter = SelectedSitter;
             if (sitter == null) return;
 
-            DateTime date = new(_displayedMonth.Year, _displayedMonth.Month, _selectedDay ?? 1);
+            DateTime date = _selectedDate ?? DateTime.Today;
             int hours = ParseDurationHours(_selectedDuration);
             decimal total = sitter.HourlyRate * hours + _serviceFee;
 
@@ -514,7 +451,7 @@ namespace Meraki_Project
 
         private void btnNewBooking_Click(object sender, EventArgs e)
         {
-            _selectedDay = null;
+            _selectedDate = DateTime.Today;
             _selectedTime = null;
             _selectedDuration = null;
             _selectedBabysitterId = null;
@@ -529,8 +466,7 @@ namespace Meraki_Project
             pnlBottomBar.Visible = true;
             SetWizardChromeVisible(true);
 
-            _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            BuildMonthCalendar();
+            _monthCalendar?.SetDate(DateTime.Today);
             foreach (var pair in _timeButtons) StyleChoiceButton(pair.Value, false, Coral);
             foreach (var pair in _durationButtons) StyleChoiceButton(pair.Value, false, Teal);
             foreach (var sitterId in _sitterRows.Keys)
@@ -547,7 +483,7 @@ namespace Meraki_Project
         {
             if (_step == 0)
             {
-                if (!_selectedDay.HasValue)
+                if (!_selectedDate.HasValue)
                 {
                     MessageBox.Show("Please pick a date on the calendar.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -634,7 +570,7 @@ namespace Meraki_Project
         {
             bool ready = _step switch
             {
-                0 => _selectedDay.HasValue && _selectedTime != null && _selectedDuration != null,
+                0 => _selectedDate.HasValue && _selectedTime != null && _selectedDuration != null,
                 1 => _selectedBabysitterId.HasValue,
                 _ => true,
             };

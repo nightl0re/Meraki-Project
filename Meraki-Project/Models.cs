@@ -60,9 +60,14 @@ namespace Meraki_Project
         public string TimeRangeText =>
             $"{DateTime.Today.Add(Start):h:mm tt} – {DateTime.Today.Add(End):h:mm tt}";
 
-        // "6–10 PM" (short form for calendar cells)
+        // "6–10 PM" (short form for compact lists).
+        // NOTE: the start uses "%h", not "h". A single-character custom format
+        // string ("h") is interpreted by .NET as a *standard* specifier, and "h"
+        // is not a valid one, so DateTime.ToString("h") throws
+        // "Input string was not in a correct format." The "%" forces it to be
+        // treated as the custom "hour, 12-hour clock" specifier.
         public string TimeRangeShort =>
-            $"{DateTime.Today.Add(Start):h}–{DateTime.Today.Add(End):h tt}";
+            $"{DateTime.Today.Add(Start):%h}–{DateTime.Today.Add(End):h tt}";
     }
 
     public class ReviewInfo

@@ -199,6 +199,47 @@ namespace Meraki_Project
             return list;
         }
 
+        // Full public card for ONE babysitter (for the "View Profile" popup).
+        public static BabysitterInfo? GetBabysitterInfo(int userId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name,
+                         COALESCE(p.bio,'') AS bio, p.hourly_rate, p.experience_years,
+                         p.location, p.verified, p.available,
+                         COALESCE((SELECT AVG(r.rating) FROM reviews r
+                                   JOIN bookings b ON b.booking_id = r.booking_id
+                                   WHERE b.babysitter_id = u.user_id), 0) AS avg_rating,
+                         (SELECT COUNT(*) FROM reviews r
+                          JOIN bookings b ON b.booking_id = r.booking_id
+                          WHERE b.babysitter_id = u.user_id) AS review_count,
+                         COALESCE((SELECT GROUP_CONCAT(s.name ORDER BY s.skill_id SEPARATOR '|')
+                                   FROM babysitter_skills bs
+                                   JOIN skills s ON s.skill_id = bs.skill_id
+                                   WHERE bs.babysitter_id = u.user_id), '') AS skills
+                  FROM users u
+                  JOIN babysitter_profiles p ON p.user_id = u.user_id
+                  WHERE u.user_id = @id", conn);
+            cmd.Parameters.AddWithValue("@id", userId);
+            using var r = cmd.ExecuteReader();
+            if (!r.Read()) return null;
+            string skills = r.GetString("skills");
+            return new BabysitterInfo
+            {
+                UserId = r.GetInt32("user_id"),
+                Name = r.GetString("name"),
+                Bio = r.GetString("bio"),
+                HourlyRate = r.GetDecimal("hourly_rate"),
+                ExperienceYears = r.GetInt32("experience_years"),
+                Location = r.GetString("location"),
+                Verified = r.GetBoolean("verified"),
+                Available = r.GetBoolean("available"),
+                AvgRating = r.GetDouble("avg_rating"),
+                ReviewCount = r.GetInt32("review_count"),
+                Skills = skills.Length == 0 ? new List<string>() : skills.Split('|').ToList(),
+            };
+        }
+
         public static (string Bio, string Location, decimal HourlyRate, int ExperienceYears, bool Verified)
             GetProfile(int userId)
         {
@@ -360,6 +401,30 @@ namespace Meraki_Project
             return Query(sql, "@id", babysitterId);
         }
 
+        // A babysitter's confirmed + completed bookings, most recent first, for the
+        // dashboard schedule list (replaces the old month-grid calendar).
+        public static List<BookingInfo> GetScheduleForBabysitter(int babysitterId)
+        {
+            const string sql =
+                @"SELECT b.*, CONCAT(u.first_name,' ',u.last_name) AS parent_name
+                  FROM bookings b
+                  JOIN users u ON u.user_id = b.parent_id
+                  WHERE b.babysitter_id = @id AND b.status IN ('confirmed','completed')
+                  ORDER BY b.booking_date DESC, b.start_time DESC";
+            return Query(sql, "@id", babysitterId);
+        }
+
+        // Any 'confirmed' booking whose date has already passed is really finished,
+        // so flip it to 'completed'. This makes it count toward the babysitter's
+        // earnings/hours and lets the parent leave a review. Safe to call on load.
+        public static void AutoCompletePastBookings()
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                "UPDATE bookings SET status = 'completed' WHERE status = 'confirmed' AND booking_date < CURDATE()", conn);
+            cmd.ExecuteNonQuery();
+        }
+
         // Confirmed/completed bookings of one month, for the dashboard calendar.
         public static Dictionary<int, BookingInfo> GetMonthCalendar(int babysitterId, int year, int month)
         {
@@ -381,6 +446,27 @@ namespace Meraki_Project
                 dict[b.Date.Day] = b;   // one entry per day is enough for the cell
             }
             return dict;
+        }
+
+        // Newest finished (or past-confirmed) booking between this parent and
+        // babysitter that has no review yet - the one a review would attach to.
+        // Returns null when the parent has nothing to review for this sitter.
+        public static int? FindReviewableBooking(int parentId, int babysitterId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT b.booking_id
+                  FROM bookings b
+                  LEFT JOIN reviews r ON r.booking_id = b.booking_id
+                  WHERE b.parent_id = @p AND b.babysitter_id = @b AND r.review_id IS NULL
+                    AND (b.status = 'completed'
+                         OR (b.status = 'confirmed' AND b.booking_date < CURDATE()))
+                  ORDER BY b.booking_date DESC, b.start_time DESC
+                  LIMIT 1", conn);
+            cmd.Parameters.AddWithValue("@p", parentId);
+            cmd.Parameters.AddWithValue("@b", babysitterId);
+            object? v = cmd.ExecuteScalar();
+            return v == null || v is DBNull ? (int?)null : Convert.ToInt32(v);
         }
 
         public static void SetStatus(int bookingId, string status)
@@ -522,12 +608,23 @@ namespace Meraki_Project
         public static void Add(int bookingId, int rating, string comment)
         {
             using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
-                "INSERT INTO reviews (booking_id, rating, comment) VALUES (@b, @r, @c)", conn);
-            cmd.Parameters.AddWithValue("@b", bookingId);
-            cmd.Parameters.AddWithValue("@r", rating);
-            cmd.Parameters.AddWithValue("@c", comment);
-            cmd.ExecuteNonQuery();
+            using var tx = conn.BeginTransaction();
+            using (var cmd = new MySqlCommand(
+                "INSERT INTO reviews (booking_id, rating, comment) VALUES (@b, @r, @c)", conn, tx))
+            {
+                cmd.Parameters.AddWithValue("@b", bookingId);
+                cmd.Parameters.AddWithValue("@r", rating);
+                cmd.Parameters.AddWithValue("@c", comment);
+                cmd.ExecuteNonQuery();
+            }
+            // A reviewed booking is, by definition, finished.
+            using (var done = new MySqlCommand(
+                "UPDATE bookings SET status = 'completed' WHERE booking_id = @b", conn, tx))
+            {
+                done.Parameters.AddWithValue("@b", bookingId);
+                done.ExecuteNonQuery();
+            }
+            tx.Commit();
         }
     }
 

@@ -9,21 +9,13 @@ namespace Meraki_Project
 {
     public partial class BabysitterDashboardForm : Form
     {
-        private static readonly Color[] CalendarPalette =
-        {
-            Color.FromArgb(232, 113, 74),
-            Color.FromArgb(94, 200, 196),
-            Color.FromArgb(255, 209, 102),
-            Color.FromArgb(224, 90, 90),
-            Color.FromArgb(244, 168, 124),
-        };
+        private static readonly Color TextMuted = Color.FromArgb(154, 136, 128);
+        private static readonly Color TextDark = Color.FromArgb(60, 50, 45);
 
-        private DateTime _displayedMonth;
-        private Dictionary<int, BookingInfo> _calendarBookings = new();
         private List<NotificationInfo> _notifications = new();
         private List<BookingInfo> _pendingRequests = new();
 
-        private readonly ToolTip _calendarToolTip = new();
+        private FlowLayoutPanel? _flpSchedule;
 
         public BabysitterDashboardForm()
         {
@@ -37,12 +29,22 @@ namespace Meraki_Project
             lblQuickName.Text = name;
             lblQuickAvatarInitial.Text = name.Length > 0 ? name.Substring(0, 1).ToUpper() : "B";
 
-            _displayedMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            // Past confirmed bookings are finished - promote them so earnings/hours
+            // are accurate. Best-effort; never block the dashboard.
+            try { BookingRepository.AutoCompletePastBookings(); } catch { }
+
+            // The old month-grid calendar is replaced by a simple schedule list, so
+            // hide the Designer calendar controls.
+            btnCalPrev.Visible = false;
+            btnCalNext.Visible = false;
+            tlpCalendar.Visible = false;
+            lblCalMonthYear.Visible = false;
+            lblCalendarTitle.Text = "My Schedule";
 
             try
             {
                 LoadStats();
-                RenderCalendar();
+                RenderSchedule();
                 LoadPendingRequests();
             }
             catch (Exception ex)
@@ -72,100 +74,189 @@ namespace Meraki_Project
             lblQuickSubtitle.Text = $"Babysitter · {profile.ExperienceYears} yrs experience";
         }
 
-        // ----- Calendar (real bookings of the shown month) -----
+        // ----- Schedule list (real confirmed / completed bookings) -----
+        //
+        // This replaces the old month-grid calendar, which was slow to redraw and
+        // hard to read in WinForms. A confirmed booking now simply appears here as
+        // a coloured card - that IS the "the date changed colour" feedback.
 
-        private void btnCalPrev_Click(object sender, EventArgs e)
+        private void btnCalPrev_Click(object sender, EventArgs e) { /* calendar removed */ }
+
+        private void btnCalNext_Click(object sender, EventArgs e) { /* calendar removed */ }
+
+        private void RenderSchedule()
         {
-            _displayedMonth = _displayedMonth.AddMonths(-1);
-            try { RenderCalendar(); } catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
+            var bookings = BookingRepository.GetScheduleForBabysitter(Session.CurrentUserId);
+            var today = DateTime.Today;
+            var upcoming = bookings.Where(b => b.Date >= today)
+                                   .OrderBy(b => b.Date).ThenBy(b => b.Start).ToList();
+            var past = bookings.Where(b => b.Date < today)
+                               .OrderByDescending(b => b.Date).ThenByDescending(b => b.Start).ToList();
 
-        private void btnCalNext_Click(object sender, EventArgs e)
-        {
-            _displayedMonth = _displayedMonth.AddMonths(1);
-            try { RenderCalendar(); } catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
+            EnsureScheduleList();
+            _flpSchedule!.SuspendLayout();
+            _flpSchedule.Controls.Clear();
 
-        private void RenderCalendar()
-        {
-            _calendarBookings = BookingRepository.GetMonthCalendar(
-                Session.CurrentUserId, _displayedMonth.Year, _displayedMonth.Month);
-
-            tlpCalendar.SuspendLayout();
-            for (int i = tlpCalendar.Controls.Count - 1; i >= 0; i--)
+            if (upcoming.Count == 0 && past.Count == 0)
             {
-                Control ctrl = tlpCalendar.Controls[i];
-                if (tlpCalendar.GetRow(ctrl) > 0)
+                _flpSchedule.Controls.Add(EmptyLabel("No confirmed bookings yet. Accept a request and it will show up here."));
+            }
+            else
+            {
+                if (upcoming.Count > 0)
                 {
-                    tlpCalendar.Controls.Remove(ctrl);
-                    ctrl.Dispose();
+                    _flpSchedule.Controls.Add(SectionLabel("Upcoming"));
+                    foreach (var b in upcoming) _flpSchedule.Controls.Add(BuildScheduleCard(b));
+                }
+                if (past.Count > 0)
+                {
+                    _flpSchedule.Controls.Add(SectionLabel("Past"));
+                    foreach (var b in past.Take(10)) _flpSchedule.Controls.Add(BuildScheduleCard(b));
                 }
             }
-
-            lblCalMonthYear.Text = _displayedMonth.ToString("MMMM yyyy");
-
-            int daysInMonth = DateTime.DaysInMonth(_displayedMonth.Year, _displayedMonth.Month);
-            int firstDayOfWeek = (int)new DateTime(_displayedMonth.Year, _displayedMonth.Month, 1).DayOfWeek;
-
-            int day = 1;
-            for (int row = 1; row <= 6 && day <= daysInMonth; row++)
-            {
-                int startCol = row == 1 ? firstDayOfWeek : 0;
-                for (int col = startCol; col < 7 && day <= daysInMonth; col++)
-                {
-                    tlpCalendar.Controls.Add(BuildCalendarDayCell(day), col, row);
-                    day++;
-                }
-            }
-            tlpCalendar.ResumeLayout();
+            _flpSchedule.ResumeLayout();
         }
 
-        private Control BuildCalendarDayCell(int day)
+        private void EnsureScheduleList()
         {
-            var cell = new Panel { Dock = DockStyle.Fill, Margin = new Padding(2) };
-            bool hasBooking = _calendarBookings.TryGetValue(day, out var booking);
-            Color accent = CalendarPalette[day % CalendarPalette.Length];
-            cell.BackColor = hasBooking ? LightenColor(accent, 0.85) : Color.Transparent;
-
-            var dayLabel = new Label
+            if (_flpSchedule != null) return;
+            _flpSchedule = new FlowLayoutPanel
             {
-                Text = day.ToString(),
-                Dock = DockStyle.Top,
-                Height = 18,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 8F, hasBooking ? FontStyle.Bold : FontStyle.Regular),
-                ForeColor = hasBooking ? accent : Color.FromArgb(60, 50, 45),
+                Location = new Point(16, 52),
+                Size = new Size(868, 360),
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoScroll = true,
+                // The calendar card is white; match it so gaps aren't grey.
+                BackColor = Color.White,
+            };
+            pnlCalendarCard.Controls.Add(_flpSchedule);
+            _flpSchedule.BringToFront();
+        }
+
+        private Label EmptyLabel(string text) => new()
+        {
+            Text = text,
+            Width = 820,
+            Height = 44,
+            Margin = new Padding(0, 6, 0, 0),
+            ForeColor = TextMuted,
+            Font = new Font("Segoe UI", 9.5F),
+            BackColor = Color.Transparent,
+        };
+
+        private Label SectionLabel(string text) => new()
+        {
+            Text = text,
+            Width = 820,
+            Height = 26,
+            Margin = new Padding(0, 8, 0, 2),
+            ForeColor = TextMuted,
+            Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+            BackColor = Color.Transparent,
+        };
+
+        private Control BuildScheduleCard(BookingInfo b)
+        {
+            bool completed = b.Status == "completed";
+            Color stripe = completed ? Color.FromArgb(210, 205, 200) : Color.FromArgb(94, 200, 196);
+
+            var card = new Guna2Panel
+            {
+                Width = 820,
+                Height = 78,
+                Margin = new Padding(0, 0, 0, 10),
+                BorderRadius = 12,
+                BorderThickness = 1,
+                BorderColor = completed ? Color.FromArgb(230, 226, 221) : Color.FromArgb(200, 232, 230),
+                FillColor = completed ? Color.FromArgb(247, 245, 242) : Color.FromArgb(232, 247, 247),
+                BackColor = Color.Transparent,
+                Cursor = Cursors.Hand,
+            };
+
+            var accentBar = new Guna2Panel
+            {
+                Location = new Point(10, 14),
+                Size = new Size(4, 50),
+                BorderRadius = 2,
+                FillColor = stripe,
                 BackColor = Color.Transparent,
             };
-            cell.Controls.Add(dayLabel);
-
-            if (hasBooking)
+            var avatar = new Guna2Panel
             {
-                var timeLabel = new Label
-                {
-                    Text = booking!.TimeRangeShort,
-                    Dock = DockStyle.Fill,
-                    TextAlign = ContentAlignment.TopCenter,
-                    Font = new Font("Segoe UI", 6.5F),
-                    ForeColor = accent,
-                    BackColor = Color.Transparent,
-                };
-                cell.Controls.Add(timeLabel);
-                timeLabel.BringToFront();
-                string tip = $"{booking.ParentName} - {booking.TimeRangeText}";
-                _calendarToolTip.SetToolTip(cell, tip);
-                _calendarToolTip.SetToolTip(timeLabel, tip);
-            }
+                Location = new Point(22, 15),
+                Size = new Size(48, 48),
+                BorderRadius = 14,
+                FillColor = completed ? Color.FromArgb(238, 235, 231) : Color.FromArgb(214, 240, 238),
+                BackColor = Color.Transparent,
+            };
+            avatar.Controls.Add(new Label
+            {
+                Text = b.ParentName.Length > 0 ? b.ParentName.Substring(0, 1).ToUpper() : "?",
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                ForeColor = completed ? TextMuted : Color.FromArgb(42, 112, 112),
+                BackColor = Color.Transparent,
+            });
 
-            return cell;
-        }
+            var nameLabel = new Label
+            {
+                Text = b.ParentName,
+                Location = new Point(84, 10),
+                Size = new Size(400, 22),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = TextDark,
+                BackColor = Color.Transparent,
+            };
+            var whenLabel = new Label
+            {
+                Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}",
+                Location = new Point(84, 34),
+                Size = new Size(500, 18),
+                Font = new Font("Segoe UI", 8.5F),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+            };
+            var payLabel = new Label
+            {
+                Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}",
+                Location = new Point(84, 52),
+                Size = new Size(500, 18),
+                Font = new Font("Segoe UI", 8F),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+            };
+            var statusLabel = new Label
+            {
+                Text = completed ? "Completed" : "Confirmed",
+                Location = new Point(680, 26),
+                Size = new Size(120, 26),
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = completed ? Color.FromArgb(235, 232, 228) : Color.FromArgb(210, 240, 238),
+                ForeColor = completed ? TextMuted : Color.FromArgb(42, 112, 112),
+                Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+            };
 
-        private static Color LightenColor(Color c, double amount)
-        {
-            int r = (int)(c.R + (255 - c.R) * amount);
-            int g = (int)(c.G + (255 - c.G) * amount);
-            int b = (int)(c.B + (255 - c.B) * amount);
-            return Color.FromArgb(r, g, b);
+            card.Controls.Add(accentBar);
+            card.Controls.Add(avatar);
+            card.Controls.Add(nameLabel);
+            card.Controls.Add(whenLabel);
+            card.Controls.Add(payLabel);
+            card.Controls.Add(statusLabel);
+
+            EventHandler openReceipt = (s, e) =>
+            {
+                using var dlg = new ReceiptDialog(b, showParentSide: false);
+                dlg.ShowDialog(this);
+            };
+            card.Click += openReceipt;
+            nameLabel.Click += openReceipt;
+            whenLabel.Click += openReceipt;
+            payLabel.Click += openReceipt;
+            statusLabel.Click += openReceipt;
+
+            return card;
         }
 
         // ----- Notifications dropdown -----
@@ -376,7 +467,7 @@ namespace Meraki_Project
                 BeginInvoke(new Action(() =>
                 {
                     LoadPendingRequests();
-                    RenderCalendar();
+                    RenderSchedule();
                     LoadStats();
                 }));
 
@@ -398,7 +489,7 @@ namespace Meraki_Project
             try
             {
                 LoadStats();
-                RenderCalendar();
+                RenderSchedule();
                 LoadPendingRequests();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }

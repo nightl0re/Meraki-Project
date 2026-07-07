@@ -92,19 +92,34 @@ namespace Meraki_Project
             lblKpiBookingsValue.Text = monthBookings.ToString("N0");
             lblKpiRevenueValue.Text = "$" + revenue.ToString("N0");
 
-            // Chart labels are Jan..Jun in the designer, so we chart months 1-6
-            // of the current year.
-            var (counts, monthlyRevenue) = BookingRepository.GetMonthlyStats(DateTime.Today.Year);
+            // Chart the last 6 months ENDING this month, so the month that actually
+            // has activity is always on screen and the bars visibly grow as new
+            // bookings come in (a fixed Jan-Jun window was empty and looked static).
+            var today = DateTime.Today;
+            var months = new (int Year, int Month)[6];
+            for (int i = 0; i < 6; i++)
+            {
+                var d = today.AddMonths(-5 + i);
+                months[i] = (d.Year, d.Month);
+            }
+            var statsByYear = new Dictionary<int, (int[] Counts, decimal[] Revenue)>();
+            foreach (var m in months)
+                if (!statsByYear.ContainsKey(m.Year))
+                    statsByYear[m.Year] = BookingRepository.GetMonthlyStats(m.Year);
+
+            int[] counts = months.Select(m => statsByYear[m.Year].Counts[m.Month - 1]).ToArray();
+            int[] revenueByMonth = months.Select(m => (int)statsByYear[m.Year].Revenue[m.Month - 1]).ToArray();
+            string[] captions = months.Select(m => new DateTime(m.Year, m.Month, 1).ToString("MMM")).ToArray();
 
             UpdateBarChart(
                 new[] { barJan, barFeb, barMar, barApr, barMay, barJun },
                 new[] { lblBarJan, lblBarFeb, lblBarMar, lblBarApr, lblBarMay, lblBarJun },
-                counts.Take(6).ToArray());
+                counts, captions);
 
             UpdateBarChart(
                 new[] { revJan, revFeb, revMar, revApr, revMay, revJun },
                 new[] { lblRevJan, lblRevFeb, lblRevMar, lblRevApr, lblRevMay, lblRevJun },
-                monthlyRevenue.Take(6).Select(x => (int)x).ToArray());
+                revenueByMonth, captions);
         }
 
         // ----- Users grid (with Approve / Suspend / Activate actions) -----
@@ -235,7 +250,7 @@ namespace Meraki_Project
             s.Length == 0 ? s : char.ToUpper(s[0]) + s.Substring(1);
 
         private void UpdateBarChart(Guna2Panel[] bars, Label[] labels, int[] values,
-            int chartAreaTop = 38, int chartAreaHeight = 141)
+            string[]? captions = null, int chartAreaTop = 38, int chartAreaHeight = 141)
         {
             if (bars.Length != values.Length || labels.Length != values.Length)
                 throw new ArgumentException("bars, labels, and values must be the same length.");
@@ -250,8 +265,16 @@ namespace Meraki_Project
                 int x = bars[i].Location.X;
                 bars[i].Height = barHeight;
                 bars[i].Location = new Point(x, chartAreaTop + (chartAreaHeight - barHeight));
+
+                // Relabel the axis to the real month and show the value on hover, so
+                // the chart is clearly live data and not a static picture.
+                if (captions != null && i < captions.Length)
+                    labels[i].Text = captions[i];
+                _chartToolTip.SetToolTip(bars[i], $"{labels[i].Text}: {values[i]}");
             }
         }
+
+        private readonly ToolTip _chartToolTip = new();
 
         // ----- Sidebar navigation -----
 
