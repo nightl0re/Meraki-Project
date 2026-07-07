@@ -1,6 +1,7 @@
-﻿using Guna.UI2.WinForms;
+using Guna.UI2.WinForms;
 using System;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Meraki_Project
@@ -24,9 +25,27 @@ namespace Meraki_Project
         private void LoginForm_Load(object sender, EventArgs e)
         {
             SetActiveRole(UserRole.Parent);
+
+            // Fail early with a clear message if MySQL isn't reachable, instead of
+            // a confusing crash on the first click.
+            try
+            {
+                Db.TestConnection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Could not connect to the MySQL database.\n\n" +
+                    "1. Is MySQL running?\n" +
+                    "2. Did you run meraki_database.sql?\n" +
+                    "3. Is the password in Db.cs correct?\n\n" +
+                    "Details: " + ex.Message,
+                    "Database connection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // ----- Role tabs -----
+        // ----- Role tabs (visual pre-selection only; the account's real role
+        //       in the database decides which dashboard opens) -----
 
         private void rbParent_Click(object sender, EventArgs e) => SetActiveRole(UserRole.Parent);
 
@@ -56,20 +75,72 @@ namespace Meraki_Project
             string email = tbEmail.Text.Trim();
             string password = tbPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                MessageBox.Show("Please enter both your email/username and password.", "Meraki",
+                MessageBox.Show("Please enter a valid email address.", "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Please enter your password.", "Meraki",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // TODO (Phase 2): replace this with a real lookup + password-hash check
-            // against the `users` table instead of accepting any non-empty input.
-            Session.CurrentUserEmail = email;
-            Session.CurrentUserName = Session.DeriveDisplayName(email);
-            Session.CurrentRole = _selectedRole;
+            User? user;
+            UserRepository.LoginResult result;
+            try
+            {
+                result = UserRepository.Authenticate(email, password, out user);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while signing in:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            Form next = _selectedRole switch
+            if (result == UserRepository.LoginResult.NoSuchEmail)
+            {
+                MessageBox.Show("No account found with this email address.", "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (result == UserRepository.LoginResult.WrongPassword)
+            {
+                MessageBox.Show("Incorrect password. Please try again.", "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Admin approval gate: pending/suspended accounts can't get in.
+            if (user!.Status == "pending")
+            {
+                MessageBox.Show(
+                    "Your account is still awaiting admin approval.\nPlease try again later.",
+                    "Account pending", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (user.Status == "suspended")
+            {
+                MessageBox.Show(
+                    "This account has been suspended. Please contact the administrator.",
+                    "Account suspended", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Session.CurrentUserId = user.UserId;
+            Session.CurrentUserEmail = user.Email;
+            Session.CurrentUserName = user.FullName;
+            Session.CurrentRole = user.Role switch
+            {
+                "admin" => UserRole.Admin,
+                "babysitter" => UserRole.Babysitter,
+                _ => UserRole.Parent,
+            };
+
+            Form next = Session.CurrentRole switch
             {
                 UserRole.Admin => new AdminDashboardForm(),
                 UserRole.Babysitter => new BabysitterDashboardForm(),
@@ -84,7 +155,7 @@ namespace Meraki_Project
         private void lnkForgotPassword_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "Password reset isn't wired up yet - this will email a reset link once the database is in place.",
+                "Please contact the administrator to reset your password.",
                 "Forgot Password", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

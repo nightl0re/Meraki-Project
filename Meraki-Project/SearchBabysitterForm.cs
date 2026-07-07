@@ -1,4 +1,4 @@
-﻿using Guna.UI2.WinForms;
+using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +9,17 @@ namespace Meraki_Project
 {
     public partial class SearchBabysitterForm : Form
     {
-        private readonly HashSet<int> _favorites = new();
+        private static readonly Color[] AvatarPalette =
+        {
+            Color.FromArgb(94, 200, 196),
+            Color.FromArgb(244, 168, 124),
+            Color.FromArgb(232, 113, 74),
+            Color.FromArgb(224, 90, 90),
+            Color.FromArgb(255, 209, 102),
+        };
+
+        private List<BabysitterInfo> _all = new();
+        private HashSet<int> _favorites = new();
 
         private int _maxRate = 25;
         private double _minRating = 0;
@@ -23,6 +33,17 @@ namespace Meraki_Project
 
         private void SearchBabysitterForm_Load(object sender, EventArgs e)
         {
+            try
+            {
+                _all = BabysitterRepository.GetActiveBabysitters();
+                _favorites = ExtrasRepository.GetFavoriteIds(Session.CurrentUserId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while loading babysitters:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _all = new List<BabysitterInfo>();
+            }
             RenderResults();
         }
 
@@ -38,8 +59,6 @@ namespace Meraki_Project
                 : Color.FromArgb(247, 245, 242);
             btnToggleFilters.ForeColor = pnlFiltersPanel.Visible ? Color.White : Color.FromArgb(154, 136, 128);
 
-            // The results grid sits right below the filters panel, so it moves
-            // down/up depending on whether the panel is showing.
             int top = pnlFiltersPanel.Visible ? 310 : 166;
             flpResults.SetBounds(30, top, 1420, 806 - top);
             lblNoResults.Top = top + 90;
@@ -89,13 +108,13 @@ namespace Meraki_Project
         {
             string search = tbSearch.Text.Trim();
 
-            var filtered = MockData.Babysitters.Where(b =>
+            var filtered = _all.Where(b =>
                 (search.Length == 0
                     || b.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
                     || b.Location.Contains(search, StringComparison.OrdinalIgnoreCase)
-                    || b.Tags.Any(t => t.Contains(search, StringComparison.OrdinalIgnoreCase)))
+                    || b.Skills.Any(t => t.Contains(search, StringComparison.OrdinalIgnoreCase)))
                 && b.HourlyRate <= _maxRate
-                && b.Rating >= _minRating
+                && (_minRating == 0 || b.AvgRating >= _minRating)
                 && (!_availableOnly || b.Available)
                 && (!_verifiedOnly || b.Verified))
                 .ToList();
@@ -111,8 +130,10 @@ namespace Meraki_Project
             lblNoResults.Visible = filtered.Count == 0;
         }
 
-        private Control BuildBabysitterCard(Babysitter b)
+        private Control BuildBabysitterCard(BabysitterInfo b)
         {
+            Color accent = AvatarPalette[b.UserId % AvatarPalette.Length];
+
             var card = new Guna2Panel
             {
                 Size = new Size(450, 310),
@@ -125,18 +146,18 @@ namespace Meraki_Project
             var avatar = new Guna2Panel
             {
                 BorderRadius = 18,
-                FillColor = LightenColor(b.Color, 0.8),
+                FillColor = LightenColor(accent, 0.8),
                 BackColor = Color.White,
                 Location = new Point(16, 16),
                 Size = new Size(56, 56),
             };
             avatar.Controls.Add(new Label
             {
-                Text = b.Avatar,
+                Text = b.Name.Length > 0 ? b.Name.Substring(0, 1).ToUpper() : "?",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                ForeColor = b.Color,
+                ForeColor = accent,
                 BackColor = Color.Transparent,
             });
 
@@ -151,7 +172,7 @@ namespace Meraki_Project
             };
             var locationLabel = new Label
             {
-                Text = "📍 " + b.Location,
+                Text = "📍 " + (b.Location.Length > 0 ? b.Location : "No location set"),
                 Location = new Point(82, 42),
                 Size = new Size(300, 18),
                 Font = new Font("Segoe UI", 8F),
@@ -161,7 +182,7 @@ namespace Meraki_Project
 
             var favoriteBtn = new Guna2Button
             {
-                Text = _favorites.Contains(b.Id) ? "♥" : "♡",
+                Text = _favorites.Contains(b.UserId) ? "♥" : "♡",
                 Location = new Point(400, 14),
                 Size = new Size(34, 30),
                 BorderRadius = 6,
@@ -172,13 +193,21 @@ namespace Meraki_Project
             };
             favoriteBtn.Click += (s, e) =>
             {
-                if (!_favorites.Add(b.Id)) _favorites.Remove(b.Id);
-                ((Guna2Button)s!).Text = _favorites.Contains(b.Id) ? "♥" : "♡";
+                try
+                {
+                    bool nowFavorite = ExtrasRepository.ToggleFavorite(Session.CurrentUserId, b.UserId);
+                    if (nowFavorite) _favorites.Add(b.UserId); else _favorites.Remove(b.UserId);
+                    ((Guna2Button)s!).Text = nowFavorite ? "♥" : "♡";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Database error:\n" + ex.Message);
+                }
             };
 
             var bioLabel = new Label
             {
-                Text = b.Bio,
+                Text = b.Bio.Length > 0 ? b.Bio : "This babysitter hasn't written a bio yet.",
                 Location = new Point(16, 82),
                 Size = new Size(418, 38),
                 Font = new Font("Segoe UI", 8F),
@@ -194,7 +223,7 @@ namespace Meraki_Project
                 WrapContents = true,
                 BackColor = Color.Transparent,
             };
-            foreach (var tag in b.Tags)
+            foreach (var tag in b.Skills.Take(4))
             {
                 tagsFlow.Controls.Add(new Label
                 {
@@ -210,7 +239,9 @@ namespace Meraki_Project
 
             var ratingLabel = new Label
             {
-                Text = $"★ {b.Rating:0.0} ({b.ReviewCount})    {b.ExperienceYears}yr exp",
+                Text = b.ReviewCount > 0
+                    ? $"★ {b.AvgRating:0.0} ({b.ReviewCount})    {b.ExperienceYears}yr exp"
+                    : $"★ New    {b.ExperienceYears}yr exp",
                 Location = new Point(16, 182),
                 Size = new Size(300, 20),
                 Font = new Font("Segoe UI", 8F),
@@ -250,7 +281,7 @@ namespace Meraki_Project
                 Enabled = b.Available,
                 BackColor = Color.White,
             };
-            bookBtn.Click += (s, e) => Navigation.GoTo(this, new BookingForm(b.Id));
+            bookBtn.Click += (s, e) => Navigation.GoTo(this, new BookingForm(b.UserId));
 
             card.Controls.Add(avatar);
             card.Controls.Add(nameLabel);
@@ -277,7 +308,7 @@ namespace Meraki_Project
 
         private void btnNavParentHome_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ParentDashboardForm());
 
-        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => RenderResults();
+        private void btnNavFindBabysitter_Click(object sender, EventArgs e) => SearchBabysitterForm_Load(sender, e);
 
         private void btnNavBookNow_Click(object sender, EventArgs e) => Navigation.GoTo(this, new BookingForm());
 

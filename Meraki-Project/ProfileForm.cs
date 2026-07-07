@@ -1,40 +1,17 @@
-﻿using Guna.UI2.WinForms;
+using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Meraki_Project
 {
     public partial class ProfileForm : Form
     {
-        private sealed class ReviewItem
-        {
-            public string Author = "";
-            public int Rating;
-            public string Text = "";
-            public string Date = "";
-        }
-
-        // TODO (Phase 2): `SELECT name FROM skills` and the babysitter's selected ones
-        // from `babysitter_skills`; reviews from the `reviews` table.
-        private static readonly string[] AllSkills =
-        {
-            "Infant Care", "Toddler Care", "Homework Help", "CPR Certified", "First Aid",
-            "Cooking", "Arts & Crafts", "Music", "Swimming", "Special Needs",
-        };
-
-        private readonly HashSet<string> _selectedSkills = new()
-        {
-            "Infant Care", "Toddler Care", "Arts & Crafts", "CPR Certified",
-        };
-
-        private readonly ReviewItem[] _mockReviews =
-        {
-            new ReviewItem { Author = "Sarah M.", Rating = 5, Text = "Emma was incredible with our two kids. Highly recommend!", Date = "Jun 1, 2024" },
-            new ReviewItem { Author = "Tom W.", Rating = 5, Text = "So patient and creative. The kids adore her!", Date = "May 18, 2024" },
-            new ReviewItem { Author = "Claire K.", Rating = 4, Text = "Very professional and punctual. Will book again.", Date = "Apr 29, 2024" },
-        };
+        private List<string> _allSkills = new();
+        private readonly HashSet<string> _selectedSkills = new();
 
         private bool _editing;
         private bool _loaded;
@@ -51,17 +28,39 @@ namespace Meraki_Project
 
             SetupNavbarForRole();
 
-            string name = string.IsNullOrWhiteSpace(Session.CurrentUserName) ? "User" : Session.CurrentUserName;
-            string[] parts = name.Split(' ', 2);
+            try
+            {
+                LoadProfile();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while loading the profile:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            tbFirstName.Text = parts[0];
-            tbLastName.Text = parts.Length > 1 ? parts[1] : "";
-            tbEmail.Text = Session.CurrentUserEmail;
-            tbPhone.Text = "+1 (555) 234-5678";
-            tbLocation.Text = "Downtown, New York";
+            ApplyEditingStyle(false);
+            RenderSettingsTab();
+        }
 
-            lblProfileName.Text = name;
-            lblAvatarInitial.Text = name.Length > 0 ? name.Substring(0, 1).ToUpper() : "U";
+        private void LoadProfile()
+        {
+            var user = UserRepository.GetById(Session.CurrentUserId);
+            if (user == null) return;
+
+            tbFirstName.Text = user.FirstName;
+            tbLastName.Text = user.LastName;
+            tbEmail.Text = user.Email;
+            tbPhone.Text = user.Phone;
+
+            lblProfileName.Text = user.FullName;
+            lblAvatarInitial.Text = user.FirstName.Length > 0 ? user.FirstName.Substring(0, 1).ToUpper() : "U";
+
+            if (user.Photo != null)
+            {
+                picAvatarPhoto.Image = Image.FromStream(new MemoryStream(user.Photo));
+                picAvatarPhoto.Visible = true;
+                picAvatarPhoto.BringToFront();
+            }
 
             bool isBabysitter = Session.CurrentRole == UserRole.Babysitter;
             lblRoleBadge.Text = isBabysitter
@@ -70,38 +69,48 @@ namespace Meraki_Project
 
             if (isBabysitter)
             {
-                tbBio.Text = "Hi! I'm a certified babysitter with 3 years of experience. I love working with " +
-                              "children of all ages and creating fun, educational activities.";
-                lblRatingLocation.Text = "★ 4.9 (47 reviews)    📍 Downtown, New York";
-                lblStatBookingsValue.Text = "47";
-                lblStatExperienceValue.Text = "3yr";
+                var profile = BabysitterRepository.GetProfile(Session.CurrentUserId);
+                var (_, bookings, _, avg, count) = BabysitterRepository.GetDashboardStats(Session.CurrentUserId);
+
+                tbBio.Text = profile.Bio;
+                tbLocation.Text = profile.Location;
+                lblRatingLocation.Text = count > 0
+                    ? $"★ {avg:0.0} ({count} review{(count == 1 ? "" : "s")})    📍 {profile.Location}"
+                    : $"No reviews yet    📍 {profile.Location}";
+
+                lblStatBookingsValue.Text = bookings.ToString();
+                lblStatExperienceValue.Text = profile.ExperienceYears + "yr";
                 lblStatExperienceLabel.Text = "Experience";
-                lblStatRateValue.Text = "$18/hr";
+                lblStatRateValue.Text = $"${profile.HourlyRate:0}/hr";
                 lblStatRateLabel.Text = "Rate";
+
                 pnlSkillsCard.Visible = true;
+                _allSkills = BabysitterRepository.GetAllSkills();
+                _selectedSkills.Clear();
+                foreach (var s in BabysitterRepository.GetSkillsFor(Session.CurrentUserId))
+                    _selectedSkills.Add(s);
                 RenderSkills();
+                RenderReviews(ReviewRepository.GetForBabysitter(Session.CurrentUserId));
             }
             else
             {
-                tbBio.Text = "Parent of two looking for reliable, caring babysitters for date nights and after-school care.";
-                lblRatingLocation.Text = "📍 Downtown, New York";
-                lblStatBookingsValue.Text = "12";
-                lblStatExperienceValue.Text = "2";
-                lblStatExperienceLabel.Text = "Children";
-                lblStatRateValue.Text = "2024";
-                lblStatRateLabel.Text = "Member Since";
-                pnlSkillsCard.Visible = false;
-            }
+                var myBookings = BookingRepository.GetForParent(Session.CurrentUserId);
+                tbBio.Text = "Parent looking for reliable, caring babysitters.";
+                tbLocation.Text = "";
+                lblRatingLocation.Text = $"Member since {user.CreatedAt:MMMM yyyy}";
 
-            ApplyEditingStyle(false);
-            RenderReviews();
-            RenderSettingsTab();
+                lblStatBookingsValue.Text = myBookings.Count.ToString();
+                lblStatExperienceValue.Text = myBookings.Count(b => b.Status == "completed").ToString();
+                lblStatExperienceLabel.Text = "Completed";
+                lblStatRateValue.Text = user.CreatedAt.Year.ToString();
+                lblStatRateLabel.Text = "Member Since";
+
+                pnlSkillsCard.Visible = false;
+                RenderReviews(new List<ReviewInfo>());
+            }
         }
 
         // ----- Navbar built per-role -----
-        // Babysitters see: Babysitter Home / My Profile / Logout.
-        // Parents see: Parent Home / Find a Babysitter / Book Now / My Profile / Logout.
-        // Admin never lands here (admin has its own dashboard) - treated like Parent as a fallback.
 
         private void SetupNavbarForRole()
         {
@@ -134,10 +143,43 @@ namespace Meraki_Project
             pnlNavbar.Controls.Add(btnLogout);
         }
 
-        // ----- Edit toggle -----
+        // ----- Edit toggle (Save writes to the database) -----
 
         private void btnEditProfile_Click(object sender, EventArgs e)
         {
+            if (_editing)
+            {
+                // "Save" pressed - validate and persist.
+                string first = tbFirstName.Text.Trim();
+                string last = tbLastName.Text.Trim();
+                if (first.Length < 2 || last.Length < 2)
+                {
+                    MessageBox.Show("Please enter your real first and last name.", "Meraki",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                try
+                {
+                    UserRepository.UpdateContact(Session.CurrentUserId, first, last, tbPhone.Text.Trim());
+                    if (Session.CurrentRole == UserRole.Babysitter)
+                    {
+                        BabysitterRepository.UpdateProfile(Session.CurrentUserId,
+                            tbBio.Text.Trim(), tbLocation.Text.Trim());
+                        BabysitterRepository.SetSkills(Session.CurrentUserId, _selectedSkills);
+                    }
+                    Session.CurrentUserName = $"{first} {last}";
+                    lblProfileName.Text = Session.CurrentUserName;
+                    MessageBox.Show("Profile saved.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Database error while saving:\n" + ex.Message, "Meraki",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             _editing = !_editing;
             ApplyEditingStyle(_editing);
         }
@@ -148,21 +190,17 @@ namespace Meraki_Project
             btnEditProfile.FillColor = editing ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242);
             btnEditProfile.ForeColor = editing ? Color.White : Color.FromArgb(60, 50, 45);
 
-            foreach (var box in new[] { tbFirstName, tbLastName, tbEmail, tbPhone, tbLocation, tbBio })
+            foreach (var box in new[] { tbFirstName, tbLastName, tbPhone, tbLocation, tbBio })
             {
                 box.ReadOnly = !editing;
                 box.FillColor = editing ? Color.FromArgb(247, 245, 242) : Color.White;
             }
-
-            if (!editing)
-            {
-                lblProfileName.Text = $"{tbFirstName.Text} {tbLastName.Text}".Trim();
-                // TODO (Phase 2): UPDATE users SET first_name = ..., last_name = ..., phone = ...
-                // and UPDATE babysitter_profiles SET bio = ..., location = ... WHERE user_id = ...
-            }
+            // Email is the login key - it stays read-only.
+            tbEmail.ReadOnly = true;
+            tbEmail.FillColor = Color.White;
         }
 
-        // ----- Photo upload -----
+        // ----- Photo upload: resized and stored IN the database (no file paths) -----
 
         private void btnChangePhoto_Click(object sender, EventArgs e)
         {
@@ -171,13 +209,26 @@ namespace Meraki_Project
                 Filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp",
                 Title = "Choose a profile photo",
             };
+            if (dialog.ShowDialog() != DialogResult.OK) return;
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                picAvatarPhoto.Image = Image.FromFile(dialog.FileName);
+                using var original = Image.FromFile(dialog.FileName);
+                using var resized = new Bitmap(original, new Size(200, 200));
+                using var ms = new MemoryStream();
+                resized.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                byte[] bytes = ms.ToArray();
+
+                UserRepository.SetPhoto(Session.CurrentUserId, bytes);
+
+                picAvatarPhoto.Image = Image.FromStream(new MemoryStream(bytes));
                 picAvatarPhoto.Visible = true;
                 picAvatarPhoto.BringToFront();
-                // TODO (Phase 2): save the chosen file's path to babysitter_profiles.photo_path.
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not save the photo:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -187,7 +238,7 @@ namespace Meraki_Project
         {
             flpSkills.SuspendLayout();
             flpSkills.Controls.Clear();
-            foreach (var skill in AllSkills)
+            foreach (var skill in _allSkills)
                 flpSkills.Controls.Add(BuildSkillChip(skill));
             flpSkills.ResumeLayout();
         }
@@ -210,15 +261,17 @@ namespace Meraki_Project
             chip.Click += (s, e) =>
             {
                 if (!_editing) return;
-                if (!_selectedSkills.Remove(skill)) _selectedSkills.Add(skill);
-                RenderSkills();
+                bool nowActive = !_selectedSkills.Remove(skill);
+                if (nowActive) _selectedSkills.Add(skill);
+                chip.FillColor = nowActive ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242);
+                chip.ForeColor = nowActive ? Color.White : Color.FromArgb(154, 136, 128);
             };
             return chip;
         }
 
         // ----- Reviews tab -----
 
-        private void RenderReviews()
+        private void RenderReviews(List<ReviewInfo> reviews)
         {
             flpReviews.SuspendLayout();
             flpReviews.Controls.Clear();
@@ -227,7 +280,19 @@ namespace Meraki_Project
             {
                 flpReviews.Controls.Add(new Label
                 {
-                    Text = "Reviews you leave for babysitters will show up here.",
+                    Text = "Reviews you leave after completed bookings appear on each babysitter's profile.",
+                    Width = 860,
+                    Height = 30,
+                    ForeColor = Color.FromArgb(154, 136, 128),
+                    Font = new Font("Segoe UI", 9F),
+                    BackColor = Color.Transparent,
+                });
+            }
+            else if (reviews.Count == 0)
+            {
+                flpReviews.Controls.Add(new Label
+                {
+                    Text = "No reviews yet - they'll appear here after your first completed bookings.",
                     Width = 860,
                     Height = 30,
                     ForeColor = Color.FromArgb(154, 136, 128),
@@ -237,13 +302,13 @@ namespace Meraki_Project
             }
             else
             {
-                foreach (var r in _mockReviews)
+                foreach (var r in reviews)
                     flpReviews.Controls.Add(BuildReviewCard(r));
             }
             flpReviews.ResumeLayout();
         }
 
-        private Control BuildReviewCard(ReviewItem r)
+        private Control BuildReviewCard(ReviewInfo r)
         {
             var card = new Guna2Panel
             {
@@ -275,7 +340,7 @@ namespace Meraki_Project
             });
             card.Controls.Add(new Label
             {
-                Text = $"“{r.Text}”",
+                Text = r.Comment.Length > 0 ? $"“{r.Comment}”" : "(no comment)",
                 Location = new Point(16, 38),
                 Size = new Size(820, 36),
                 Font = new Font("Segoe UI", 8.5F),
@@ -284,7 +349,7 @@ namespace Meraki_Project
             });
             card.Controls.Add(new Label
             {
-                Text = r.Date,
+                Text = r.CreatedAt.ToString("MMM d, yyyy"),
                 Location = new Point(16, 74),
                 Size = new Size(200, 18),
                 Font = new Font("Segoe UI", 7.5F),
@@ -303,7 +368,7 @@ namespace Meraki_Project
             var items = new (string Title, string Description)[]
             {
                 ("Notifications", "Manage your notification preferences"),
-                ("Privacy & Security", "Update password and 2FA"),
+                ("Privacy & Security", "Update password and account security"),
                 ("Verification", "Background check and ID verification"),
                 ("Availability", "Set your available hours"),
             };
@@ -347,8 +412,7 @@ namespace Meraki_Project
             };
 
             EventHandler openPlaceholder = (s, e) => MessageBox.Show(
-                $"{title} isn't wired up yet - this will be manageable once the database is in place.",
-                title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                $"{title} isn't wired up yet.", title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             card.Click += openPlaceholder;
             titleLabel.Click += openPlaceholder;
             descLabel.Click += openPlaceholder;

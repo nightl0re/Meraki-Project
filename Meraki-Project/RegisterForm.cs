@@ -1,4 +1,4 @@
-﻿using Guna.UI2.WinForms;
+using Guna.UI2.WinForms;
 using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
@@ -64,7 +64,6 @@ namespace Meraki_Project
 
             if (strength == 0)
             {
-                // Hide instead of shrinking to width 0 - safer with Guna's rounded corners.
                 pnlStrengthBar.Visible = false;
                 lblStrengthLabel.Text = "";
                 return;
@@ -99,23 +98,23 @@ namespace Meraki_Project
             string password = tbPassword.Text;
             string confirmPassword = tbConfirmPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            if (firstName.Length < 2 || lastName.Length < 2)
             {
-                MessageBox.Show("Please enter your first and last name.", "Meraki",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter your real first and last name (at least 2 letters each).",
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                MessageBox.Show("Please enter a valid email address.", "Meraki",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid email address (e.g. name@example.com).",
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(phone))
+            if (phone.Length < 7)
             {
-                MessageBox.Show("Please enter a phone number.", "Meraki",
+                MessageBox.Show("Please enter a valid phone number.", "Meraki",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -141,17 +140,31 @@ namespace Meraki_Project
                 return;
             }
 
-            // TODO (Phase 2): INSERT a new row into `users` (and `babysitter_profiles`
-            // when role == Babysitter) with a PBKDF2 hash of `password`.
-            Session.CurrentUserEmail = email;
-            Session.CurrentUserName = $"{firstName} {lastName}";
-            Session.CurrentRole = _selectedRole;
+            try
+            {
+                if (UserRepository.EmailExists(email))
+                {
+                    MessageBox.Show("An account with this email already exists. Try signing in instead.",
+                        "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            Form next = _selectedRole == UserRole.Babysitter
-                ? new BabysitterDashboardForm()
-                : new ParentDashboardForm();
+                UserRepository.Register(firstName, lastName, email, phone, password, _selectedRole);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while creating the account:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            Navigation.GoTo(this, next);
+            // New accounts are 'pending' - the admin must approve before first sign-in.
+            MessageBox.Show(
+                "Your account was created!\n\nAn administrator needs to approve it before " +
+                "you can sign in. Please check back soon.",
+                "Account created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            Navigation.GoTo(this, new LoginForm());
         }
 
         private void lnkSignIn_Click(object sender, EventArgs e)

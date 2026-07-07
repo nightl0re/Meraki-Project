@@ -1,5 +1,8 @@
-﻿using System;
+using Guna.UI2.WinForms;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -9,14 +12,8 @@ namespace Meraki_Project
     {
         private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
 
-        // Mock notification feed shown by the bell button.
-        // TODO (Phase 2): replace with `SELECT ... FROM notifications WHERE user_id = ...`.
-        private readonly string[] _mockNotifications =
-        {
-            "Emma Thompson confirmed your booking for Sat, Jun 15.",
-            "Mia Rodriguez sent you a message about Wed's booking.",
-            "Reminder: booking with Sarah Park starts in 2 days.",
-        };
+        private Guna2Button? _reviewButton;
+        private BookingInfo? _bookingToReview;
 
         public ParentDashboardForm()
         {
@@ -28,22 +25,114 @@ namespace Meraki_Project
             ApplyDesignPolish();
 
             string name = string.IsNullOrWhiteSpace(Session.CurrentUserName) ? "Parent" : Session.CurrentUserName;
-
             lblGreeting.Text = TimeOfDayGreeting();
             lblUserName.Text = $"<div style=\"color:white;font-weight:bold;font-size:14pt;\">{name} \U0001F44B</div>";
             lblUserAvatarInitial.Text = name.Length > 0 ? name.Substring(0, 1).ToUpper() : "P";
 
-            // The booking cards on this form are still the fixed design-preview
-            // sample data (pnlBookingCard1/2) - TODO (Phase 2): populate them from
-            // `SELECT ... FROM bookings WHERE parent_user_id = ... AND status IN (...)`.
+            try
+            {
+                LoadBookings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while loading your bookings:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        /// <summary>
-        /// Runtime readability polish for the existing designer layout: section
-        /// headings and card titles get the darker warm-brown used on newer pages,
-        /// and controls sitting on the gradient banner get transparent backs so
-        /// their rounded corners don't show square color blocks.
-        /// </summary>
+        private void LoadBookings()
+        {
+            var all = BookingRepository.GetForParent(Session.CurrentUserId);
+            var upcoming = all
+                .Where(b => (b.Status == "pending" || b.Status == "confirmed") && b.Date >= DateTime.Today)
+                .OrderBy(b => b.Date).ThenBy(b => b.Start)
+                .ToList();
+
+            int thisWeek = upcoming.Count(b => b.Date < DateTime.Today.AddDays(7));
+            lblBannerSubtext.Text = upcoming.Count == 0
+                ? "You have no upcoming bookings - time to book a babysitter!"
+                : $"You have {thisWeek} upcoming booking{(thisWeek == 1 ? "" : "s")} this week.";
+
+            FillBookingCard(upcoming.ElementAtOrDefault(0), pnlBookingCard1,
+                lblBookingSitterName1, lblBookingStatus1, lblBookingDateTime1, lblBookingChildren1, lblAvatarInitial1);
+            FillBookingCard(upcoming.ElementAtOrDefault(1), pnlBookingCard2,
+                lblBookingSitterName2, lblBookingStatus2, lblBookingDateTime2, lblBookingChildren2, lblAvatarInitial2);
+
+            // Offer a review for the most recent completed booking without one.
+            _bookingToReview = all.FirstOrDefault(b => b.Status == "completed" && !b.HasReview);
+            ShowOrHideReviewButton();
+        }
+
+        private void FillBookingCard(BookingInfo? b, Guna2Panel card, Label nameLabel,
+            Guna2HtmlLabel statusLabel, Label dateTimeLabel, Label childrenLabel, Label avatarInitial)
+        {
+            if (b == null)
+            {
+                card.Visible = false;
+                return;
+            }
+            card.Visible = true;
+            nameLabel.Text = b.SitterName;
+            avatarInitial.Text = b.SitterName.Length > 0 ? b.SitterName.Substring(0, 1).ToUpper() : "?";
+            dateTimeLabel.Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}";
+            childrenLabel.Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}";
+            statusLabel.Text = b.Status == "confirmed"
+                ? "<div style=\"background:#E8F7F7;color:#2A7070;border-radius:10px;padding:2px 10px;font-weight:bold;\">Confirmed</div>"
+                : "<div style=\"background:#FFF8E0;color:#A07000;border-radius:10px;padding:2px 10px;font-weight:bold;\">Pending</div>";
+        }
+
+        private void ShowOrHideReviewButton()
+        {
+            if (_bookingToReview == null)
+            {
+                if (_reviewButton != null) _reviewButton.Visible = false;
+                return;
+            }
+
+            if (_reviewButton == null)
+            {
+                _reviewButton = new Guna2Button
+                {
+                    Location = new Point(30, 610),
+                    Size = new Size(560, 48),
+                    BorderRadius = 12,
+                    FillColor = Color.FromArgb(255, 244, 217),
+                    ForeColor = Color.FromArgb(160, 112, 0),
+                    Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                    BackColor = Color.Transparent,
+                };
+                _reviewButton.Click += ReviewButton_Click;
+                pnlContent.Controls.Add(_reviewButton);
+                _reviewButton.BringToFront();
+            }
+
+            _reviewButton.Text = $"★  How was your booking with {_bookingToReview.SitterName}?  Leave a review";
+            _reviewButton.Visible = true;
+        }
+
+        private void ReviewButton_Click(object? sender, EventArgs e)
+        {
+            if (_bookingToReview == null) return;
+
+            using var dialog = new ReviewDialog(_bookingToReview.SitterName);
+            if (dialog.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                ReviewRepository.Add(_bookingToReview.BookingId, dialog.Rating, dialog.Comment);
+                ExtrasRepository.AddNotification(_bookingToReview.BabysitterId,
+                    $"{Session.CurrentUserName} left you a {dialog.Rating}-star review!");
+                MessageBox.Show("Thank you! Your review was saved.", "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadBookings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while saving the review:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void ApplyDesignPolish()
         {
             lblQuickActionsTitle.ForeColor = ColorHeading;
@@ -75,31 +164,63 @@ namespace Meraki_Project
 
         private void btnFavorites_Click(object sender, EventArgs e) => Navigation.GoTo(this, new SearchBabysitterForm());
 
-        private void btnViewAllBookings_Click(object sender, EventArgs e) => Navigation.GoTo(this, new BookingForm());
+        private void btnViewAllBookings_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var all = BookingRepository.GetForParent(Session.CurrentUserId);
+                if (all.Count == 0)
+                {
+                    MessageBox.Show("You have no bookings yet.", "My Bookings",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                var sb = new StringBuilder();
+                foreach (var b in all.Take(12))
+                    sb.AppendLine($"{b.Date:MMM d, yyyy}  {b.TimeRangeText}  ·  {b.SitterName}  ·  ${b.Total:0.00}  ·  {b.Status}");
+                MessageBox.Show(sb.ToString(), "My Bookings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void btnNotifications_Click(object sender, EventArgs e)
         {
-            var sb = new StringBuilder();
-            foreach (var n in _mockNotifications)
-                sb.AppendLine("• " + n);
-
-            MessageBox.Show(sb.ToString(), "Notifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                var notifications = ExtrasRepository.GetNotifications(Session.CurrentUserId);
+                if (notifications.Count == 0)
+                {
+                    MessageBox.Show("No notifications yet.", "Notifications",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                var sb = new StringBuilder();
+                foreach (var n in notifications)
+                    sb.AppendLine($"{(n.Unread ? "●" : "○")}  {n.Message}   ({n.TimeAgoText})");
+                MessageBox.Show(sb.ToString(), "Notifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ExtrasRepository.MarkAllRead(Session.CurrentUserId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // ----- Navbar -----
 
         private void btnNavParentHome_Click(object sender, EventArgs e)
         {
-            // Already home - just refresh the greeting/labels on this same form.
-            string name = string.IsNullOrWhiteSpace(Session.CurrentUserName) ? "Parent" : Session.CurrentUserName;
-            lblGreeting.Text = TimeOfDayGreeting();
-            lblUserName.Text = $"<div style=\"color:white;font-weight:bold;font-size:14pt;\">{name} \U0001F44B</div>";
+            try { LoadBookings(); } catch { /* refresh only */ }
         }
 
         private void btnNavBabysitterHome_Click(object sender, EventArgs e)
         {
-            // Not shown on the Parent navbar - kept only because the control exists
-            // in the Designer; no-op.
+            // Not shown on the Parent navbar; no-op.
         }
 
         private void btnNavFindBabysitter_Click(object sender, EventArgs e) => Navigation.GoTo(this, new SearchBabysitterForm());
@@ -110,8 +231,7 @@ namespace Meraki_Project
 
         private void btnNavAdmin_Click(object sender, EventArgs e)
         {
-            // Not shown on the Parent navbar - kept only because the control exists
-            // in the Designer; no-op.
+            // Not shown on the Parent navbar; no-op.
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
