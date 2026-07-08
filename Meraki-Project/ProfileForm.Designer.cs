@@ -93,6 +93,7 @@
             //
             pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -228,7 +229,7 @@
             // pnlContent
             //
             pnlContent.AutoScroll = true;
-            pnlContent.BackColor = Color.Transparent;
+            pnlContent.BackColor = Color.FromArgb(253, 238, 232);
             pnlContent.Controls.Add(pnlProfileHeaderCard);
             pnlContent.Controls.Add(pnlTabsBar);
             pnlContent.Controls.Add(pnlTabProfile);

@@ -57,20 +57,10 @@
             lblStatHoursLabel = new Label();
             pnlCalendarCard = new Guna.UI2.WinForms.Guna2Panel();
             lblCalendarTitle = new Label();
-            btnCalPrev = new Guna.UI2.WinForms.Guna2Button();
-            lblCalMonthYear = new Label();
-            btnCalNext = new Guna.UI2.WinForms.Guna2Button();
-            tlpCalendar = new TableLayoutPanel();
-            lblCalSun = new Label();
-            lblCalMon = new Label();
-            lblCalTue = new Label();
-            lblCalWed = new Label();
-            lblCalThu = new Label();
-            lblCalFri = new Label();
-            lblCalSat = new Label();
             pnlPendingRequestsCard = new Guna.UI2.WinForms.Guna2Panel();
             lblPendingTitle = new Label();
             flpPendingRequests = new FlowLayoutPanel();
+            flpSchedule = new FlowLayoutPanel();
             pnlProfileQuickView = new Guna.UI2.WinForms.Guna2Panel();
             lblProfileQuickTitle = new Label();
             pnlQuickAvatar = new Guna.UI2.WinForms.Guna2Panel();
@@ -98,7 +88,6 @@
             pnlStatHours.SuspendLayout();
             pnlStatHoursIcon.SuspendLayout();
             pnlCalendarCard.SuspendLayout();
-            tlpCalendar.SuspendLayout();
             pnlPendingRequestsCard.SuspendLayout();
             pnlProfileQuickView.SuspendLayout();
             pnlQuickAvatar.SuspendLayout();
@@ -110,6 +99,7 @@
             //
             pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -202,7 +192,7 @@
             // pnlContent
             //
             pnlContent.AutoScroll = true;
-            pnlContent.BackColor = Color.Transparent;
+            pnlContent.BackColor = Color.FromArgb(253, 238, 232);
             pnlContent.Controls.Add(pnlNotificationsDropdown);
             pnlContent.Controls.Add(pnlWelcomeBanner);
             pnlContent.Controls.Add(pnlStatMonth);
@@ -586,10 +576,7 @@
             pnlCalendarCard.BackColor = Color.Transparent;
             pnlCalendarCard.BorderRadius = 16;
             pnlCalendarCard.Controls.Add(lblCalendarTitle);
-            pnlCalendarCard.Controls.Add(btnCalPrev);
-            pnlCalendarCard.Controls.Add(lblCalMonthYear);
-            pnlCalendarCard.Controls.Add(btnCalNext);
-            pnlCalendarCard.Controls.Add(tlpCalendar);
+            pnlCalendarCard.Controls.Add(flpSchedule);
             pnlCalendarCard.FillColor = Color.White;
             pnlCalendarCard.Location = new Point(30, 300);
             pnlCalendarCard.Name = "pnlCalendarCard";
@@ -605,155 +592,18 @@
             lblCalendarTitle.Name = "lblCalendarTitle";
             lblCalendarTitle.Size = new Size(220, 24);
             lblCalendarTitle.TabIndex = 0;
-            lblCalendarTitle.Text = "Booking Calendar";
+            lblCalendarTitle.Text = "My Schedule";
             //
-            // btnCalPrev
+            // flpSchedule
             //
-            btnCalPrev.BackColor = Color.White;
-            btnCalPrev.BorderRadius = 8;
-            btnCalPrev.FillColor = Color.FromArgb(247, 245, 242);
-            btnCalPrev.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCalPrev.ForeColor = Color.FromArgb(154, 136, 128);
-            btnCalPrev.Location = new Point(650, 12);
-            btnCalPrev.Name = "btnCalPrev";
-            btnCalPrev.Size = new Size(36, 32);
-            btnCalPrev.TabIndex = 1;
-            btnCalPrev.Text = "<";
-            btnCalPrev.Click += btnCalPrev_Click;
-            //
-            // lblCalMonthYear
-            //
-            lblCalMonthYear.BackColor = Color.Transparent;
-            lblCalMonthYear.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblCalMonthYear.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalMonthYear.Location = new Point(692, 14);
-            lblCalMonthYear.Name = "lblCalMonthYear";
-            lblCalMonthYear.Size = new Size(150, 26);
-            lblCalMonthYear.TabIndex = 2;
-            lblCalMonthYear.Text = "June 2024";
-            lblCalMonthYear.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // btnCalNext
-            //
-            btnCalNext.BackColor = Color.White;
-            btnCalNext.BorderRadius = 8;
-            btnCalNext.FillColor = Color.FromArgb(247, 245, 242);
-            btnCalNext.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCalNext.ForeColor = Color.FromArgb(154, 136, 128);
-            btnCalNext.Location = new Point(848, 12);
-            btnCalNext.Name = "btnCalNext";
-            btnCalNext.Size = new Size(36, 32);
-            btnCalNext.TabIndex = 3;
-            btnCalNext.Text = ">";
-            btnCalNext.Click += btnCalNext_Click;
-            //
-            // tlpCalendar
-            //
-            tlpCalendar.BackColor = Color.Transparent;
-            tlpCalendar.ColumnCount = 7;
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpCalendar.Controls.Add(lblCalSun, 0, 0);
-            tlpCalendar.Controls.Add(lblCalMon, 1, 0);
-            tlpCalendar.Controls.Add(lblCalTue, 2, 0);
-            tlpCalendar.Controls.Add(lblCalWed, 3, 0);
-            tlpCalendar.Controls.Add(lblCalThu, 4, 0);
-            tlpCalendar.Controls.Add(lblCalFri, 5, 0);
-            tlpCalendar.Controls.Add(lblCalSat, 6, 0);
-            tlpCalendar.Location = new Point(16, 56);
-            tlpCalendar.Name = "tlpCalendar";
-            tlpCalendar.RowCount = 7;
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpCalendar.Size = new Size(868, 356);
-            tlpCalendar.TabIndex = 4;
-            //
-            // lblCalSun
-            //
-            lblCalSun.BackColor = Color.Transparent;
-            lblCalSun.Dock = DockStyle.Fill;
-            lblCalSun.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalSun.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalSun.Name = "lblCalSun";
-            lblCalSun.TabIndex = 0;
-            lblCalSun.Text = "Sun";
-            lblCalSun.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalMon
-            //
-            lblCalMon.BackColor = Color.Transparent;
-            lblCalMon.Dock = DockStyle.Fill;
-            lblCalMon.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalMon.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalMon.Name = "lblCalMon";
-            lblCalMon.TabIndex = 1;
-            lblCalMon.Text = "Mon";
-            lblCalMon.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalTue
-            //
-            lblCalTue.BackColor = Color.Transparent;
-            lblCalTue.Dock = DockStyle.Fill;
-            lblCalTue.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalTue.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalTue.Name = "lblCalTue";
-            lblCalTue.TabIndex = 2;
-            lblCalTue.Text = "Tue";
-            lblCalTue.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalWed
-            //
-            lblCalWed.BackColor = Color.Transparent;
-            lblCalWed.Dock = DockStyle.Fill;
-            lblCalWed.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalWed.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalWed.Name = "lblCalWed";
-            lblCalWed.TabIndex = 3;
-            lblCalWed.Text = "Wed";
-            lblCalWed.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalThu
-            //
-            lblCalThu.BackColor = Color.Transparent;
-            lblCalThu.Dock = DockStyle.Fill;
-            lblCalThu.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalThu.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalThu.Name = "lblCalThu";
-            lblCalThu.TabIndex = 4;
-            lblCalThu.Text = "Thu";
-            lblCalThu.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalFri
-            //
-            lblCalFri.BackColor = Color.Transparent;
-            lblCalFri.Dock = DockStyle.Fill;
-            lblCalFri.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalFri.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalFri.Name = "lblCalFri";
-            lblCalFri.TabIndex = 5;
-            lblCalFri.Text = "Fri";
-            lblCalFri.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalSat
-            //
-            lblCalSat.BackColor = Color.Transparent;
-            lblCalSat.Dock = DockStyle.Fill;
-            lblCalSat.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalSat.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalSat.Name = "lblCalSat";
-            lblCalSat.TabIndex = 6;
-            lblCalSat.Text = "Sat";
-            lblCalSat.TextAlign = ContentAlignment.MiddleCenter;
+            flpSchedule.AutoScroll = true;
+            flpSchedule.BackColor = Color.White;
+            flpSchedule.FlowDirection = FlowDirection.TopDown;
+            flpSchedule.Location = new Point(16, 52);
+            flpSchedule.Name = "flpSchedule";
+            flpSchedule.Size = new Size(868, 360);
+            flpSchedule.TabIndex = 1;
+            flpSchedule.WrapContents = false;
             //
             // pnlPendingRequestsCard
             //
@@ -949,7 +799,6 @@
             pnlQuickAvatar.ResumeLayout(false);
             pnlProfileQuickView.ResumeLayout(false);
             pnlPendingRequestsCard.ResumeLayout(false);
-            tlpCalendar.ResumeLayout(false);
             pnlCalendarCard.ResumeLayout(false);
             pnlStatHoursIcon.ResumeLayout(false);
             pnlStatHours.ResumeLayout(false);
@@ -1009,20 +858,10 @@
         private System.Windows.Forms.Label lblStatHoursLabel;
         private Guna.UI2.WinForms.Guna2Panel pnlCalendarCard;
         private System.Windows.Forms.Label lblCalendarTitle;
-        private Guna.UI2.WinForms.Guna2Button btnCalPrev;
-        private System.Windows.Forms.Label lblCalMonthYear;
-        private Guna.UI2.WinForms.Guna2Button btnCalNext;
-        private System.Windows.Forms.TableLayoutPanel tlpCalendar;
-        private System.Windows.Forms.Label lblCalSun;
-        private System.Windows.Forms.Label lblCalMon;
-        private System.Windows.Forms.Label lblCalTue;
-        private System.Windows.Forms.Label lblCalWed;
-        private System.Windows.Forms.Label lblCalThu;
-        private System.Windows.Forms.Label lblCalFri;
-        private System.Windows.Forms.Label lblCalSat;
         private Guna.UI2.WinForms.Guna2Panel pnlPendingRequestsCard;
         private System.Windows.Forms.Label lblPendingTitle;
         private System.Windows.Forms.FlowLayoutPanel flpPendingRequests;
+        private System.Windows.Forms.FlowLayoutPanel flpSchedule;
         private Guna.UI2.WinForms.Guna2Panel pnlProfileQuickView;
         private System.Windows.Forms.Label lblProfileQuickTitle;
         private Guna.UI2.WinForms.Guna2Panel pnlQuickAvatar;

@@ -15,8 +15,6 @@ namespace Meraki_Project
         private List<NotificationInfo> _notifications = new();
         private List<BookingInfo> _pendingRequests = new();
 
-        private FlowLayoutPanel? _flpSchedule;
-
         public BabysitterDashboardForm()
         {
             InitializeComponent();
@@ -32,14 +30,6 @@ namespace Meraki_Project
             // Past confirmed bookings are finished - promote them so earnings/hours
             // are accurate. Best-effort; never block the dashboard.
             try { BookingRepository.AutoCompletePastBookings(); } catch { }
-
-            // The old month-grid calendar is replaced by a simple schedule list, so
-            // hide the Designer calendar controls.
-            btnCalPrev.Visible = false;
-            btnCalNext.Visible = false;
-            tlpCalendar.Visible = false;
-            lblCalMonthYear.Visible = false;
-            lblCalendarTitle.Text = "My Schedule";
 
             try
             {
@@ -76,13 +66,8 @@ namespace Meraki_Project
 
         // ----- Schedule list (real confirmed / completed bookings) -----
         //
-        // This replaces the old month-grid calendar, which was slow to redraw and
-        // hard to read in WinForms. A confirmed booking now simply appears here as
-        // a coloured card - that IS the "the date changed colour" feedback.
-
-        private void btnCalPrev_Click(object sender, EventArgs e) { /* calendar removed */ }
-
-        private void btnCalNext_Click(object sender, EventArgs e) { /* calendar removed */ }
+        // A confirmed booking appears here as a coloured card; when it is done it
+        // turns grey ("Completed") - simple, readable schedule instead of a calendar.
 
         private void RenderSchedule()
         {
@@ -93,45 +78,27 @@ namespace Meraki_Project
             var past = bookings.Where(b => b.Date < today)
                                .OrderByDescending(b => b.Date).ThenByDescending(b => b.Start).ToList();
 
-            EnsureScheduleList();
-            _flpSchedule!.SuspendLayout();
-            _flpSchedule.Controls.Clear();
+            flpSchedule.SuspendLayout();
+            flpSchedule.Controls.Clear();
 
             if (upcoming.Count == 0 && past.Count == 0)
             {
-                _flpSchedule.Controls.Add(EmptyLabel("No confirmed bookings yet. Accept a request and it will show up here."));
+                flpSchedule.Controls.Add(EmptyLabel("No confirmed bookings yet. Accept a request and it will show up here."));
             }
             else
             {
                 if (upcoming.Count > 0)
                 {
-                    _flpSchedule.Controls.Add(SectionLabel("Upcoming"));
-                    foreach (var b in upcoming) _flpSchedule.Controls.Add(BuildScheduleCard(b));
+                    flpSchedule.Controls.Add(SectionLabel("Upcoming"));
+                    foreach (var b in upcoming) flpSchedule.Controls.Add(BuildScheduleCard(b));
                 }
                 if (past.Count > 0)
                 {
-                    _flpSchedule.Controls.Add(SectionLabel("Past"));
-                    foreach (var b in past.Take(10)) _flpSchedule.Controls.Add(BuildScheduleCard(b));
+                    flpSchedule.Controls.Add(SectionLabel("Past"));
+                    foreach (var b in past.Take(10)) flpSchedule.Controls.Add(BuildScheduleCard(b));
                 }
             }
-            _flpSchedule.ResumeLayout();
-        }
-
-        private void EnsureScheduleList()
-        {
-            if (_flpSchedule != null) return;
-            _flpSchedule = new FlowLayoutPanel
-            {
-                Location = new Point(16, 52),
-                Size = new Size(868, 360),
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                AutoScroll = true,
-                // The calendar card is white; match it so gaps aren't grey.
-                BackColor = Color.White,
-            };
-            pnlCalendarCard.Controls.Add(_flpSchedule);
-            _flpSchedule.BringToFront();
+            flpSchedule.ResumeLayout();
         }
 
         private Label EmptyLabel(string text) => new()

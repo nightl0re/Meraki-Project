@@ -803,11 +803,12 @@
             this.dgvUsers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvUsers.EnableHeadersVisualStyles = false;
             this.dgvUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
+            this.dgvUsers.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(232, 113, 74);
+            this.dgvUsers.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
             this.dgvUsers.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.White;
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
+            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(232, 113, 74);
+            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+            this.dgvUsers.ColumnHeadersHeight = 40;
             this.dgvUsers.DefaultCellStyle.BackColor = System.Drawing.Color.White;
             this.dgvUsers.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
             this.dgvUsers.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(253, 238, 232);

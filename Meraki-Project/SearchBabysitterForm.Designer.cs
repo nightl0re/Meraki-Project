@@ -29,10 +29,10 @@
             pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
             lblPageTitle = new Label();
             lblPageSubtitle = new Label();
-            pnlSearchBar = new Guna.UI2.WinForms.Guna2Panel();
-            tbSearch = new Guna.UI2.WinForms.Guna2TextBox();
-            btnToggleFilters = new Guna.UI2.WinForms.Guna2Button();
             pnlFiltersPanel = new Guna.UI2.WinForms.Guna2Panel();
+            lblFilterHeader = new Label();
+            lblKeywordCaption = new Label();
+            tbSearch = new Guna.UI2.WinForms.Guna2TextBox();
             lblMaxRateCaption = new Label();
             tbMaxRate = new TrackBar();
             lblMaxRateRange = new Label();
@@ -44,7 +44,6 @@
             lblAvailabilityCaption = new Label();
             cbAvailableOnly = new Guna.UI2.WinForms.Guna2CustomCheckBox();
             lblAvailableOnly = new Label();
-            lblVerificationCaption = new Label();
             cbVerifiedOnly = new Guna.UI2.WinForms.Guna2CustomCheckBox();
             lblVerifiedOnly = new Label();
             flpResults = new FlowLayoutPanel();
@@ -54,7 +53,6 @@
             pnlPageBackground.SuspendLayout();
             pnlNavbar.SuspendLayout();
             pnlContent.SuspendLayout();
-            pnlSearchBar.SuspendLayout();
             pnlFiltersPanel.SuspendLayout();
             SuspendLayout();
             //
@@ -62,6 +60,7 @@
             //
             pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -186,11 +185,10 @@
             // pnlContent
             //
             pnlContent.AutoScroll = true;
-            pnlContent.BackColor = Color.Transparent;
+            pnlContent.BackColor = Color.FromArgb(253, 238, 232);
             pnlContent.Controls.Add(lblPageTitle);
             pnlContent.Controls.Add(lblPageSubtitle);
             pnlContent.Controls.Add(pnlFiltersPanel);
-            pnlContent.Controls.Add(pnlSearchBar);
             pnlContent.Controls.Add(flpResults);
             pnlContent.Controls.Add(lblNoResults);
             pnlContent.FillColor = Color.FromArgb(253, 238, 232);
@@ -222,51 +220,15 @@
             lblPageSubtitle.TabIndex = 1;
             lblPageSubtitle.Text = "6 caregivers available in your area";
             //
-            // pnlSearchBar
-            //
-            pnlSearchBar.BackColor = Color.Transparent;
-            pnlSearchBar.BorderRadius = 16;
-            pnlSearchBar.Controls.Add(tbSearch);
-            pnlSearchBar.Controls.Add(btnToggleFilters);
-            pnlSearchBar.FillColor = Color.White;
-            pnlSearchBar.Location = new Point(30, 86);
-            pnlSearchBar.Name = "pnlSearchBar";
-            pnlSearchBar.Size = new Size(1420, 60);
-            pnlSearchBar.TabIndex = 2;
-            //
-            // tbSearch
-            //
-            tbSearch.BorderRadius = 10;
-            tbSearch.DefaultText = "";
-            tbSearch.FillColor = Color.FromArgb(247, 245, 242);
-            tbSearch.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
-            tbSearch.Font = new Font("Segoe UI", 9F);
-            tbSearch.Location = new Point(12, 10);
-            tbSearch.Name = "tbSearch";
-            tbSearch.PlaceholderText = "Search by name, skill, or location...";
-            tbSearch.SelectedText = "";
-            tbSearch.Size = new Size(1200, 40);
-            tbSearch.TabIndex = 0;
-            tbSearch.TextChanged += tbSearch_TextChanged;
-            //
-            // btnToggleFilters
-            //
-            btnToggleFilters.BackColor = Color.White;
-            btnToggleFilters.BorderRadius = 10;
-            btnToggleFilters.FillColor = Color.FromArgb(247, 245, 242);
-            btnToggleFilters.Font = new Font("Segoe UI", 9F);
-            btnToggleFilters.ForeColor = Color.FromArgb(154, 136, 128);
-            btnToggleFilters.Location = new Point(1224, 10);
-            btnToggleFilters.Name = "btnToggleFilters";
-            btnToggleFilters.Size = new Size(184, 40);
-            btnToggleFilters.TabIndex = 1;
-            btnToggleFilters.Text = "⚙ Filters";
-            btnToggleFilters.Click += btnToggleFilters_Click;
-            //
-            // pnlFiltersPanel
+            // pnlFiltersPanel  (fixed left sidebar, always visible - like the design)
             //
             pnlFiltersPanel.BackColor = Color.Transparent;
             pnlFiltersPanel.BorderRadius = 16;
+            pnlFiltersPanel.BorderThickness = 1;
+            pnlFiltersPanel.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlFiltersPanel.Controls.Add(lblFilterHeader);
+            pnlFiltersPanel.Controls.Add(lblKeywordCaption);
+            pnlFiltersPanel.Controls.Add(tbSearch);
             pnlFiltersPanel.Controls.Add(lblMaxRateCaption);
             pnlFiltersPanel.Controls.Add(tbMaxRate);
             pnlFiltersPanel.Controls.Add(lblMaxRateRange);
@@ -278,36 +240,73 @@
             pnlFiltersPanel.Controls.Add(lblAvailabilityCaption);
             pnlFiltersPanel.Controls.Add(cbAvailableOnly);
             pnlFiltersPanel.Controls.Add(lblAvailableOnly);
-            pnlFiltersPanel.Controls.Add(lblVerificationCaption);
             pnlFiltersPanel.Controls.Add(cbVerifiedOnly);
             pnlFiltersPanel.Controls.Add(lblVerifiedOnly);
             pnlFiltersPanel.FillColor = Color.White;
-            pnlFiltersPanel.Location = new Point(30, 156);
+            pnlFiltersPanel.Location = new Point(30, 96);
             pnlFiltersPanel.Name = "pnlFiltersPanel";
-            pnlFiltersPanel.Size = new Size(1420, 140);
+            pnlFiltersPanel.Size = new Size(280, 620);
             pnlFiltersPanel.TabIndex = 3;
-            pnlFiltersPanel.Visible = false;
+            //
+            // lblFilterHeader
+            //
+            lblFilterHeader.BackColor = Color.FromArgb(232, 113, 74);
+            lblFilterHeader.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
+            lblFilterHeader.ForeColor = Color.White;
+            lblFilterHeader.Location = new Point(1, 1);
+            lblFilterHeader.Name = "lblFilterHeader";
+            lblFilterHeader.Padding = new Padding(20, 0, 0, 0);
+            lblFilterHeader.Size = new Size(278, 48);
+            lblFilterHeader.TabIndex = 0;
+            lblFilterHeader.Text = "Filter Results";
+            lblFilterHeader.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // lblKeywordCaption
+            //
+            lblKeywordCaption.BackColor = Color.Transparent;
+            lblKeywordCaption.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblKeywordCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblKeywordCaption.Location = new Point(20, 64);
+            lblKeywordCaption.Name = "lblKeywordCaption";
+            lblKeywordCaption.Size = new Size(240, 22);
+            lblKeywordCaption.TabIndex = 1;
+            lblKeywordCaption.Text = "Keyword Search";
+            //
+            // tbSearch
+            //
+            tbSearch.BorderRadius = 10;
+            tbSearch.DefaultText = "";
+            tbSearch.FillColor = Color.FromArgb(247, 245, 242);
+            tbSearch.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbSearch.Font = new Font("Segoe UI", 9F);
+            tbSearch.Location = new Point(20, 90);
+            tbSearch.Name = "tbSearch";
+            tbSearch.PlaceholderText = "Search by name...";
+            tbSearch.SelectedText = "";
+            tbSearch.Size = new Size(240, 40);
+            tbSearch.TabIndex = 2;
+            tbSearch.TextChanged += tbSearch_TextChanged;
             //
             // lblMaxRateCaption
             //
             lblMaxRateCaption.BackColor = Color.Transparent;
-            lblMaxRateCaption.Font = new Font("Segoe UI", 9F);
-            lblMaxRateCaption.ForeColor = Color.FromArgb(154, 136, 128);
-            lblMaxRateCaption.Location = new Point(24, 16);
+            lblMaxRateCaption.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMaxRateCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblMaxRateCaption.Location = new Point(20, 150);
             lblMaxRateCaption.Name = "lblMaxRateCaption";
-            lblMaxRateCaption.Size = new Size(220, 22);
-            lblMaxRateCaption.TabIndex = 0;
+            lblMaxRateCaption.Size = new Size(240, 22);
+            lblMaxRateCaption.TabIndex = 3;
             lblMaxRateCaption.Text = "Max Rate: $25/hr";
             //
             // tbMaxRate
             //
             tbMaxRate.BackColor = Color.White;
-            tbMaxRate.Location = new Point(24, 42);
+            tbMaxRate.Location = new Point(20, 176);
             tbMaxRate.Maximum = 30;
             tbMaxRate.Minimum = 10;
             tbMaxRate.Name = "tbMaxRate";
-            tbMaxRate.Size = new Size(300, 45);
-            tbMaxRate.TabIndex = 1;
+            tbMaxRate.Size = new Size(240, 45);
+            tbMaxRate.TabIndex = 4;
             tbMaxRate.TickFrequency = 5;
             tbMaxRate.Value = 25;
             tbMaxRate.Scroll += tbMaxRate_Scroll;
@@ -317,22 +316,22 @@
             lblMaxRateRange.BackColor = Color.Transparent;
             lblMaxRateRange.Font = new Font("Segoe UI", 7.5F);
             lblMaxRateRange.ForeColor = Color.FromArgb(154, 136, 128);
-            lblMaxRateRange.Location = new Point(24, 92);
+            lblMaxRateRange.Location = new Point(20, 222);
             lblMaxRateRange.Name = "lblMaxRateRange";
-            lblMaxRateRange.Size = new Size(300, 18);
-            lblMaxRateRange.TabIndex = 2;
-            lblMaxRateRange.Text = "$10/hr                                                $30/hr";
+            lblMaxRateRange.Size = new Size(240, 18);
+            lblMaxRateRange.TabIndex = 5;
+            lblMaxRateRange.Text = "$10/hr                                  $30/hr";
             //
             // lblMinRatingCaption
             //
             lblMinRatingCaption.BackColor = Color.Transparent;
-            lblMinRatingCaption.Font = new Font("Segoe UI", 9F);
-            lblMinRatingCaption.ForeColor = Color.FromArgb(154, 136, 128);
-            lblMinRatingCaption.Location = new Point(360, 16);
+            lblMinRatingCaption.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMinRatingCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblMinRatingCaption.Location = new Point(20, 262);
             lblMinRatingCaption.Name = "lblMinRatingCaption";
-            lblMinRatingCaption.Size = new Size(150, 22);
-            lblMinRatingCaption.TabIndex = 3;
-            lblMinRatingCaption.Text = "Min Rating";
+            lblMinRatingCaption.Size = new Size(240, 22);
+            lblMinRatingCaption.TabIndex = 6;
+            lblMinRatingCaption.Text = "Minimum Rating";
             //
             // btnRatingAny
             //
@@ -341,10 +340,10 @@
             btnRatingAny.FillColor = Color.FromArgb(232, 113, 74);
             btnRatingAny.Font = new Font("Segoe UI", 8F);
             btnRatingAny.ForeColor = Color.White;
-            btnRatingAny.Location = new Point(360, 46);
+            btnRatingAny.Location = new Point(20, 290);
             btnRatingAny.Name = "btnRatingAny";
-            btnRatingAny.Size = new Size(64, 34);
-            btnRatingAny.TabIndex = 4;
+            btnRatingAny.Size = new Size(116, 34);
+            btnRatingAny.TabIndex = 7;
             btnRatingAny.Text = "Any";
             btnRatingAny.Click += btnRatingAny_Click;
             //
@@ -355,10 +354,10 @@
             btnRating4.FillColor = Color.FromArgb(247, 245, 242);
             btnRating4.Font = new Font("Segoe UI", 8F);
             btnRating4.ForeColor = Color.FromArgb(154, 136, 128);
-            btnRating4.Location = new Point(432, 46);
+            btnRating4.Location = new Point(144, 290);
             btnRating4.Name = "btnRating4";
-            btnRating4.Size = new Size(64, 34);
-            btnRating4.TabIndex = 5;
+            btnRating4.Size = new Size(116, 34);
+            btnRating4.TabIndex = 8;
             btnRating4.Text = "4+";
             btnRating4.Click += btnRating4_Click;
             //
@@ -369,10 +368,10 @@
             btnRating45.FillColor = Color.FromArgb(247, 245, 242);
             btnRating45.Font = new Font("Segoe UI", 8F);
             btnRating45.ForeColor = Color.FromArgb(154, 136, 128);
-            btnRating45.Location = new Point(504, 46);
+            btnRating45.Location = new Point(20, 330);
             btnRating45.Name = "btnRating45";
-            btnRating45.Size = new Size(64, 34);
-            btnRating45.TabIndex = 6;
+            btnRating45.Size = new Size(116, 34);
+            btnRating45.TabIndex = 9;
             btnRating45.Text = "4.5+";
             btnRating45.Click += btnRating45_Click;
             //
@@ -383,22 +382,22 @@
             btnRating48.FillColor = Color.FromArgb(247, 245, 242);
             btnRating48.Font = new Font("Segoe UI", 8F);
             btnRating48.ForeColor = Color.FromArgb(154, 136, 128);
-            btnRating48.Location = new Point(576, 46);
+            btnRating48.Location = new Point(144, 330);
             btnRating48.Name = "btnRating48";
-            btnRating48.Size = new Size(64, 34);
-            btnRating48.TabIndex = 7;
+            btnRating48.Size = new Size(116, 34);
+            btnRating48.TabIndex = 10;
             btnRating48.Text = "4.8+";
             btnRating48.Click += btnRating48_Click;
             //
             // lblAvailabilityCaption
             //
             lblAvailabilityCaption.BackColor = Color.Transparent;
-            lblAvailabilityCaption.Font = new Font("Segoe UI", 9F);
-            lblAvailabilityCaption.ForeColor = Color.FromArgb(154, 136, 128);
-            lblAvailabilityCaption.Location = new Point(700, 16);
+            lblAvailabilityCaption.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblAvailabilityCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblAvailabilityCaption.Location = new Point(20, 388);
             lblAvailabilityCaption.Name = "lblAvailabilityCaption";
-            lblAvailabilityCaption.Size = new Size(150, 22);
-            lblAvailabilityCaption.TabIndex = 8;
+            lblAvailabilityCaption.Size = new Size(240, 22);
+            lblAvailabilityCaption.TabIndex = 11;
             lblAvailabilityCaption.Text = "Availability";
             //
             // cbAvailableOnly
@@ -407,10 +406,10 @@
             cbAvailableOnly.CheckedState.BorderRadius = 4;
             cbAvailableOnly.CheckedState.BorderThickness = 0;
             cbAvailableOnly.CheckedState.FillColor = Color.FromArgb(94, 200, 196);
-            cbAvailableOnly.Location = new Point(700, 48);
+            cbAvailableOnly.Location = new Point(20, 418);
             cbAvailableOnly.Name = "cbAvailableOnly";
             cbAvailableOnly.Size = new Size(22, 22);
-            cbAvailableOnly.TabIndex = 9;
+            cbAvailableOnly.TabIndex = 12;
             cbAvailableOnly.UncheckedState.BorderColor = Color.FromArgb(200, 190, 185);
             cbAvailableOnly.UncheckedState.BorderRadius = 4;
             cbAvailableOnly.UncheckedState.BorderThickness = 1;
@@ -422,22 +421,11 @@
             lblAvailableOnly.BackColor = Color.Transparent;
             lblAvailableOnly.Font = new Font("Segoe UI", 8.5F);
             lblAvailableOnly.ForeColor = Color.FromArgb(154, 136, 128);
-            lblAvailableOnly.Location = new Point(730, 50);
+            lblAvailableOnly.Location = new Point(50, 420);
             lblAvailableOnly.Name = "lblAvailableOnly";
-            lblAvailableOnly.Size = new Size(150, 20);
-            lblAvailableOnly.TabIndex = 10;
+            lblAvailableOnly.Size = new Size(200, 20);
+            lblAvailableOnly.TabIndex = 13;
             lblAvailableOnly.Text = "Available only";
-            //
-            // lblVerificationCaption
-            //
-            lblVerificationCaption.BackColor = Color.Transparent;
-            lblVerificationCaption.Font = new Font("Segoe UI", 9F);
-            lblVerificationCaption.ForeColor = Color.FromArgb(154, 136, 128);
-            lblVerificationCaption.Location = new Point(920, 16);
-            lblVerificationCaption.Name = "lblVerificationCaption";
-            lblVerificationCaption.Size = new Size(150, 22);
-            lblVerificationCaption.TabIndex = 11;
-            lblVerificationCaption.Text = "Verification";
             //
             // cbVerifiedOnly
             //
@@ -445,10 +433,10 @@
             cbVerifiedOnly.CheckedState.BorderRadius = 4;
             cbVerifiedOnly.CheckedState.BorderThickness = 0;
             cbVerifiedOnly.CheckedState.FillColor = Color.FromArgb(94, 200, 196);
-            cbVerifiedOnly.Location = new Point(920, 48);
+            cbVerifiedOnly.Location = new Point(20, 450);
             cbVerifiedOnly.Name = "cbVerifiedOnly";
             cbVerifiedOnly.Size = new Size(22, 22);
-            cbVerifiedOnly.TabIndex = 12;
+            cbVerifiedOnly.TabIndex = 14;
             cbVerifiedOnly.UncheckedState.BorderColor = Color.FromArgb(200, 190, 185);
             cbVerifiedOnly.UncheckedState.BorderRadius = 4;
             cbVerifiedOnly.UncheckedState.BorderThickness = 1;
@@ -460,27 +448,29 @@
             lblVerifiedOnly.BackColor = Color.Transparent;
             lblVerifiedOnly.Font = new Font("Segoe UI", 8.5F);
             lblVerifiedOnly.ForeColor = Color.FromArgb(154, 136, 128);
-            lblVerifiedOnly.Location = new Point(950, 50);
+            lblVerifiedOnly.Location = new Point(50, 452);
             lblVerifiedOnly.Name = "lblVerifiedOnly";
-            lblVerifiedOnly.Size = new Size(150, 20);
-            lblVerifiedOnly.TabIndex = 13;
+            lblVerifiedOnly.Size = new Size(200, 20);
+            lblVerifiedOnly.TabIndex = 15;
             lblVerifiedOnly.Text = "Verified only";
             //
             // flpResults
             //
             flpResults.AutoScroll = true;
             flpResults.BackColor = Color.Transparent;
-            flpResults.Location = new Point(30, 166);
+            flpResults.FlowDirection = FlowDirection.TopDown;
+            flpResults.Location = new Point(330, 96);
             flpResults.Name = "flpResults";
-            flpResults.Size = new Size(1420, 640);
+            flpResults.Size = new Size(1140, 700);
             flpResults.TabIndex = 4;
+            flpResults.WrapContents = false;
             //
             // lblNoResults
             //
             lblNoResults.BackColor = Color.Transparent;
             lblNoResults.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblNoResults.ForeColor = Color.FromArgb(154, 136, 128);
-            lblNoResults.Location = new Point(30, 260);
+            lblNoResults.Location = new Point(360, 200);
             lblNoResults.Name = "lblNoResults";
             lblNoResults.Size = new Size(500, 60);
             lblNoResults.TabIndex = 5;
@@ -501,7 +491,6 @@
             ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)tbMaxRate).EndInit();
             pnlFiltersPanel.ResumeLayout(false);
-            pnlSearchBar.ResumeLayout(false);
             pnlContent.ResumeLayout(false);
             pnlNavbar.ResumeLayout(false);
             pnlPageBackground.ResumeLayout(false);
@@ -522,10 +511,10 @@
         private Guna.UI2.WinForms.Guna2GradientPanel pnlContent;
         private System.Windows.Forms.Label lblPageTitle;
         private System.Windows.Forms.Label lblPageSubtitle;
-        private Guna.UI2.WinForms.Guna2Panel pnlSearchBar;
-        private Guna.UI2.WinForms.Guna2TextBox tbSearch;
-        private Guna.UI2.WinForms.Guna2Button btnToggleFilters;
         private Guna.UI2.WinForms.Guna2Panel pnlFiltersPanel;
+        private System.Windows.Forms.Label lblFilterHeader;
+        private System.Windows.Forms.Label lblKeywordCaption;
+        private Guna.UI2.WinForms.Guna2TextBox tbSearch;
         private System.Windows.Forms.Label lblMaxRateCaption;
         private System.Windows.Forms.TrackBar tbMaxRate;
         private System.Windows.Forms.Label lblMaxRateRange;
@@ -537,7 +526,6 @@
         private System.Windows.Forms.Label lblAvailabilityCaption;
         private Guna.UI2.WinForms.Guna2CustomCheckBox cbAvailableOnly;
         private System.Windows.Forms.Label lblAvailableOnly;
-        private System.Windows.Forms.Label lblVerificationCaption;
         private Guna.UI2.WinForms.Guna2CustomCheckBox cbVerifiedOnly;
         private System.Windows.Forms.Label lblVerifiedOnly;
         private System.Windows.Forms.FlowLayoutPanel flpResults;

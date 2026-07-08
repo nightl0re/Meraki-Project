@@ -14,7 +14,7 @@ namespace Meraki_Project
         private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
         private static readonly Color ColorActiveTabFill = Color.FromArgb(253, 238, 232);
 
-        private enum GridMode { Users, Bookings, Requests }
+        private enum GridMode { Users, Bookings, PendingApprovals }
         private GridMode _mode = GridMode.Users;
 
         private List<User> _users = new();
@@ -49,37 +49,44 @@ namespace Meraki_Project
             lblRevenueChartTitle.ForeColor = ColorHeading;
             lblUserTableTitle.ForeColor = ColorHeading;
 
-            // Repurpose the two unused sidebar buttons: Reports -> Requests
-            // (pending bookings needing action), and hide Settings entirely.
-            btnSidebarReports.Text = "Requests";
+            // Repurpose the two unused sidebar buttons: Reports -> Pending Approvals
+            // (new registrations waiting for the admin), and hide Settings entirely.
+            btnSidebarReports.Text = "Pending Approvals";
             btnSidebarSettings.Visible = false;
         }
 
-        // ----- Requests grid: every booking still 'pending' a babysitter reply -----
+        // ----- Pending Approvals: new accounts waiting for an admin decision -----
 
-        private void ShowRequestsGrid()
+        private void ShowPendingApprovalsGrid()
         {
-            _mode = GridMode.Requests;
-            lblUserTableTitle.Text = "Pending Requests";
-            tbSearchUsers.PlaceholderText = "Search by parent or babysitter...";
+            _mode = GridMode.PendingApprovals;
+            lblUserTableTitle.Text = "Pending Approvals";
+            tbSearchUsers.PlaceholderText = "Search pending users...";
 
             dgvUsers.Columns.Clear();
-            AddCol("Date", 110);
-            AddCol("Time", 150);
-            AddCol("Parent", 170);
-            AddCol("Babysitter", 170);
-            AddCol("Children", 80);
-            AddCol("Total", 90);
-            AddCol("Status", 110);
+            AddCol("Name", 200);
+            AddCol("Role", 120);
+            AddCol("Email", 260);
+            AddCol("Requested", 130);
+            AddCol("Action", 110);
 
-            try { _bookings = BookingRepository.GetAll().Where(b => b.Status == "pending").ToList(); }
-            catch (Exception ex)
+            ReloadPendingApprovals();
+        }
+
+        private void ReloadPendingApprovals()
+        {
+            _users = UserRepository.GetUsers(tbSearchUsers.Text.Trim())
+                .Where(u => u.Status == "pending").ToList();
+            dgvUsers.Rows.Clear();
+            foreach (var u in _users)
             {
-                MessageBox.Show("Database error while loading requests:\n" + ex.Message,
-                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _bookings = new List<BookingInfo>();
+                int idx = dgvUsers.Rows.Add(u.FullName, Capitalize(u.Role), u.Email,
+                                            u.CreatedAt.ToString("MMM d, yyyy"), "Approve");
+                dgvUsers.Rows[idx].Tag = u;
+                StyleActionCell(dgvUsers.Rows[idx].Cells[4], approve: true);
             }
-            ReloadBookings();
+            if (_users.Count == 0)
+                lblUserTableTitle.Text = "Pending Approvals  ·  all caught up!";
         }
 
         // ----- KPI cards + the two monthly charts (real data) -----
@@ -157,7 +164,43 @@ namespace Meraki_Project
                 int idx = dgvUsers.Rows.Add(u.FullName, Capitalize(u.Role), u.Email, u.Status,
                                             u.CreatedAt.ToString("MMM d, yyyy"), action);
                 dgvUsers.Rows[idx].Tag = u;
+                StyleStatusCell(dgvUsers.Rows[idx].Cells[3], u.Status);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[5], approve: u.Status != "active");
             }
+        }
+
+        // Coloured "pill" text for status cells, like the design.
+        private static void StyleStatusCell(DataGridViewCell cell, string status)
+        {
+            var (back, fore) = status switch
+            {
+                "confirmed" => (Color.FromArgb(232, 247, 247), Color.FromArgb(42, 112, 112)),
+                "active" => (Color.FromArgb(232, 247, 240), Color.FromArgb(34, 120, 80)),
+                "pending" => (Color.FromArgb(255, 248, 224), Color.FromArgb(160, 112, 0)),
+                "completed" => (Color.FromArgb(236, 245, 236), Color.FromArgb(70, 120, 70)),
+                "declined" => (Color.FromArgb(253, 235, 235), Color.FromArgb(180, 70, 70)),
+                "cancelled" => (Color.FromArgb(253, 235, 235), Color.FromArgb(180, 70, 70)),
+                "suspended" => (Color.FromArgb(245, 240, 238), Color.FromArgb(140, 130, 124)),
+                _ => (Color.White, Color.FromArgb(80, 70, 65)),
+            };
+            cell.Style.BackColor = back;
+            cell.Style.ForeColor = fore;
+            cell.Style.SelectionBackColor = back;
+            cell.Style.SelectionForeColor = fore;
+            cell.Style.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+        }
+
+        // Action cells look like small buttons so they're obviously clickable.
+        private static void StyleActionCell(DataGridViewCell cell, bool approve)
+        {
+            var back = approve ? Color.FromArgb(46, 125, 50) : Color.FromArgb(253, 238, 232);
+            var fore = approve ? Color.White : ColorCoral;
+            cell.Style.BackColor = back;
+            cell.Style.ForeColor = fore;
+            cell.Style.SelectionBackColor = back;
+            cell.Style.SelectionForeColor = fore;
+            cell.Style.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            cell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         // ----- Bookings grid (view every booking in the system) -----
@@ -169,13 +212,14 @@ namespace Meraki_Project
             tbSearchUsers.PlaceholderText = "Search by parent or babysitter...";
 
             dgvUsers.Columns.Clear();
-            AddCol("Date", 110);
-            AddCol("Time", 150);
-            AddCol("Parent", 170);
-            AddCol("Babysitter", 170);
-            AddCol("Children", 80);
-            AddCol("Total", 90);
-            AddCol("Status", 110);
+            AddCol("Date", 105);
+            AddCol("Time", 145);
+            AddCol("Parent", 160);
+            AddCol("Babysitter", 160);
+            AddCol("Children", 75);
+            AddCol("Total", 85);
+            AddCol("Status", 105);
+            AddCol("Action", 80);
 
             try { _bookings = BookingRepository.GetAll(); }
             catch (Exception ex)
@@ -196,22 +240,40 @@ namespace Meraki_Project
                          || b.ParentName.Contains(search, StringComparison.OrdinalIgnoreCase)
                          || b.SitterName.Contains(search, StringComparison.OrdinalIgnoreCase)))
             {
-                dgvUsers.Rows.Add(b.Date.ToString("MMM d, yyyy"), b.TimeRangeText,
-                                  b.ParentName, b.SitterName, b.ChildrenCount,
-                                  "$" + b.Total.ToString("0.00"), b.Status);
+                int idx = dgvUsers.Rows.Add(b.Date.ToString("MMM d, yyyy"), b.TimeRangeText,
+                                            b.ParentName, b.SitterName, b.ChildrenCount,
+                                            "$" + b.Total.ToString("0.00"), b.Status, "View");
+                dgvUsers.Rows[idx].Tag = b;
+                StyleStatusCell(dgvUsers.Rows[idx].Cells[6], b.Status);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[7], approve: false);
             }
         }
 
         private void tbSearchUsers_TextChanged(object sender, EventArgs e)
         {
             if (_mode == GridMode.Users) ReloadUsers();
-            else ReloadBookings(); // Bookings and Requests share the same filter
+            else if (_mode == GridMode.PendingApprovals) ReloadPendingApprovals();
+            else ReloadBookings();
         }
 
-        // Approve / Suspend / Activate when the Action cell is clicked.
+        // Row actions: Approve/Suspend/Activate a user, or View a booking receipt.
         private void dgvUsers_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (_mode != GridMode.Users || e.RowIndex < 0 || e.ColumnIndex != 5) return;
+            if (e.RowIndex < 0) return;
+
+            if (_mode == GridMode.Bookings && e.ColumnIndex == 7)
+            {
+                if (dgvUsers.Rows[e.RowIndex].Tag is BookingInfo booking)
+                {
+                    using var dlg = new ReceiptDialog(booking, showParentSide: true);
+                    dlg.ShowDialog(this);
+                }
+                return;
+            }
+
+            int actionCol = _mode == GridMode.Users ? 5
+                          : _mode == GridMode.PendingApprovals ? 4 : -1;
+            if (e.ColumnIndex != actionCol) return;
             if (dgvUsers.Rows[e.RowIndex].Tag is not User u || u.Role == "admin") return;
 
             string newStatus = u.Status == "active" ? "suspended" : "active";
@@ -229,7 +291,8 @@ namespace Meraki_Project
                 if (newStatus == "active")
                     ExtrasRepository.AddNotification(u.UserId,
                         "Your Meraki account has been approved. Welcome!");
-                ReloadUsers();
+                if (_mode == GridMode.PendingApprovals) ShowPendingApprovalsGrid();
+                else ReloadUsers();
                 LoadKpisAndCharts();
             }
             catch (Exception ex)
@@ -298,12 +361,12 @@ namespace Meraki_Project
             ShowBookingsGrid();
         }
 
-        // "Reports" button is relabelled to "Requests" at load - it lists every
-        // booking still awaiting a babysitter's response, across the whole system.
+        // "Reports" button is relabelled to "Pending Approvals" at load - it lists
+        // new registrations waiting for the admin's decision.
         private void btnSidebarReports_Click(object sender, EventArgs e)
         {
             SetActiveSidebarButton(btnSidebarReports);
-            ShowRequestsGrid();
+            ShowPendingApprovalsGrid();
         }
 
         // "Settings" button is hidden at load; this handler is kept only because the

@@ -45,24 +45,17 @@
             lblStepNum4 = new Label();
             lblStepCaption4 = new Label();
             pnlStepDateTime = new Panel();
-            pnlCalendarCard = new Guna.UI2.WinForms.Guna2Panel();
-            lblCalTitle = new Label();
-            btnCalPrev = new Guna.UI2.WinForms.Guna2Button();
-            lblCalMonthYear = new Label();
-            btnCalNext = new Guna.UI2.WinForms.Guna2Button();
-            tlpBookingCalendar = new TableLayoutPanel();
-            lblCalSun = new Label();
-            lblCalMon = new Label();
-            lblCalTue = new Label();
-            lblCalWed = new Label();
-            lblCalThu = new Label();
-            lblCalFri = new Label();
-            lblCalSat = new Label();
-            pnlTimeSlotsCard = new Guna.UI2.WinForms.Guna2Panel();
-            lblTimeSlotsTitle = new Label();
-            flpTimeSlots = new FlowLayoutPanel();
-            pnlDurationCard = new Guna.UI2.WinForms.Guna2Panel();
-            lblDurationTitle = new Label();
+            pnlDateTimeCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblDateTimeTitle = new Label();
+            lblMonthCaption = new Label();
+            cbMonth = new Guna.UI2.WinForms.Guna2ComboBox();
+            lblDayCaption = new Label();
+            cbDay = new Guna.UI2.WinForms.Guna2ComboBox();
+            lblYearCaption = new Label();
+            cbYear = new Guna.UI2.WinForms.Guna2ComboBox();
+            lblStartTimeCaption = new Label();
+            cbStartTime = new Guna.UI2.WinForms.Guna2ComboBox();
+            lblDurationCaption = new Label();
             flpDurations = new FlowLayoutPanel();
             pnlStepBabysitter = new Panel();
             flpBabysitterSelect = new FlowLayoutPanel();
@@ -113,10 +106,7 @@
             pnlStepCircle3.SuspendLayout();
             pnlStepCircle4.SuspendLayout();
             pnlStepDateTime.SuspendLayout();
-            pnlCalendarCard.SuspendLayout();
-            tlpBookingCalendar.SuspendLayout();
-            pnlTimeSlotsCard.SuspendLayout();
-            pnlDurationCard.SuspendLayout();
+            pnlDateTimeCard.SuspendLayout();
             pnlStepBabysitter.SuspendLayout();
             pnlStepDetails.SuspendLayout();
             pnlDetailsCard.SuspendLayout();
@@ -133,6 +123,7 @@
             pnlPageBackground.Controls.Add(pnlBottomBar);
             pnlPageBackground.Controls.Add(pnlNavbar);
             pnlPageBackground.Controls.Add(pnlContent);
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -298,7 +289,7 @@
             // pnlContent
             //
             pnlContent.AutoScroll = true;
-            pnlContent.BackColor = Color.Transparent;
+            pnlContent.BackColor = Color.FromArgb(253, 238, 232);
             pnlContent.Controls.Add(pnlConfirmationScreen);
             pnlContent.Controls.Add(lblPageTitle);
             pnlContent.Controls.Add(lblPageSubtitle);
@@ -516,249 +507,176 @@
             // pnlStepDateTime
             //
             pnlStepDateTime.BackColor = Color.Transparent;
-            pnlStepDateTime.Controls.Add(pnlCalendarCard);
-            pnlStepDateTime.Controls.Add(pnlTimeSlotsCard);
-            pnlStepDateTime.Controls.Add(pnlDurationCard);
+            pnlStepDateTime.Controls.Add(pnlDateTimeCard);
             pnlStepDateTime.Location = new Point(30, 136);
             pnlStepDateTime.Name = "pnlStepDateTime";
             pnlStepDateTime.Size = new Size(1420, 610);
             pnlStepDateTime.TabIndex = 13;
             //
-            // pnlCalendarCard
+            // pnlDateTimeCard
             //
-            pnlCalendarCard.BackColor = Color.Transparent;
-            pnlCalendarCard.BorderRadius = 16;
-            pnlCalendarCard.Controls.Add(lblCalTitle);
-            pnlCalendarCard.Controls.Add(btnCalPrev);
-            pnlCalendarCard.Controls.Add(lblCalMonthYear);
-            pnlCalendarCard.Controls.Add(btnCalNext);
-            pnlCalendarCard.Controls.Add(tlpBookingCalendar);
-            pnlCalendarCard.FillColor = Color.White;
-            pnlCalendarCard.Location = new Point(0, 0);
-            pnlCalendarCard.Name = "pnlCalendarCard";
-            pnlCalendarCard.Size = new Size(700, 480);
-            pnlCalendarCard.TabIndex = 0;
+            pnlDateTimeCard.BackColor = Color.Transparent;
+            pnlDateTimeCard.BorderRadius = 16;
+            pnlDateTimeCard.BorderThickness = 1;
+            pnlDateTimeCard.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlDateTimeCard.Controls.Add(lblDateTimeTitle);
+            pnlDateTimeCard.Controls.Add(lblMonthCaption);
+            pnlDateTimeCard.Controls.Add(cbMonth);
+            pnlDateTimeCard.Controls.Add(lblDayCaption);
+            pnlDateTimeCard.Controls.Add(cbDay);
+            pnlDateTimeCard.Controls.Add(lblYearCaption);
+            pnlDateTimeCard.Controls.Add(cbYear);
+            pnlDateTimeCard.Controls.Add(lblStartTimeCaption);
+            pnlDateTimeCard.Controls.Add(cbStartTime);
+            pnlDateTimeCard.Controls.Add(lblDurationCaption);
+            pnlDateTimeCard.Controls.Add(flpDurations);
+            pnlDateTimeCard.FillColor = Color.White;
+            pnlDateTimeCard.Location = new Point(0, 0);
+            pnlDateTimeCard.Name = "pnlDateTimeCard";
+            pnlDateTimeCard.Size = new Size(900, 470);
+            pnlDateTimeCard.TabIndex = 0;
             //
-            // lblCalTitle
+            // lblDateTimeTitle
             //
-            lblCalTitle.BackColor = Color.Transparent;
-            lblCalTitle.Font = new Font("Segoe UI", 10.5F, FontStyle.Bold);
-            lblCalTitle.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalTitle.Location = new Point(16, 14);
-            lblCalTitle.Name = "lblCalTitle";
-            lblCalTitle.Size = new Size(200, 24);
-            lblCalTitle.TabIndex = 0;
-            lblCalTitle.Text = "Select Date";
+            lblDateTimeTitle.BackColor = Color.Transparent;
+            lblDateTimeTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblDateTimeTitle.ForeColor = Color.FromArgb(60, 50, 45);
+            lblDateTimeTitle.Location = new Point(24, 20);
+            lblDateTimeTitle.Name = "lblDateTimeTitle";
+            lblDateTimeTitle.Size = new Size(400, 30);
+            lblDateTimeTitle.TabIndex = 0;
+            lblDateTimeTitle.Text = "Select Date && Time";
             //
-            // btnCalPrev
+            // lblMonthCaption
             //
-            btnCalPrev.BackColor = Color.White;
-            btnCalPrev.BorderRadius = 8;
-            btnCalPrev.FillColor = Color.FromArgb(247, 245, 242);
-            btnCalPrev.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCalPrev.ForeColor = Color.FromArgb(154, 136, 128);
-            btnCalPrev.Location = new Point(560, 12);
-            btnCalPrev.Name = "btnCalPrev";
-            btnCalPrev.Size = new Size(34, 32);
-            btnCalPrev.TabIndex = 1;
-            btnCalPrev.Text = "<";
-            btnCalPrev.Click += btnCalPrev_Click;
+            lblMonthCaption.BackColor = Color.Transparent;
+            lblMonthCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblMonthCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblMonthCaption.Location = new Point(24, 72);
+            lblMonthCaption.Name = "lblMonthCaption";
+            lblMonthCaption.Size = new Size(200, 22);
+            lblMonthCaption.TabIndex = 1;
+            lblMonthCaption.Text = "Month *";
             //
-            // lblCalMonthYear
+            // cbMonth
             //
-            lblCalMonthYear.BackColor = Color.Transparent;
-            lblCalMonthYear.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblCalMonthYear.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalMonthYear.Location = new Point(598, 14);
-            lblCalMonthYear.Name = "lblCalMonthYear";
-            lblCalMonthYear.Size = new Size(130, 26);
-            lblCalMonthYear.TabIndex = 2;
-            lblCalMonthYear.Text = "June 2024";
-            lblCalMonthYear.TextAlign = ContentAlignment.MiddleCenter;
+            cbMonth.BackColor = Color.Transparent;
+            cbMonth.BorderRadius = 8;
+            cbMonth.DrawMode = DrawMode.OwnerDrawFixed;
+            cbMonth.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbMonth.FillColor = Color.FromArgb(247, 245, 242);
+            cbMonth.FocusedColor = Color.FromArgb(232, 113, 74);
+            cbMonth.Font = new Font("Segoe UI", 9.5F);
+            cbMonth.ForeColor = Color.FromArgb(60, 50, 45);
+            cbMonth.ItemHeight = 34;
+            cbMonth.Location = new Point(24, 96);
+            cbMonth.Name = "cbMonth";
+            cbMonth.Size = new Size(266, 40);
+            cbMonth.TabIndex = 2;
+            cbMonth.SelectedIndexChanged += cbDate_Changed;
             //
-            // btnCalNext
+            // lblDayCaption
             //
-            btnCalNext.BackColor = Color.White;
-            btnCalNext.BorderRadius = 8;
-            btnCalNext.FillColor = Color.FromArgb(247, 245, 242);
-            btnCalNext.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCalNext.ForeColor = Color.FromArgb(154, 136, 128);
-            btnCalNext.Location = new Point(650, 12);
-            btnCalNext.Name = "btnCalNext";
-            btnCalNext.Size = new Size(34, 32);
-            btnCalNext.TabIndex = 3;
-            btnCalNext.Text = ">";
-            btnCalNext.Click += btnCalNext_Click;
+            lblDayCaption.BackColor = Color.Transparent;
+            lblDayCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblDayCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblDayCaption.Location = new Point(316, 72);
+            lblDayCaption.Name = "lblDayCaption";
+            lblDayCaption.Size = new Size(200, 22);
+            lblDayCaption.TabIndex = 3;
+            lblDayCaption.Text = "Day *";
             //
-            // tlpBookingCalendar
+            // cbDay
             //
-            tlpBookingCalendar.BackColor = Color.Transparent;
-            tlpBookingCalendar.ColumnCount = 7;
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.285714F));
-            tlpBookingCalendar.Controls.Add(lblCalSun, 0, 0);
-            tlpBookingCalendar.Controls.Add(lblCalMon, 1, 0);
-            tlpBookingCalendar.Controls.Add(lblCalTue, 2, 0);
-            tlpBookingCalendar.Controls.Add(lblCalWed, 3, 0);
-            tlpBookingCalendar.Controls.Add(lblCalThu, 4, 0);
-            tlpBookingCalendar.Controls.Add(lblCalFri, 5, 0);
-            tlpBookingCalendar.Controls.Add(lblCalSat, 6, 0);
-            tlpBookingCalendar.Location = new Point(16, 52);
-            tlpBookingCalendar.Name = "tlpBookingCalendar";
-            tlpBookingCalendar.RowCount = 7;
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
-            tlpBookingCalendar.Size = new Size(668, 412);
-            tlpBookingCalendar.TabIndex = 4;
+            cbDay.BackColor = Color.Transparent;
+            cbDay.BorderRadius = 8;
+            cbDay.DrawMode = DrawMode.OwnerDrawFixed;
+            cbDay.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbDay.FillColor = Color.FromArgb(247, 245, 242);
+            cbDay.FocusedColor = Color.FromArgb(232, 113, 74);
+            cbDay.Font = new Font("Segoe UI", 9.5F);
+            cbDay.ForeColor = Color.FromArgb(60, 50, 45);
+            cbDay.ItemHeight = 34;
+            cbDay.Location = new Point(316, 96);
+            cbDay.Name = "cbDay";
+            cbDay.Size = new Size(266, 40);
+            cbDay.TabIndex = 4;
+            cbDay.SelectedIndexChanged += cbDate_Changed;
             //
-            // lblCalSun
+            // lblYearCaption
             //
-            lblCalSun.BackColor = Color.Transparent;
-            lblCalSun.Dock = DockStyle.Fill;
-            lblCalSun.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalSun.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalSun.Name = "lblCalSun";
-            lblCalSun.TabIndex = 0;
-            lblCalSun.Text = "Su";
-            lblCalSun.TextAlign = ContentAlignment.MiddleCenter;
+            lblYearCaption.BackColor = Color.Transparent;
+            lblYearCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblYearCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblYearCaption.Location = new Point(608, 72);
+            lblYearCaption.Name = "lblYearCaption";
+            lblYearCaption.Size = new Size(200, 22);
+            lblYearCaption.TabIndex = 5;
+            lblYearCaption.Text = "Year *";
             //
-            // lblCalMon
+            // cbYear
             //
-            lblCalMon.BackColor = Color.Transparent;
-            lblCalMon.Dock = DockStyle.Fill;
-            lblCalMon.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalMon.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalMon.Name = "lblCalMon";
-            lblCalMon.TabIndex = 1;
-            lblCalMon.Text = "Mo";
-            lblCalMon.TextAlign = ContentAlignment.MiddleCenter;
+            cbYear.BackColor = Color.Transparent;
+            cbYear.BorderRadius = 8;
+            cbYear.DrawMode = DrawMode.OwnerDrawFixed;
+            cbYear.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbYear.FillColor = Color.FromArgb(247, 245, 242);
+            cbYear.FocusedColor = Color.FromArgb(232, 113, 74);
+            cbYear.Font = new Font("Segoe UI", 9.5F);
+            cbYear.ForeColor = Color.FromArgb(60, 50, 45);
+            cbYear.ItemHeight = 34;
+            cbYear.Location = new Point(608, 96);
+            cbYear.Name = "cbYear";
+            cbYear.Size = new Size(266, 40);
+            cbYear.TabIndex = 6;
+            cbYear.SelectedIndexChanged += cbDate_Changed;
             //
-            // lblCalTue
+            // lblStartTimeCaption
             //
-            lblCalTue.BackColor = Color.Transparent;
-            lblCalTue.Dock = DockStyle.Fill;
-            lblCalTue.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalTue.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalTue.Name = "lblCalTue";
-            lblCalTue.TabIndex = 2;
-            lblCalTue.Text = "Tu";
-            lblCalTue.TextAlign = ContentAlignment.MiddleCenter;
+            lblStartTimeCaption.BackColor = Color.Transparent;
+            lblStartTimeCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblStartTimeCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblStartTimeCaption.Location = new Point(24, 160);
+            lblStartTimeCaption.Name = "lblStartTimeCaption";
+            lblStartTimeCaption.Size = new Size(200, 22);
+            lblStartTimeCaption.TabIndex = 7;
+            lblStartTimeCaption.Text = "Start Time *";
             //
-            // lblCalWed
+            // cbStartTime
             //
-            lblCalWed.BackColor = Color.Transparent;
-            lblCalWed.Dock = DockStyle.Fill;
-            lblCalWed.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalWed.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalWed.Name = "lblCalWed";
-            lblCalWed.TabIndex = 3;
-            lblCalWed.Text = "We";
-            lblCalWed.TextAlign = ContentAlignment.MiddleCenter;
+            cbStartTime.BackColor = Color.Transparent;
+            cbStartTime.BorderRadius = 8;
+            cbStartTime.DrawMode = DrawMode.OwnerDrawFixed;
+            cbStartTime.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbStartTime.FillColor = Color.FromArgb(247, 245, 242);
+            cbStartTime.FocusedColor = Color.FromArgb(232, 113, 74);
+            cbStartTime.Font = new Font("Segoe UI", 9.5F);
+            cbStartTime.ForeColor = Color.FromArgb(60, 50, 45);
+            cbStartTime.ItemHeight = 34;
+            cbStartTime.Location = new Point(24, 184);
+            cbStartTime.Name = "cbStartTime";
+            cbStartTime.Size = new Size(850, 40);
+            cbStartTime.TabIndex = 8;
+            cbStartTime.SelectedIndexChanged += cbStartTime_Changed;
             //
-            // lblCalThu
+            // lblDurationCaption
             //
-            lblCalThu.BackColor = Color.Transparent;
-            lblCalThu.Dock = DockStyle.Fill;
-            lblCalThu.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalThu.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalThu.Name = "lblCalThu";
-            lblCalThu.TabIndex = 4;
-            lblCalThu.Text = "Th";
-            lblCalThu.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalFri
-            //
-            lblCalFri.BackColor = Color.Transparent;
-            lblCalFri.Dock = DockStyle.Fill;
-            lblCalFri.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalFri.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalFri.Name = "lblCalFri";
-            lblCalFri.TabIndex = 5;
-            lblCalFri.Text = "Fr";
-            lblCalFri.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // lblCalSat
-            //
-            lblCalSat.BackColor = Color.Transparent;
-            lblCalSat.Dock = DockStyle.Fill;
-            lblCalSat.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-            lblCalSat.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCalSat.Name = "lblCalSat";
-            lblCalSat.TabIndex = 6;
-            lblCalSat.Text = "Sa";
-            lblCalSat.TextAlign = ContentAlignment.MiddleCenter;
-            //
-            // pnlTimeSlotsCard
-            //
-            pnlTimeSlotsCard.BackColor = Color.Transparent;
-            pnlTimeSlotsCard.BorderRadius = 16;
-            pnlTimeSlotsCard.Controls.Add(lblTimeSlotsTitle);
-            pnlTimeSlotsCard.Controls.Add(flpTimeSlots);
-            pnlTimeSlotsCard.FillColor = Color.White;
-            pnlTimeSlotsCard.Location = new Point(720, 0);
-            pnlTimeSlotsCard.Name = "pnlTimeSlotsCard";
-            pnlTimeSlotsCard.Size = new Size(680, 300);
-            pnlTimeSlotsCard.TabIndex = 1;
-            //
-            // lblTimeSlotsTitle
-            //
-            lblTimeSlotsTitle.BackColor = Color.Transparent;
-            lblTimeSlotsTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblTimeSlotsTitle.ForeColor = Color.FromArgb(154, 136, 128);
-            lblTimeSlotsTitle.Location = new Point(16, 14);
-            lblTimeSlotsTitle.Name = "lblTimeSlotsTitle";
-            lblTimeSlotsTitle.Size = new Size(220, 22);
-            lblTimeSlotsTitle.TabIndex = 0;
-            lblTimeSlotsTitle.Text = "Select Start Time";
-            //
-            // flpTimeSlots
-            //
-            flpTimeSlots.BackColor = Color.Transparent;
-            flpTimeSlots.Location = new Point(12, 44);
-            flpTimeSlots.Name = "flpTimeSlots";
-            flpTimeSlots.Size = new Size(656, 244);
-            flpTimeSlots.TabIndex = 1;
-            //
-            // pnlDurationCard
-            //
-            pnlDurationCard.BackColor = Color.Transparent;
-            pnlDurationCard.BorderRadius = 16;
-            pnlDurationCard.Controls.Add(lblDurationTitle);
-            pnlDurationCard.Controls.Add(flpDurations);
-            pnlDurationCard.FillColor = Color.White;
-            pnlDurationCard.Location = new Point(720, 312);
-            pnlDurationCard.Name = "pnlDurationCard";
-            pnlDurationCard.Size = new Size(680, 168);
-            pnlDurationCard.TabIndex = 2;
-            //
-            // lblDurationTitle
-            //
-            lblDurationTitle.BackColor = Color.Transparent;
-            lblDurationTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblDurationTitle.ForeColor = Color.FromArgb(154, 136, 128);
-            lblDurationTitle.Location = new Point(16, 14);
-            lblDurationTitle.Name = "lblDurationTitle";
-            lblDurationTitle.Size = new Size(160, 22);
-            lblDurationTitle.TabIndex = 0;
-            lblDurationTitle.Text = "Duration";
+            lblDurationCaption.BackColor = Color.Transparent;
+            lblDurationCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblDurationCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblDurationCaption.Location = new Point(24, 248);
+            lblDurationCaption.Name = "lblDurationCaption";
+            lblDurationCaption.Size = new Size(200, 22);
+            lblDurationCaption.TabIndex = 9;
+            lblDurationCaption.Text = "Duration *";
             //
             // flpDurations
             //
             flpDurations.BackColor = Color.Transparent;
-            flpDurations.Location = new Point(12, 44);
+            flpDurations.Location = new Point(24, 274);
             flpDurations.Name = "flpDurations";
-            flpDurations.Size = new Size(656, 112);
-            flpDurations.TabIndex = 1;
+            flpDurations.Size = new Size(850, 170);
+            flpDurations.TabIndex = 10;
             //
             // pnlStepBabysitter
             //
@@ -1223,10 +1141,7 @@
             pnlDetailsCard.ResumeLayout(false);
             pnlStepDetails.ResumeLayout(false);
             pnlStepBabysitter.ResumeLayout(false);
-            pnlDurationCard.ResumeLayout(false);
-            pnlTimeSlotsCard.ResumeLayout(false);
-            tlpBookingCalendar.ResumeLayout(false);
-            pnlCalendarCard.ResumeLayout(false);
+            pnlDateTimeCard.ResumeLayout(false);
             pnlStepDateTime.ResumeLayout(false);
             pnlStepCircle4.ResumeLayout(false);
             pnlStepCircle3.ResumeLayout(false);
@@ -1268,24 +1183,17 @@
         private System.Windows.Forms.Label lblStepNum4;
         private System.Windows.Forms.Label lblStepCaption4;
         private System.Windows.Forms.Panel pnlStepDateTime;
-        private Guna.UI2.WinForms.Guna2Panel pnlCalendarCard;
-        private System.Windows.Forms.Label lblCalTitle;
-        private Guna.UI2.WinForms.Guna2Button btnCalPrev;
-        private System.Windows.Forms.Label lblCalMonthYear;
-        private Guna.UI2.WinForms.Guna2Button btnCalNext;
-        private System.Windows.Forms.TableLayoutPanel tlpBookingCalendar;
-        private System.Windows.Forms.Label lblCalSun;
-        private System.Windows.Forms.Label lblCalMon;
-        private System.Windows.Forms.Label lblCalTue;
-        private System.Windows.Forms.Label lblCalWed;
-        private System.Windows.Forms.Label lblCalThu;
-        private System.Windows.Forms.Label lblCalFri;
-        private System.Windows.Forms.Label lblCalSat;
-        private Guna.UI2.WinForms.Guna2Panel pnlTimeSlotsCard;
-        private System.Windows.Forms.Label lblTimeSlotsTitle;
-        private System.Windows.Forms.FlowLayoutPanel flpTimeSlots;
-        private Guna.UI2.WinForms.Guna2Panel pnlDurationCard;
-        private System.Windows.Forms.Label lblDurationTitle;
+        private Guna.UI2.WinForms.Guna2Panel pnlDateTimeCard;
+        private System.Windows.Forms.Label lblDateTimeTitle;
+        private System.Windows.Forms.Label lblMonthCaption;
+        private Guna.UI2.WinForms.Guna2ComboBox cbMonth;
+        private System.Windows.Forms.Label lblDayCaption;
+        private Guna.UI2.WinForms.Guna2ComboBox cbDay;
+        private System.Windows.Forms.Label lblYearCaption;
+        private Guna.UI2.WinForms.Guna2ComboBox cbYear;
+        private System.Windows.Forms.Label lblStartTimeCaption;
+        private Guna.UI2.WinForms.Guna2ComboBox cbStartTime;
+        private System.Windows.Forms.Label lblDurationCaption;
         private System.Windows.Forms.FlowLayoutPanel flpDurations;
         private System.Windows.Forms.Panel pnlStepBabysitter;
         private System.Windows.Forms.FlowLayoutPanel flpBabysitterSelect;

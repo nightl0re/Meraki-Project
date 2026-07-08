@@ -76,20 +76,7 @@
             btnFavorites = new Guna.UI2.WinForms.Guna2Button();
             lblUpcomingTitle = new Label();
             btnViewAllBookings = new Guna.UI2.WinForms.Guna2Button();
-            pnlBookingCard1 = new Guna.UI2.WinForms.Guna2Panel();
-            lblBookingSitterName1 = new Label();
-            lblBookingStatus1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            lblBookingDateTime1 = new Label();
-            lblBookingChildren1 = new Label();
-            pnlAvatar1 = new Guna.UI2.WinForms.Guna2Panel();
-            lblAvatarInitial1 = new Label();
-            pnlBookingCard2 = new Guna.UI2.WinForms.Guna2Panel();
-            lblBookingSitterName2 = new Label();
-            lblBookingStatus2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            lblBookingDateTime2 = new Label();
-            lblBookingChildren2 = new Label();
-            pnlAvatar2 = new Guna.UI2.WinForms.Guna2Panel();
-            lblAvatarInitial2 = new Label();
+            flpBookings = new FlowLayoutPanel();
             pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
             picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
             lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -104,10 +91,6 @@
             pnlContent.SuspendLayout();
             pnlWelcomeBanner.SuspendLayout();
             picUserAvatar.SuspendLayout();
-            pnlBookingCard1.SuspendLayout();
-            pnlAvatar1.SuspendLayout();
-            pnlBookingCard2.SuspendLayout();
-            pnlAvatar2.SuspendLayout();
             pnlNavbar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picNavLogo).BeginInit();
             SuspendLayout();
@@ -117,6 +100,7 @@
             pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlNavbar);
             pnlPageBackground.CustomizableEdges = customizableEdges39;
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
@@ -137,8 +121,7 @@
             pnlContent.Controls.Add(btnFavorites);
             pnlContent.Controls.Add(lblUpcomingTitle);
             pnlContent.Controls.Add(btnViewAllBookings);
-            pnlContent.Controls.Add(pnlBookingCard1);
-            pnlContent.Controls.Add(pnlBookingCard2);
+            pnlContent.Controls.Add(flpBookings);
             pnlContent.CustomizableEdges = customizableEdges23;
             pnlContent.Dock = DockStyle.Fill;
             pnlContent.FillColor = Color.FromArgb(253, 238, 232);
@@ -338,189 +321,17 @@
             btnViewAllBookings.Text = "View all  →";
             btnViewAllBookings.Click += btnViewAllBookings_Click;
             // 
-            // pnlBookingCard1
+            // flpBookings
             // 
-            pnlBookingCard1.BackColor = Color.Transparent;
-            pnlBookingCard1.BorderRadius = 16;
-            pnlBookingCard1.Controls.Add(lblBookingSitterName1);
-            pnlBookingCard1.Controls.Add(lblBookingStatus1);
-            pnlBookingCard1.Controls.Add(lblBookingDateTime1);
-            pnlBookingCard1.Controls.Add(lblBookingChildren1);
-            pnlBookingCard1.Controls.Add(pnlAvatar1);
-            pnlBookingCard1.CustomizableEdges = customizableEdges17;
-            pnlBookingCard1.FillColor = Color.White;
-            pnlBookingCard1.Location = new Point(30, 390);
-            pnlBookingCard1.Margin = new Padding(4, 4, 4, 4);
-            pnlBookingCard1.Name = "pnlBookingCard1";
-            pnlBookingCard1.ShadowDecoration.CustomizableEdges = customizableEdges18;
-            pnlBookingCard1.Size = new Size(1420, 95);
-            pnlBookingCard1.TabIndex = 7;
-            // 
-            // lblBookingSitterName1
-            // 
-            lblBookingSitterName1.AutoSize = true;
-            lblBookingSitterName1.BackColor = Color.Transparent;
-            lblBookingSitterName1.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblBookingSitterName1.ForeColor = Color.FromArgb(154, 136, 128);
-            lblBookingSitterName1.Location = new Point(100, 15);
-            lblBookingSitterName1.Margin = new Padding(4, 0, 4, 0);
-            lblBookingSitterName1.Name = "lblBookingSitterName1";
-            lblBookingSitterName1.Size = new Size(143, 21);
-            lblBookingSitterName1.TabIndex = 0;
-            lblBookingSitterName1.Text = "Emma Thompson";
-            // 
-            // lblBookingStatus1
-            // 
-            lblBookingStatus1.BackColor = Color.Transparent;
-            lblBookingStatus1.Location = new Point(312, 12);
-            lblBookingStatus1.Margin = new Padding(4, 4, 4, 4);
-            lblBookingStatus1.Name = "lblBookingStatus1";
-            lblBookingStatus1.Size = new Size(97, 26);
-            lblBookingStatus1.TabIndex = 1;
-            lblBookingStatus1.Text = "<div style=\"background:#E8F7F7;color:#2A7070;border-radius:10px;padding:2px 10px;font-weight:bold;\">Confirmed</div>";
-            // 
-            // lblBookingDateTime1
-            // 
-            lblBookingDateTime1.BackColor = Color.Transparent;
-            lblBookingDateTime1.Font = new Font("Segoe UI", 8F);
-            lblBookingDateTime1.ForeColor = Color.FromArgb(154, 136, 128);
-            lblBookingDateTime1.Location = new Point(100, 45);
-            lblBookingDateTime1.Margin = new Padding(4, 0, 4, 0);
-            lblBookingDateTime1.Name = "lblBookingDateTime1";
-            lblBookingDateTime1.Size = new Size(375, 22);
-            lblBookingDateTime1.TabIndex = 2;
-            lblBookingDateTime1.Text = "Sat, Jun 15  ·  6:00 PM – 10:00 PM";
-            // 
-            // lblBookingChildren1
-            // 
-            lblBookingChildren1.BackColor = Color.Transparent;
-            lblBookingChildren1.Font = new Font("Segoe UI", 8F);
-            lblBookingChildren1.ForeColor = Color.FromArgb(232, 113, 74);
-            lblBookingChildren1.Location = new Point(100, 68);
-            lblBookingChildren1.Margin = new Padding(4, 0, 4, 0);
-            lblBookingChildren1.Name = "lblBookingChildren1";
-            lblBookingChildren1.Size = new Size(375, 22);
-            lblBookingChildren1.TabIndex = 3;
-            lblBookingChildren1.Text = "Lily (4), Jake (7)";
-            // 
-            // pnlAvatar1
-            // 
-            pnlAvatar1.BorderRadius = 22;
-            pnlAvatar1.Controls.Add(lblAvatarInitial1);
-            pnlAvatar1.CustomizableEdges = customizableEdges15;
-            pnlAvatar1.FillColor = Color.FromArgb(253, 238, 232);
-            pnlAvatar1.Location = new Point(22, 20);
-            pnlAvatar1.Margin = new Padding(4, 4, 4, 4);
-            pnlAvatar1.Name = "pnlAvatar1";
-            pnlAvatar1.ShadowDecoration.CustomizableEdges = customizableEdges16;
-            pnlAvatar1.Size = new Size(55, 55);
-            pnlAvatar1.TabIndex = 4;
-            // 
-            // lblAvatarInitial1
-            // 
-            lblAvatarInitial1.BackColor = Color.Transparent;
-            lblAvatarInitial1.Dock = DockStyle.Fill;
-            lblAvatarInitial1.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblAvatarInitial1.ForeColor = Color.FromArgb(232, 113, 74);
-            lblAvatarInitial1.Location = new Point(0, 0);
-            lblAvatarInitial1.Margin = new Padding(4, 0, 4, 0);
-            lblAvatarInitial1.Name = "lblAvatarInitial1";
-            lblAvatarInitial1.Size = new Size(55, 55);
-            lblAvatarInitial1.TabIndex = 0;
-            lblAvatarInitial1.Text = "E";
-            lblAvatarInitial1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pnlBookingCard2
-            // 
-            pnlBookingCard2.BackColor = Color.Transparent;
-            pnlBookingCard2.BorderRadius = 16;
-            pnlBookingCard2.Controls.Add(lblBookingSitterName2);
-            pnlBookingCard2.Controls.Add(lblBookingStatus2);
-            pnlBookingCard2.Controls.Add(lblBookingDateTime2);
-            pnlBookingCard2.Controls.Add(lblBookingChildren2);
-            pnlBookingCard2.Controls.Add(pnlAvatar2);
-            pnlBookingCard2.CustomizableEdges = customizableEdges21;
-            pnlBookingCard2.FillColor = Color.White;
-            pnlBookingCard2.Location = new Point(30, 495);
-            pnlBookingCard2.Margin = new Padding(4, 4, 4, 4);
-            pnlBookingCard2.Name = "pnlBookingCard2";
-            pnlBookingCard2.ShadowDecoration.CustomizableEdges = customizableEdges22;
-            pnlBookingCard2.Size = new Size(1420, 95);
-            pnlBookingCard2.TabIndex = 8;
-            // 
-            // lblBookingSitterName2
-            // 
-            lblBookingSitterName2.AutoSize = true;
-            lblBookingSitterName2.BackColor = Color.Transparent;
-            lblBookingSitterName2.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblBookingSitterName2.ForeColor = Color.FromArgb(154, 136, 128);
-            lblBookingSitterName2.Location = new Point(100, 15);
-            lblBookingSitterName2.Margin = new Padding(4, 0, 4, 0);
-            lblBookingSitterName2.Name = "lblBookingSitterName2";
-            lblBookingSitterName2.Size = new Size(121, 21);
-            lblBookingSitterName2.TabIndex = 0;
-            lblBookingSitterName2.Text = "Mia Rodriguez";
-            // 
-            // lblBookingStatus2
-            // 
-            lblBookingStatus2.BackColor = Color.Transparent;
-            lblBookingStatus2.Location = new Point(312, 12);
-            lblBookingStatus2.Margin = new Padding(4, 4, 4, 4);
-            lblBookingStatus2.Name = "lblBookingStatus2";
-            lblBookingStatus2.Size = new Size(80, 26);
-            lblBookingStatus2.TabIndex = 1;
-            lblBookingStatus2.Text = "<div style=\"background:#FFF8E0;color:#A07000;border-radius:10px;padding:2px 10px;font-weight:bold;\">Pending</div>";
-            // 
-            // lblBookingDateTime2
-            // 
-            lblBookingDateTime2.BackColor = Color.Transparent;
-            lblBookingDateTime2.Font = new Font("Segoe UI", 8F);
-            lblBookingDateTime2.ForeColor = Color.FromArgb(154, 136, 128);
-            lblBookingDateTime2.Location = new Point(100, 45);
-            lblBookingDateTime2.Margin = new Padding(4, 0, 4, 0);
-            lblBookingDateTime2.Name = "lblBookingDateTime2";
-            lblBookingDateTime2.Size = new Size(375, 22);
-            lblBookingDateTime2.TabIndex = 2;
-            lblBookingDateTime2.Text = "Wed, Jun 19  ·  3:00 PM – 7:00 PM";
-            // 
-            // lblBookingChildren2
-            // 
-            lblBookingChildren2.BackColor = Color.Transparent;
-            lblBookingChildren2.Font = new Font("Segoe UI", 8F);
-            lblBookingChildren2.ForeColor = Color.FromArgb(232, 113, 74);
-            lblBookingChildren2.Location = new Point(100, 68);
-            lblBookingChildren2.Margin = new Padding(4, 0, 4, 0);
-            lblBookingChildren2.Name = "lblBookingChildren2";
-            lblBookingChildren2.Size = new Size(375, 22);
-            lblBookingChildren2.TabIndex = 3;
-            lblBookingChildren2.Text = "Lily (4)";
-            // 
-            // pnlAvatar2
-            // 
-            pnlAvatar2.BorderRadius = 22;
-            pnlAvatar2.Controls.Add(lblAvatarInitial2);
-            pnlAvatar2.CustomizableEdges = customizableEdges19;
-            pnlAvatar2.FillColor = Color.FromArgb(253, 238, 232);
-            pnlAvatar2.Location = new Point(22, 20);
-            pnlAvatar2.Margin = new Padding(4, 4, 4, 4);
-            pnlAvatar2.Name = "pnlAvatar2";
-            pnlAvatar2.ShadowDecoration.CustomizableEdges = customizableEdges20;
-            pnlAvatar2.Size = new Size(55, 55);
-            pnlAvatar2.TabIndex = 4;
-            // 
-            // lblAvatarInitial2
-            // 
-            lblAvatarInitial2.BackColor = Color.Transparent;
-            lblAvatarInitial2.Dock = DockStyle.Fill;
-            lblAvatarInitial2.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblAvatarInitial2.ForeColor = Color.FromArgb(232, 113, 74);
-            lblAvatarInitial2.Location = new Point(0, 0);
-            lblAvatarInitial2.Margin = new Padding(4, 0, 4, 0);
-            lblAvatarInitial2.Name = "lblAvatarInitial2";
-            lblAvatarInitial2.Size = new Size(55, 55);
-            lblAvatarInitial2.TabIndex = 0;
-            lblAvatarInitial2.Text = "M";
-            lblAvatarInitial2.TextAlign = ContentAlignment.MiddleCenter;
+            flpBookings.AutoScroll = true;
+            flpBookings.BackColor = Color.FromArgb(253, 238, 232);
+            flpBookings.FlowDirection = FlowDirection.TopDown;
+            flpBookings.Location = new Point(30, 388);
+            flpBookings.Margin = new Padding(4, 4, 4, 4);
+            flpBookings.Name = "flpBookings";
+            flpBookings.Size = new Size(1440, 400);
+            flpBookings.TabIndex = 7;
+            flpBookings.WrapContents = false;
             // 
             // pnlNavbar
             // 
@@ -701,12 +512,6 @@
             pnlWelcomeBanner.ResumeLayout(false);
             pnlWelcomeBanner.PerformLayout();
             picUserAvatar.ResumeLayout(false);
-            pnlBookingCard1.ResumeLayout(false);
-            pnlBookingCard1.PerformLayout();
-            pnlAvatar1.ResumeLayout(false);
-            pnlBookingCard2.ResumeLayout(false);
-            pnlBookingCard2.PerformLayout();
-            pnlAvatar2.ResumeLayout(false);
             pnlNavbar.ResumeLayout(false);
             pnlNavbar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
@@ -739,20 +544,7 @@
         private Guna.UI2.WinForms.Guna2Button btnFindBabysitters;
         private Guna.UI2.WinForms.Guna2Button btnFavorites;
         private System.Windows.Forms.Label lblUpcomingTitle;
+        private System.Windows.Forms.FlowLayoutPanel flpBookings;
         private Guna.UI2.WinForms.Guna2Button btnViewAllBookings;
-        private Guna.UI2.WinForms.Guna2Panel pnlBookingCard1;
-        private Guna.UI2.WinForms.Guna2Panel pnlAvatar1;
-        private System.Windows.Forms.Label lblAvatarInitial1;
-        private System.Windows.Forms.Label lblBookingSitterName1;
-        private Guna.UI2.WinForms.Guna2HtmlLabel lblBookingStatus1;
-        private System.Windows.Forms.Label lblBookingDateTime1;
-        private System.Windows.Forms.Label lblBookingChildren1;
-        private Guna.UI2.WinForms.Guna2Panel pnlBookingCard2;
-        private Guna.UI2.WinForms.Guna2Panel pnlAvatar2;
-        private System.Windows.Forms.Label lblAvatarInitial2;
-        private System.Windows.Forms.Label lblBookingSitterName2;
-        private Guna.UI2.WinForms.Guna2HtmlLabel lblBookingStatus2;
-        private System.Windows.Forms.Label lblBookingDateTime2;
-        private System.Windows.Forms.Label lblBookingChildren2;
     }
 }

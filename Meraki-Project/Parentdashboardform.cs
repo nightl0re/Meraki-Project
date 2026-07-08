@@ -14,8 +14,6 @@ namespace Meraki_Project
         private static readonly Color Coral = Color.FromArgb(232, 113, 74);
         private static readonly Color TextMuted = Color.FromArgb(154, 136, 128);
 
-        private FlowLayoutPanel? _flpBookings;
-
         public ParentDashboardForm()
         {
             InitializeComponent();
@@ -63,50 +61,26 @@ namespace Meraki_Project
                 ? "You have no upcoming bookings - time to book a babysitter!"
                 : $"You have {thisWeek} upcoming booking{(thisWeek == 1 ? "" : "s")} this week.";
 
-            // The two static Designer cards are replaced by one scrollable list so
-            // *every* booking shows up, not just the first two.
-            pnlBookingCard1.Visible = false;
-            pnlBookingCard2.Visible = false;
-
-            EnsureBookingList();
-            _flpBookings!.SuspendLayout();
-            _flpBookings.Controls.Clear();
+            flpBookings.SuspendLayout();
+            flpBookings.Controls.Clear();
 
             if (upcoming.Count == 0 && reviewable.Count == 0)
             {
-                _flpBookings.Controls.Add(EmptyLabel("No bookings yet. Tap \"Book a Babysitter\" to get started."));
+                flpBookings.Controls.Add(EmptyLabel("No bookings yet. Tap \"Book a Babysitter\" to get started."));
             }
             else
             {
                 foreach (var b in upcoming)
-                    _flpBookings.Controls.Add(BuildBookingCard(b, reviewable: false));
+                    flpBookings.Controls.Add(BuildBookingCard(b, reviewable: false));
 
                 if (reviewable.Count > 0)
                 {
-                    _flpBookings.Controls.Add(SectionLabel("Leave a review"));
+                    flpBookings.Controls.Add(SectionLabel("Leave a review"));
                     foreach (var b in reviewable)
-                        _flpBookings.Controls.Add(BuildBookingCard(b, reviewable: true));
+                        flpBookings.Controls.Add(BuildBookingCard(b, reviewable: true));
                 }
             }
-            _flpBookings.ResumeLayout();
-        }
-
-        private void EnsureBookingList()
-        {
-            if (_flpBookings != null) return;
-            _flpBookings = new FlowLayoutPanel
-            {
-                Location = new Point(30, 388),
-                Size = new Size(1440, 400),
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                AutoScroll = true,
-                // A standard panel can't render the Guna gradient through "Transparent"
-                // (it falls back to the form's grey), so paint it the page's peach.
-                BackColor = Color.FromArgb(253, 238, 232),
-            };
-            pnlContent.Controls.Add(_flpBookings);
-            _flpBookings.BringToFront();
+            flpBookings.ResumeLayout();
         }
 
         private Label EmptyLabel(string text) => new()
@@ -272,17 +246,8 @@ namespace Meraki_Project
             return card;
         }
 
-        private void OpenBabysitterProfile(int babysitterId)
-        {
-            using var dlg = new BabysitterProfileDialog(babysitterId);
-            dlg.ShowDialog(this);
-            if (dlg.BookRequested)
-            {
-                Navigation.GoTo(this, new BookingForm(babysitterId));
-                return;
-            }
-            LoadBookings();
-        }
+        private void OpenBabysitterProfile(int babysitterId) =>
+            Navigation.GoTo(this, new BabysitterProfileForm(babysitterId, backToSearch: false));
 
         private void LeaveReview(BookingInfo booking)
         {
@@ -309,13 +274,9 @@ namespace Meraki_Project
         {
             lblQuickActionsTitle.ForeColor = ColorHeading;
             lblUpcomingTitle.ForeColor = ColorHeading;
-            lblBookingSitterName1.ForeColor = ColorHeading;
-            lblBookingSitterName2.ForeColor = ColorHeading;
 
             btnNotifications.BackColor = Color.Transparent;
             picUserAvatar.BackColor = Color.Transparent;
-            pnlAvatar1.BackColor = Color.Transparent;
-            pnlAvatar2.BackColor = Color.Transparent;
         }
 
         private static string TimeOfDayGreeting()

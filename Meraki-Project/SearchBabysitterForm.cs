@@ -48,28 +48,9 @@ namespace Meraki_Project
             RenderResults();
         }
 
-        // ----- Search bar -----
+        // ----- Filters (fixed left sidebar - the layout never moves) -----
 
         private void tbSearch_TextChanged(object sender, EventArgs e) => RenderResults();
-
-        private void btnToggleFilters_Click(object sender, EventArgs e)
-        {
-            pnlFiltersPanel.Visible = !pnlFiltersPanel.Visible;
-            btnToggleFilters.FillColor = pnlFiltersPanel.Visible
-                ? Color.FromArgb(232, 113, 74)
-                : Color.FromArgb(247, 245, 242);
-            btnToggleFilters.ForeColor = pnlFiltersPanel.Visible ? Color.White : Color.FromArgb(154, 136, 128);
-
-            int top = pnlFiltersPanel.Visible ? 310 : 166;
-            flpResults.SetBounds(30, top, 1420, 806 - top);
-            lblNoResults.Top = top + 90;
-
-            // Keep the filter panel above the results list so it never renders behind
-            // the cards when it expands.
-            if (pnlFiltersPanel.Visible) pnlFiltersPanel.BringToFront();
-        }
-
-        // ----- Filters -----
 
         private void tbMaxRate_Scroll(object sender, EventArgs e)
         {
@@ -134,14 +115,16 @@ namespace Meraki_Project
             lblNoResults.Visible = filtered.Count == 0;
         }
 
+        // One horizontal row per babysitter, like the design: accent stripe, avatar,
+        // name + location/exp/rating, bio, tags on the left; price and actions right.
         private Control BuildBabysitterCard(BabysitterInfo b)
         {
             Color accent = AvatarPalette[b.UserId % AvatarPalette.Length];
 
             var card = new Guna2Panel
             {
-                Size = new Size(450, 310),
-                Margin = new Padding(0, 0, 20, 20),
+                Size = new Size(1100, 170),
+                Margin = new Padding(0, 0, 0, 16),
                 BorderRadius = 16,
                 BorderThickness = 1,
                 BorderColor = Color.FromArgb(238, 230, 224),
@@ -149,20 +132,29 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
+            var accentBar = new Guna2Panel
+            {
+                Location = new Point(10, 16),
+                Size = new Size(5, 138),
+                BorderRadius = 3,
+                FillColor = accent,
+                BackColor = Color.Transparent,
+            };
+
             var avatar = new Guna2Panel
             {
                 BorderRadius = 18,
                 FillColor = LightenColor(accent, 0.8),
-                BackColor = Color.White,
-                Location = new Point(16, 16),
-                Size = new Size(56, 56),
+                BackColor = Color.Transparent,
+                Location = new Point(28, 24),
+                Size = new Size(70, 70),
             };
             avatar.Controls.Add(new Label
             {
                 Text = b.Name.Length > 0 ? b.Name.Substring(0, 1).ToUpper() : "?",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = accent,
                 BackColor = Color.Transparent,
             });
@@ -170,32 +162,64 @@ namespace Meraki_Project
             var nameLabel = new Label
             {
                 Text = b.Name + (b.Verified ? "  ✓" : ""),
-                Location = new Point(82, 18),
-                Size = new Size(300, 22),
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                Location = new Point(114, 22),
+                Size = new Size(420, 24),
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(60, 50, 45),
                 BackColor = Color.Transparent,
             };
-            var locationLabel = new Label
+            var metaLabel = new Label
             {
-                Text = "📍 " + (b.Location.Length > 0 ? b.Location : "No location set"),
-                Location = new Point(82, 42),
-                Size = new Size(300, 18),
-                Font = new Font("Segoe UI", 8F),
+                Text = $"📍 {(b.Location.Length > 0 ? b.Location : "No location")}   ·   {b.ExperienceYears}yr exp   ·   "
+                     + (b.ReviewCount > 0 ? $"★ {b.AvgRating:0.0} ({b.ReviewCount})" : "★ New"),
+                Location = new Point(114, 50),
+                Size = new Size(560, 20),
+                Font = new Font("Segoe UI", 8.5F),
                 ForeColor = Color.FromArgb(154, 136, 128),
                 BackColor = Color.Transparent,
             };
+            var bioLabel = new Label
+            {
+                Text = b.Bio.Length > 0 ? b.Bio : "This babysitter hasn't written a bio yet.",
+                Location = new Point(114, 76),
+                Size = new Size(640, 20),
+                Font = new Font("Segoe UI", 8.5F),
+                ForeColor = Color.FromArgb(120, 108, 100),
+                BackColor = Color.Transparent,
+            };
+
+            var tagsFlow = new FlowLayoutPanel
+            {
+                Location = new Point(112, 104),
+                Size = new Size(640, 54),
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = true,
+                BackColor = Color.Transparent,
+            };
+            foreach (var tag in b.Skills.Take(4))
+            {
+                tagsFlow.Controls.Add(new Label
+                {
+                    Text = tag,
+                    AutoSize = true,
+                    Padding = new Padding(9, 4, 9, 4),
+                    Margin = new Padding(0, 0, 8, 6),
+                    BackColor = Color.FromArgb(253, 238, 232),
+                    ForeColor = Color.FromArgb(232, 113, 74),
+                    Font = new Font("Segoe UI", 8F),
+                });
+            }
 
             var favoriteBtn = new Guna2Button
             {
                 Text = _favorites.Contains(b.UserId) ? "♥" : "♡",
-                Location = new Point(400, 14),
-                Size = new Size(34, 30),
+                Location = new Point(1046, 14),
+                Size = new Size(38, 32),
                 BorderRadius = 6,
-                FillColor = Color.Transparent,
+                FillColor = Color.White,
                 ForeColor = Color.FromArgb(224, 90, 90),
-                Font = new Font("Segoe UI", 11F),
-                BackColor = Color.White,
+                Font = new Font("Segoe UI", 12F),
+                BackColor = Color.Transparent,
             };
             favoriteBtn.Click += (s, e) =>
             {
@@ -211,106 +235,54 @@ namespace Meraki_Project
                 }
             };
 
-            var bioLabel = new Label
-            {
-                Text = b.Bio.Length > 0 ? b.Bio : "This babysitter hasn't written a bio yet.",
-                Location = new Point(16, 82),
-                Size = new Size(418, 38),
-                Font = new Font("Segoe UI", 8F),
-                ForeColor = Color.FromArgb(154, 136, 128),
-                BackColor = Color.Transparent,
-            };
-
-            var tagsFlow = new FlowLayoutPanel
-            {
-                Location = new Point(16, 124),
-                Size = new Size(418, 50),
-                FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = true,
-                BackColor = Color.Transparent,
-            };
-            foreach (var tag in b.Skills.Take(4))
-            {
-                tagsFlow.Controls.Add(new Label
-                {
-                    Text = tag,
-                    AutoSize = true,
-                    Padding = new Padding(8, 3, 8, 3),
-                    Margin = new Padding(0, 0, 6, 6),
-                    BackColor = Color.FromArgb(253, 238, 232),
-                    ForeColor = Color.FromArgb(232, 113, 74),
-                    Font = new Font("Segoe UI", 7.5F),
-                });
-            }
-
-            var ratingLabel = new Label
-            {
-                Text = b.ReviewCount > 0
-                    ? $"★ {b.AvgRating:0.0} ({b.ReviewCount})    {b.ExperienceYears}yr exp"
-                    : $"★ New    {b.ExperienceYears}yr exp",
-                Location = new Point(16, 182),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 8F),
-                ForeColor = Color.FromArgb(154, 136, 128),
-                BackColor = Color.Transparent,
-            };
-
             var rateLabel = new Label
             {
                 Text = $"${b.HourlyRate:0}/hr",
-                Location = new Point(16, 208),
-                Size = new Size(120, 22),
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                Location = new Point(880, 44),
+                Size = new Size(150, 28),
+                TextAlign = ContentAlignment.MiddleRight,
+                Font = new Font("Segoe UI", 13F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(232, 113, 74),
                 BackColor = Color.Transparent,
-            };
-            var availabilityLabel = new Label
-            {
-                Text = b.Available ? "Available" : "Booked",
-                Location = new Point(334, 208),
-                Size = new Size(100, 22),
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 7.5F),
-                BackColor = b.Available ? Color.FromArgb(232, 247, 247) : Color.FromArgb(240, 240, 240),
-                ForeColor = b.Available ? Color.FromArgb(42, 112, 112) : Color.FromArgb(153, 153, 153),
             };
 
             var profileBtn = new Guna2Button
             {
                 Text = "View Profile",
-                Location = new Point(16, 244),
-                Size = new Size(198, 44),
+                Location = new Point(870, 78),
+                Size = new Size(160, 38),
                 BorderRadius = 10,
-                FillColor = Color.FromArgb(247, 245, 242),
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(238, 230, 224),
+                FillColor = Color.White,
                 ForeColor = Color.FromArgb(232, 113, 74),
-                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
-                BackColor = Color.White,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = Color.Transparent,
             };
             profileBtn.Click += (s, e) => OpenProfile(b.UserId);
 
             var bookBtn = new Guna2Button
             {
                 Text = b.Available ? "Book Now" : "Unavailable",
-                Location = new Point(222, 244),
-                Size = new Size(212, 44),
+                Location = new Point(870, 122),
+                Size = new Size(160, 38),
                 BorderRadius = 10,
                 FillColor = b.Available ? Color.FromArgb(232, 113, 74) : Color.FromArgb(229, 231, 235),
                 ForeColor = b.Available ? Color.White : Color.FromArgb(170, 170, 170),
-                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 Enabled = b.Available,
-                BackColor = Color.White,
+                BackColor = Color.Transparent,
             };
             bookBtn.Click += (s, e) => Navigation.GoTo(this, new BookingForm(b.UserId));
 
+            card.Controls.Add(accentBar);
             card.Controls.Add(avatar);
             card.Controls.Add(nameLabel);
-            card.Controls.Add(locationLabel);
-            card.Controls.Add(favoriteBtn);
+            card.Controls.Add(metaLabel);
             card.Controls.Add(bioLabel);
             card.Controls.Add(tagsFlow);
-            card.Controls.Add(ratingLabel);
+            card.Controls.Add(favoriteBtn);
             card.Controls.Add(rateLabel);
-            card.Controls.Add(availabilityLabel);
             card.Controls.Add(profileBtn);
             card.Controls.Add(bookBtn);
             return card;
@@ -324,18 +296,8 @@ namespace Meraki_Project
             return Color.FromArgb(r, g, b);
         }
 
-        private void OpenProfile(int babysitterId)
-        {
-            using var dlg = new BabysitterProfileDialog(babysitterId);
-            dlg.ShowDialog(this);
-            if (dlg.BookRequested)
-            {
-                Navigation.GoTo(this, new BookingForm(babysitterId));
-                return;
-            }
-            // A review may have been added - refresh ratings.
-            SearchBabysitterForm_Load(this, EventArgs.Empty);
-        }
+        private void OpenProfile(int babysitterId) =>
+            Navigation.GoTo(this, new BabysitterProfileForm(babysitterId, backToSearch: true));
 
         // ----- Navigation -----
 

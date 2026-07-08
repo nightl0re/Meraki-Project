@@ -43,13 +43,11 @@ namespace Meraki_Project
         private int? _selectedBabysitterId;
         private int _childCount = 1;
 
-        // A native MonthCalendar replaced the old hand-built grid: it is instant to
-        // navigate between months and can't be left on a past date (MinDate = today).
-        private MonthCalendar? _monthCalendar;
+        // Guard so we don't react to SelectedIndexChanged while (re)filling combos.
+        private bool _fillingDateCombos;
 
         // Controls are built ONCE and only restyled on selection - rebuilding
         // heavy Guna2 controls inside their own click handlers froze the form.
-        private readonly Dictionary<string, Guna2Button> _timeButtons = new();
         private readonly Dictionary<string, Guna2Button> _durationButtons = new();
         private readonly Dictionary<int, Guna2Panel> _sitterRows = new();
         private readonly Dictionary<int, Label> _sitterChecks = new();
@@ -81,8 +79,7 @@ namespace Meraki_Project
                 _sitters = new List<BabysitterInfo>();
             }
 
-            BuildDateCalendar();
-            BuildTimeSlotButtons();
+            FillDateAndTimeCombos();
             BuildDurationButtons();
             GoToStep(0);
         }
@@ -90,80 +87,83 @@ namespace Meraki_Project
         private BabysitterInfo? SelectedSitter =>
             _sitters.FirstOrDefault(b => b.UserId == _selectedBabysitterId);
 
-        // ----- Step 0: date (native MonthCalendar) -----
+        // ----- Step 0: date & time (Month / Day / Year + Start Time dropdowns) -----
 
-        // The old grid used < / > buttons; the native calendar has its own, so these
-        // Designer-wired handlers are now no-ops.
-        private void btnCalPrev_Click(object sender, EventArgs e) { }
-
-        private void btnCalNext_Click(object sender, EventArgs e) { }
-
-        private void BuildDateCalendar()
+        private void FillDateAndTimeCombos()
         {
-            // Hide the old hand-built grid and its chrome.
-            tlpBookingCalendar.Visible = false;
-            btnCalPrev.Visible = false;
-            btnCalNext.Visible = false;
-            lblCalMonthYear.Visible = false;
+            _fillingDateCombos = true;
 
-            if (_monthCalendar == null)
-            {
-                _monthCalendar = new MonthCalendar
-                {
-                    Location = new Point(28, 44),
-                    MinDate = DateTime.Today,
-                    MaxSelectionCount = 1,
-                    CalendarDimensions = new Size(2, 2),
-                    TitleBackColor = Coral,
-                    TitleForeColor = Color.White,
-                    ForeColor = TextDark,
-                };
-                _monthCalendar.DateSelected += (s, e) =>
-                {
-                    _selectedDate = e.Start.Date;
-                    UpdateContinueAppearance();
-                };
-                pnlCalendarCard.Controls.Add(_monthCalendar);
-                _monthCalendar.BringToFront();
-            }
+            cbMonth.Items.Clear();
+            for (int m = 1; m <= 12; m++)
+                cbMonth.Items.Add(new DateTime(2000, m, 1).ToString("MMMM"));
 
-            // Default to today so "Continue" works as soon as time + duration are set.
-            _selectedDate = DateTime.Today;
-        }
+            cbYear.Items.Clear();
+            cbYear.Items.Add(DateTime.Today.Year.ToString());
+            cbYear.Items.Add((DateTime.Today.Year + 1).ToString());
 
-        // ----- Step 0: time slots + duration -----
-
-        private void BuildTimeSlotButtons()
-        {
-            flpTimeSlots.SuspendLayout();
-            flpTimeSlots.Controls.Clear();
-            _timeButtons.Clear();
-
+            cbStartTime.Items.Clear();
             foreach (var slot in TimeSlots)
-            {
-                var btn = new Guna2Button
-                {
-                    Text = slot,
-                    Size = new Size(140, 40),
-                    Margin = new Padding(4),
-                    BorderRadius = 8,
-                    Font = new Font("Segoe UI", 8.5F),
-                    BackColor = Color.White,
-                };
-                string captured = slot;
-                btn.Click += (s, e) => SelectTime(captured);
-                _timeButtons[slot] = btn;
-                flpTimeSlots.Controls.Add(btn);
-                StyleChoiceButton(btn, selected: false, Coral);
-            }
-            flpTimeSlots.ResumeLayout();
+                cbStartTime.Items.Add(slot);
+
+            // Default to today so the parent only has to pick time + duration.
+            cbMonth.SelectedIndex = DateTime.Today.Month - 1;
+            cbYear.SelectedIndex = 0;
+            _fillingDateCombos = false;
+
+            FillDayCombo();                       // also sets _selectedDate
+            cbDay.SelectedIndex = DateTime.Today.Day - 1;
         }
 
-        private void SelectTime(string slot)
+        // Day list depends on the chosen month/year (28-31 entries).
+        private void FillDayCombo()
         {
-            _selectedTime = slot;
-            foreach (var pair in _timeButtons)
-                StyleChoiceButton(pair.Value, pair.Key == slot, Coral);
+            _fillingDateCombos = true;
+            int month = cbMonth.SelectedIndex + 1;
+            int year = int.Parse(cbYear.SelectedItem?.ToString() ?? DateTime.Today.Year.ToString());
+            int days = DateTime.DaysInMonth(year, month);
+
+            int previousDay = cbDay.SelectedIndex + 1;
+            cbDay.Items.Clear();
+            for (int d = 1; d <= days; d++)
+                cbDay.Items.Add(d.ToString());
+            if (previousDay >= 1)
+                cbDay.SelectedIndex = Math.Min(previousDay, days) - 1;
+            _fillingDateCombos = false;
+
+            UpdateSelectedDate();
+        }
+
+        private void cbDate_Changed(object sender, EventArgs e)
+        {
+            if (_fillingDateCombos) return;
+            if (sender == cbMonth || sender == cbYear)
+                FillDayCombo();   // re-fills days, then updates the date
+            else
+                UpdateSelectedDate();
+        }
+
+        private void UpdateSelectedDate()
+        {
+            if (cbMonth.SelectedIndex < 0 || cbDay.SelectedIndex < 0 || cbYear.SelectedIndex < 0)
+            {
+                _selectedDate = null;
+            }
+            else
+            {
+                var date = new DateTime(
+                    int.Parse(cbYear.SelectedItem!.ToString()!),
+                    cbMonth.SelectedIndex + 1,
+                    cbDay.SelectedIndex + 1);
+                _selectedDate = date;
+            }
+            UpdateContinueAppearance();
+        }
+
+        private void cbStartTime_Changed(object sender, EventArgs e)
+        {
+            _selectedTime = cbStartTime.SelectedIndex >= 0
+                ? cbStartTime.SelectedItem!.ToString()
+                : null;
             UpdateContinueAppearance();
         }
 
@@ -466,8 +466,8 @@ namespace Meraki_Project
             pnlBottomBar.Visible = true;
             SetWizardChromeVisible(true);
 
-            _monthCalendar?.SetDate(DateTime.Today);
-            foreach (var pair in _timeButtons) StyleChoiceButton(pair.Value, false, Coral);
+            FillDateAndTimeCombos();
+            cbStartTime.SelectedIndex = -1;
             foreach (var pair in _durationButtons) StyleChoiceButton(pair.Value, false, Teal);
             foreach (var sitterId in _sitterRows.Keys)
             {
@@ -485,7 +485,13 @@ namespace Meraki_Project
             {
                 if (!_selectedDate.HasValue)
                 {
-                    MessageBox.Show("Please pick a date on the calendar.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please pick a date.", "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (_selectedDate.Value < DateTime.Today)
+                {
+                    MessageBox.Show("That date has already passed - please pick today or a future date.",
+                        "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (_selectedTime == null)
