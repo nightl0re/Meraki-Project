@@ -22,6 +22,7 @@ namespace Meraki_Project
         private void ParentDashboardForm_Load(object sender, EventArgs e)
         {
             ApplyDesignPolish();
+            Ui.HideScrollbars(flpBookings);
 
             string name = string.IsNullOrWhiteSpace(Session.CurrentUserName) ? "Parent" : Session.CurrentUserName;
             lblGreeting.Text = TimeOfDayGreeting();
@@ -138,7 +139,7 @@ namespace Meraki_Project
                 Location = new Point(28, 20),
                 Size = new Size(56, 56),
                 BorderRadius = 16,
-                FillColor = LightenColor(accent, 0.78),
+                FillColor = Ui.Lighten(accent, 0.78),
                 BackColor = Color.Transparent,
             };
             avatar.Controls.Add(new Label
@@ -256,7 +257,8 @@ namespace Meraki_Project
 
             try
             {
-                ReviewRepository.Add(booking.BookingId, dialog.Rating, dialog.Comment);
+                ReviewRepository.Add(booking.BookingId, Session.CurrentUserId,
+                                     booking.BabysitterId, dialog.Rating, dialog.Comment);
                 ExtrasRepository.AddNotification(booking.BabysitterId,
                     $"{Session.CurrentUserName} left you a {dialog.Rating}-star review!");
                 MessageBox.Show("Thank you! Your review was saved.", "Meraki",
@@ -285,14 +287,6 @@ namespace Meraki_Project
             if (hour < 12) return "Good morning,";
             if (hour < 18) return "Good afternoon,";
             return "Good evening,";
-        }
-
-        private static Color LightenColor(Color c, double amount)
-        {
-            int r = (int)(c.R + (255 - c.R) * amount);
-            int g = (int)(c.G + (255 - c.G) * amount);
-            int b = (int)(c.B + (255 - c.B) * amount);
-            return Color.FromArgb(r, g, b);
         }
 
         // ----- Quick actions -----

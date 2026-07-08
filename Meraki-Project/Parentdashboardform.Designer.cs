@@ -248,7 +248,7 @@
             btnBookBabysitter.FillColor = Color.White;
             btnBookBabysitter.Font = new Font("Segoe UI", 9F);
             btnBookBabysitter.ForeColor = Color.FromArgb(232, 113, 74);
-            btnBookBabysitter.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnBookBabysitter.HoverState.FillColor = Color.FromArgb(250, 222, 208);
             btnBookBabysitter.Location = new Point(30, 222);
             btnBookBabysitter.Margin = new Padding(4, 4, 4, 4);
             btnBookBabysitter.Name = "btnBookBabysitter";
@@ -265,7 +265,7 @@
             btnFindBabysitters.FillColor = Color.White;
             btnFindBabysitters.Font = new Font("Segoe UI", 9F);
             btnFindBabysitters.ForeColor = Color.FromArgb(94, 200, 196);
-            btnFindBabysitters.HoverState.FillColor = Color.FromArgb(232, 247, 247);
+            btnFindBabysitters.HoverState.FillColor = Color.FromArgb(214, 240, 238);
             btnFindBabysitters.Location = new Point(505, 222);
             btnFindBabysitters.Margin = new Padding(4, 4, 4, 4);
             btnFindBabysitters.Name = "btnFindBabysitters";
@@ -282,7 +282,7 @@
             btnFavorites.FillColor = Color.White;
             btnFavorites.Font = new Font("Segoe UI", 9F);
             btnFavorites.ForeColor = Color.FromArgb(224, 90, 90);
-            btnFavorites.HoverState.FillColor = Color.FromArgb(253, 232, 232);
+            btnFavorites.HoverState.FillColor = Color.FromArgb(250, 219, 219);
             btnFavorites.Location = new Point(980, 222);
             btnFavorites.Margin = new Padding(4, 4, 4, 4);
             btnFavorites.Name = "btnFavorites";

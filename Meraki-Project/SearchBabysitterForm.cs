@@ -33,7 +33,6 @@ namespace Meraki_Project
 
         private void SearchBabysitterForm_Load(object sender, EventArgs e)
         {
-            tbSearch.PlaceholderText = "Search by name...";
             try
             {
                 _all = BabysitterRepository.GetActiveBabysitters();
@@ -45,6 +44,7 @@ namespace Meraki_Project
                     "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _all = new List<BabysitterInfo>();
             }
+            Ui.HideScrollbars(flpResults);
             RenderResults();
         }
 
@@ -144,7 +144,7 @@ namespace Meraki_Project
             var avatar = new Guna2Panel
             {
                 BorderRadius = 18,
-                FillColor = LightenColor(accent, 0.8),
+                FillColor = Ui.Lighten(accent, 0.8),
                 BackColor = Color.Transparent,
                 Location = new Point(28, 24),
                 Size = new Size(70, 70),
@@ -286,14 +286,6 @@ namespace Meraki_Project
             card.Controls.Add(profileBtn);
             card.Controls.Add(bookBtn);
             return card;
-        }
-
-        private static Color LightenColor(Color c, double amount)
-        {
-            int r = (int)(c.R + (255 - c.R) * amount);
-            int g = (int)(c.G + (255 - c.G) * amount);
-            int b = (int)(c.B + (255 - c.B) * amount);
-            return Color.FromArgb(r, g, b);
         }
 
         private void OpenProfile(int babysitterId) =>

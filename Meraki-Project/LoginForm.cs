@@ -114,6 +114,23 @@ namespace Meraki_Project
                 return;
             }
 
+            // The selected role tab must match the account's real role - a
+            // babysitter can't sign in through the Parent tab and vice versa.
+            string requiredRole = _selectedRole switch
+            {
+                UserRole.Admin => "admin",
+                UserRole.Babysitter => "babysitter",
+                _ => "parent",
+            };
+            if (user!.Role != requiredRole)
+            {
+                MessageBox.Show(
+                    $"No {requiredRole} account was found with these details.\n" +
+                    "Please check the role tab you selected.",
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Admin approval gate: pending/suspended accounts can't get in.
             if (user!.Status == "pending")
             {

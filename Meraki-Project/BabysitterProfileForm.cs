@@ -93,7 +93,7 @@ namespace Meraki_Project
             {
                 flpReviews.Controls.Add(new Label
                 {
-                    Text = "No reviews yet - be the first after your booking.",
+                    Text = "No reviews yet - be the first!",
                     Width = 1360,
                     Height = 32,
                     ForeColor = TextMuted,
@@ -107,18 +107,7 @@ namespace Meraki_Project
                     flpReviews.Controls.Add(BuildReviewCard(rv));
             }
 
-            // Write Review tab: only usable after a finished booking with this sitter.
-            bool canReview = _reviewableBookingId.HasValue;
-            lblCannotReview.Visible = !canReview;
-            lblOverallCaption.Visible = canReview;
-            btnStar1.Visible = canReview;
-            btnStar2.Visible = canReview;
-            btnStar3.Visible = canReview;
-            btnStar4.Visible = canReview;
-            btnStar5.Visible = canReview;
-            lblCommentCaption.Visible = canReview;
-            tbComment.Visible = canReview;
-            btnSubmitReview.Visible = canReview;
+            Ui.HideScrollbars(flpReviews);
         }
 
         private Control BuildReviewCard(ReviewInfo rv)
@@ -205,7 +194,7 @@ namespace Meraki_Project
 
         private void btnSubmitReview_Click(object sender, EventArgs e)
         {
-            if (!_reviewableBookingId.HasValue || _info == null) return;
+            if (_info == null) return;
             if (_rating == 0)
             {
                 MessageBox.Show("Please pick a star rating first.", "Meraki",
@@ -215,15 +204,24 @@ namespace Meraki_Project
 
             try
             {
-                ReviewRepository.Add(_reviewableBookingId.Value, _rating, tbComment.Text.Trim());
+                // Linked to the parent's finished booking when there is one;
+                // a review is allowed either way.
+                ReviewRepository.Add(_reviewableBookingId, Session.CurrentUserId,
+                                     _babysitterId, _rating, tbComment.Text.Trim());
                 ExtrasRepository.AddNotification(_info.UserId,
                     $"{Session.CurrentUserName} left you a {_rating}-star review!");
                 MessageBox.Show("Thank you! Your review was saved.", "Meraki",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Reload so the new review shows up and the form resets.
+                // Reload: the header's overall rating and the Reviews tab update
+                // immediately with the new review included.
                 _rating = 0;
                 tbComment.Text = "";
+                foreach (var star in new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 })
+                {
+                    star.Text = "\u2606";
+                    star.ForeColor = StarGrey;
+                }
                 BabysitterProfileForm_Load(this, EventArgs.Empty);
                 ShowTab(1);
             }

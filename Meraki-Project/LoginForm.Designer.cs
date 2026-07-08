@@ -94,8 +94,9 @@
             pnlLoginCard.Margin = new Padding(4, 4, 4, 4);
             pnlLoginCard.Name = "pnlLoginCard";
             pnlLoginCard.ShadowDecoration.BorderRadius = 24;
+            pnlLoginCard.ShadowDecoration.Color = Color.FromArgb(216, 204, 196);
             pnlLoginCard.ShadowDecoration.CustomizableEdges = customizableEdges18;
-            pnlLoginCard.ShadowDecoration.Depth = 20;
+            pnlLoginCard.ShadowDecoration.Depth = 8;
             pnlLoginCard.ShadowDecoration.Enabled = true;
             pnlLoginCard.Size = new Size(450, 650);
             pnlLoginCard.TabIndex = 0;

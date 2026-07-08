@@ -31,6 +31,10 @@ namespace Meraki_Project
             // are accurate. Best-effort; never block the dashboard.
             try { BookingRepository.AutoCompletePastBookings(); } catch { }
 
+            Ui.HideScrollbars(flpSchedule);
+            Ui.HideScrollbars(flpPendingRequests);
+            Ui.HideScrollbars(flpNotificationsList);
+
             try
             {
                 LoadStats();

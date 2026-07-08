@@ -164,11 +164,9 @@ namespace Meraki_Project
                          COALESCE(p.bio,'') AS bio, p.hourly_rate, p.experience_years,
                          p.location, p.verified, p.available,
                          COALESCE((SELECT AVG(r.rating) FROM reviews r
-                                   JOIN bookings b ON b.booking_id = r.booking_id
-                                   WHERE b.babysitter_id = u.user_id), 0) AS avg_rating,
+                                   WHERE r.babysitter_id = u.user_id), 0) AS avg_rating,
                          (SELECT COUNT(*) FROM reviews r
-                          JOIN bookings b ON b.booking_id = r.booking_id
-                          WHERE b.babysitter_id = u.user_id) AS review_count,
+                          WHERE r.babysitter_id = u.user_id) AS review_count,
                          COALESCE((SELECT GROUP_CONCAT(s.name ORDER BY s.skill_id SEPARATOR '|')
                                    FROM babysitter_skills bs
                                    JOIN skills s ON s.skill_id = bs.skill_id
@@ -208,11 +206,9 @@ namespace Meraki_Project
                          COALESCE(p.bio,'') AS bio, p.hourly_rate, p.experience_years,
                          p.location, p.verified, p.available,
                          COALESCE((SELECT AVG(r.rating) FROM reviews r
-                                   JOIN bookings b ON b.booking_id = r.booking_id
-                                   WHERE b.babysitter_id = u.user_id), 0) AS avg_rating,
+                                   WHERE r.babysitter_id = u.user_id), 0) AS avg_rating,
                          (SELECT COUNT(*) FROM reviews r
-                          JOIN bookings b ON b.booking_id = r.booking_id
-                          WHERE b.babysitter_id = u.user_id) AS review_count,
+                          WHERE r.babysitter_id = u.user_id) AS review_count,
                          COALESCE((SELECT GROUP_CONCAT(s.name ORDER BY s.skill_id SEPARATOR '|')
                                    FROM babysitter_skills bs
                                    JOIN skills s ON s.skill_id = bs.skill_id
@@ -337,9 +333,8 @@ namespace Meraki_Project
 
             double avg = 0; int count = 0;
             using (var cmd = new MySqlCommand(
-                @"SELECT COALESCE(AVG(r.rating),0) a, COUNT(r.review_id) c
-                  FROM reviews r JOIN bookings b ON b.booking_id = r.booking_id
-                  WHERE b.babysitter_id = @id", conn))
+                @"SELECT COALESCE(AVG(rating),0) a, COUNT(review_id) c
+                  FROM reviews WHERE babysitter_id = @id", conn))
             {
                 cmd.Parameters.AddWithValue("@id", userId);
                 using var r = cmd.ExecuteReader();
@@ -586,9 +581,8 @@ namespace Meraki_Project
                 @"SELECT CONCAT(u.first_name, ' ', LEFT(u.last_name, 1), '.') AS author,
                          r.rating, COALESCE(r.comment,'') AS comment, r.created_at
                   FROM reviews r
-                  JOIN bookings b ON b.booking_id = r.booking_id
-                  JOIN users u ON u.user_id = b.parent_id
-                  WHERE b.babysitter_id = @id
+                  JOIN users u ON u.user_id = r.parent_id
+                  WHERE r.babysitter_id = @id
                   ORDER BY r.created_at DESC", conn);
             cmd.Parameters.AddWithValue("@id", babysitterId);
             using var r = cmd.ExecuteReader();
@@ -605,23 +599,29 @@ namespace Meraki_Project
             return list;
         }
 
-        public static void Add(int bookingId, int rating, string comment)
+        // bookingId is optional: reviews written from a finished booking link to
+        // it (and complete it); reviews written straight from a profile don't.
+        public static void Add(int? bookingId, int parentId, int babysitterId, int rating, string comment)
         {
             using var conn = Db.Open();
             using var tx = conn.BeginTransaction();
             using (var cmd = new MySqlCommand(
-                "INSERT INTO reviews (booking_id, rating, comment) VALUES (@b, @r, @c)", conn, tx))
+                @"INSERT INTO reviews (booking_id, parent_id, babysitter_id, rating, comment)
+                  VALUES (@b, @p, @s, @r, @c)", conn, tx))
             {
-                cmd.Parameters.AddWithValue("@b", bookingId);
+                cmd.Parameters.AddWithValue("@b", (object?)bookingId ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@p", parentId);
+                cmd.Parameters.AddWithValue("@s", babysitterId);
                 cmd.Parameters.AddWithValue("@r", rating);
                 cmd.Parameters.AddWithValue("@c", comment);
                 cmd.ExecuteNonQuery();
             }
-            // A reviewed booking is, by definition, finished.
-            using (var done = new MySqlCommand(
-                "UPDATE bookings SET status = 'completed' WHERE booking_id = @b", conn, tx))
+            if (bookingId.HasValue)
             {
-                done.Parameters.AddWithValue("@b", bookingId);
+                // A reviewed booking is, by definition, finished.
+                using var done = new MySqlCommand(
+                    "UPDATE bookings SET status = 'completed' WHERE booking_id = @b", conn, tx);
+                done.Parameters.AddWithValue("@b", bookingId.Value);
                 done.ExecuteNonQuery();
             }
             tx.Commit();

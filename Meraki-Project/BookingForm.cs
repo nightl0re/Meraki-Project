@@ -79,6 +79,7 @@ namespace Meraki_Project
                 _sitters = new List<BabysitterInfo>();
             }
 
+            Ui.HideScrollbars(flpBabysitterSelect);
             FillDateAndTimeCombos();
             BuildDurationButtons();
             GoToStep(0);
@@ -252,7 +253,7 @@ namespace Meraki_Project
             var avatar = new Guna2Panel
             {
                 BorderRadius = 16,
-                FillColor = LightenColor(accent, 0.8),
+                FillColor = Ui.Lighten(accent, 0.8),
                 BackColor = Color.Transparent,
                 Location = new Point(14, 17),
                 Size = new Size(56, 56),
@@ -323,14 +324,6 @@ namespace Meraki_Project
                 _sitterChecks[sitterId].Visible = sel;
             }
             UpdateContinueAppearance();
-        }
-
-        private static Color LightenColor(Color c, double amount)
-        {
-            int r = (int)(c.R + (255 - c.R) * amount);
-            int g = (int)(c.G + (255 - c.G) * amount);
-            int b = (int)(c.B + (255 - c.B) * amount);
-            return Color.FromArgb(r, g, b);
         }
 
         // ----- Step 2: details -----
@@ -549,8 +542,8 @@ namespace Meraki_Project
             if (step == 3) RenderConfirmSummary();
 
             btnBack.Visible = step > 0;
-            btnContinue.Location = new Point(step > 0 ? 190 : 30, 11);
-            btnContinue.Width = step > 0 ? 1280 : 1440;
+            btnContinue.Location = new Point(step > 0 ? 214 : 30, 11);
+            btnContinue.Width = step > 0 ? 1256 : 1440;
             btnContinue.Text = step == 3 ? "Confirm Booking" : "Continue >";
 
             StyleStepCircle(pnlStepCircle1, lblStepNum1, lblStepCaption1, step >= 0, step == 0);

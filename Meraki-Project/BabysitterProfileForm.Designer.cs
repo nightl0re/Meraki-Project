@@ -53,7 +53,6 @@ namespace Meraki_Project
             lblCommentCaption = new Label();
             tbComment = new Guna.UI2.WinForms.Guna2TextBox();
             btnSubmitReview = new Guna.UI2.WinForms.Guna2Button();
-            lblCannotReview = new Label();
             ((System.ComponentModel.ISupportInitialize)picNavLogo).BeginInit();
             pnlPageBackground.SuspendLayout();
             pnlNavbar.SuspendLayout();
@@ -385,7 +384,6 @@ namespace Meraki_Project
             pnlTabWrite.Controls.Add(lblCommentCaption);
             pnlTabWrite.Controls.Add(tbComment);
             pnlTabWrite.Controls.Add(btnSubmitReview);
-            pnlTabWrite.Controls.Add(lblCannotReview);
             pnlTabWrite.FillColor = Color.White;
             pnlTabWrite.Location = new Point(30, 252);
             pnlTabWrite.Name = "pnlTabWrite";
@@ -541,18 +539,6 @@ namespace Meraki_Project
             btnSubmitReview.Text = "Submit Review";
             btnSubmitReview.Click += btnSubmitReview_Click;
             //
-            // lblCannotReview
-            //
-            lblCannotReview.BackColor = Color.Transparent;
-            lblCannotReview.Font = new Font("Segoe UI", 10F);
-            lblCannotReview.ForeColor = Color.FromArgb(154, 136, 128);
-            lblCannotReview.Location = new Point(24, 92);
-            lblCannotReview.Name = "lblCannotReview";
-            lblCannotReview.Size = new Size(900, 30);
-            lblCannotReview.TabIndex = 11;
-            lblCannotReview.Text = "You can write a review after a finished booking with this babysitter.";
-            lblCannotReview.Visible = false;
-            //
             // BabysitterProfileForm
             //
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -614,6 +600,5 @@ namespace Meraki_Project
         private System.Windows.Forms.Label lblCommentCaption;
         private Guna.UI2.WinForms.Guna2TextBox tbComment;
         private Guna.UI2.WinForms.Guna2Button btnSubmitReview;
-        private System.Windows.Forms.Label lblCannotReview;
     }
 }

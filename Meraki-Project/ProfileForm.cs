@@ -23,6 +23,7 @@ namespace Meraki_Project
 
         private void ProfileForm_Load(object sender, EventArgs e)
         {
+            Ui.HideScrollbars(pnlContent);
             if (_loaded) return;
             _loaded = true;
 

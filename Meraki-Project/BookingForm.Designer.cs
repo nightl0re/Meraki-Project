@@ -279,9 +279,9 @@
             btnContinue.FillColor = Color.FromArgb(232, 113, 74);
             btnContinue.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             btnContinue.ForeColor = Color.White;
-            btnContinue.Location = new Point(190, 11);
+            btnContinue.Location = new Point(214, 11);
             btnContinue.Name = "btnContinue";
-            btnContinue.Size = new Size(1280, 48);
+            btnContinue.Size = new Size(1256, 48);
             btnContinue.TabIndex = 1;
             btnContinue.Text = "Continue >";
             btnContinue.Click += btnContinue_Click;

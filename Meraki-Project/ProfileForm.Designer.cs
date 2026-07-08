@@ -537,7 +537,7 @@
             pnlTabProfile.Controls.Add(pnlSkillsCard);
             pnlTabProfile.Location = new Point(30, 384);
             pnlTabProfile.Name = "pnlTabProfile";
-            pnlTabProfile.Size = new Size(900, 640);
+            pnlTabProfile.Size = new Size(900, 700);
             pnlTabProfile.TabIndex = 2;
             //
             // pnlPersonalInfoCard
@@ -734,7 +734,7 @@
             pnlSkillsCard.FillColor = Color.White;
             pnlSkillsCard.Location = new Point(0, 476);
             pnlSkillsCard.Name = "pnlSkillsCard";
-            pnlSkillsCard.Size = new Size(900, 150);
+            pnlSkillsCard.Size = new Size(900, 200);
             pnlSkillsCard.TabIndex = 1;
             //
             // lblSkillsTitle
@@ -753,7 +753,7 @@
             flpSkills.BackColor = Color.Transparent;
             flpSkills.Location = new Point(12, 46);
             flpSkills.Name = "flpSkills";
-            flpSkills.Size = new Size(876, 96);
+            flpSkills.Size = new Size(876, 140);
             flpSkills.TabIndex = 1;
             //
             // pnlTabReviews
