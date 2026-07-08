@@ -35,38 +35,59 @@ namespace Meraki_Project
             return LoginResult.Ok;
         }
 
+        // Declined accounts don't block their email - the person is invited to
+        // register again, which reuses (resets) the declined row.
         public static bool EmailExists(string email)
         {
             using var conn = Db.Open();
-            using var cmd = new MySqlCommand("SELECT COUNT(*) FROM users WHERE email = @e", conn);
+            using var cmd = new MySqlCommand(
+                "SELECT COUNT(*) FROM users WHERE email = @e AND status <> 'declined'", conn);
             cmd.Parameters.AddWithValue("@e", email);
             return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
 
         // Inserts the new account with status 'pending' - an admin must approve
-        // it before the person can sign in.
+        // it before the person can sign in. If a previously DECLINED account
+        // exists with this email, that row is reset and reused instead (the
+        // email column is UNIQUE, and a declined person may try again).
         public static int Register(string firstName, string lastName, string email,
                                    string phone, string password, UserRole role)
         {
             using var conn = Db.Open();
             using var tx = conn.BeginTransaction();
 
-            using var cmd = new MySqlCommand(
-                @"INSERT INTO users (role, first_name, last_name, email, phone, password, status)
-                  VALUES (@role, @fn, @ln, @e, @ph, @pw, 'pending')", conn, tx);
+            int userId;
+            using (var find = new MySqlCommand(
+                "SELECT user_id FROM users WHERE email = @e AND status = 'declined'", conn, tx))
+            {
+                find.Parameters.AddWithValue("@e", email);
+                object? existing = find.ExecuteScalar();
+                userId = existing == null || existing is DBNull ? 0 : Convert.ToInt32(existing);
+            }
+
+            using var cmd = userId > 0
+                ? new MySqlCommand(
+                    @"UPDATE users SET role = @role, first_name = @fn, last_name = @ln,
+                             phone = @ph, password = @pw, status = 'pending',
+                             created_at = CURRENT_TIMESTAMP
+                      WHERE user_id = @id", conn, tx)
+                : new MySqlCommand(
+                    @"INSERT INTO users (role, first_name, last_name, email, phone, password, status)
+                      VALUES (@role, @fn, @ln, @e, @ph, @pw, 'pending')", conn, tx);
             cmd.Parameters.AddWithValue("@role", role == UserRole.Babysitter ? "babysitter" : "parent");
             cmd.Parameters.AddWithValue("@fn", firstName);
             cmd.Parameters.AddWithValue("@ln", lastName);
-            cmd.Parameters.AddWithValue("@e", email);
             cmd.Parameters.AddWithValue("@ph", phone);
             cmd.Parameters.AddWithValue("@pw", password);
+            if (userId > 0) cmd.Parameters.AddWithValue("@id", userId);
+            else cmd.Parameters.AddWithValue("@e", email);
             cmd.ExecuteNonQuery();
-            int userId = (int)cmd.LastInsertedId;
+            if (userId == 0) userId = (int)cmd.LastInsertedId;
 
             if (role == UserRole.Babysitter)
             {
                 using var profileCmd = new MySqlCommand(
-                    @"INSERT INTO babysitter_profiles (user_id, bio, location) VALUES (@id, '', '')", conn, tx);
+                    @"INSERT IGNORE INTO babysitter_profiles (user_id, bio, location) VALUES (@id, '', '')", conn, tx);
                 profileCmd.Parameters.AddWithValue("@id", userId);
                 profileCmd.ExecuteNonQuery();
             }
@@ -371,7 +392,10 @@ namespace Meraki_Project
             return (int)cmd.LastInsertedId;
         }
 
-        // All of a parent's bookings, newest first, with a "was it reviewed" flag.
+        // All of a parent's bookings, newest first, with a "did I review it" flag.
+        // The join is scoped to author_role='parent': a booking can also carry the
+        // babysitter's review of the parent, which must not count here (and would
+        // duplicate rows in the join otherwise).
         public static List<BookingInfo> GetForParent(int parentId)
         {
             const string sql =
@@ -379,7 +403,7 @@ namespace Meraki_Project
                          (r.review_id IS NOT NULL) AS has_review
                   FROM bookings b
                   JOIN users u ON u.user_id = b.babysitter_id
-                  LEFT JOIN reviews r ON r.booking_id = b.booking_id
+                  LEFT JOIN reviews r ON r.booking_id = b.booking_id AND r.author_role = 'parent'
                   WHERE b.parent_id = @id
                   ORDER BY b.booking_date DESC, b.start_time DESC";
             return Query(sql, "@id", parentId);
@@ -444,15 +468,18 @@ namespace Meraki_Project
         }
 
         // Newest finished (or past-confirmed) booking between this parent and
-        // babysitter that has no review yet - the one a review would attach to.
-        // Returns null when the parent has nothing to review for this sitter.
-        public static int? FindReviewableBooking(int parentId, int babysitterId)
+        // babysitter that this author role hasn't reviewed yet - the one a new
+        // review would attach to. A booking can carry one review per direction
+        // (parent-about-sitter and sitter-about-parent are independent), so the
+        // "already reviewed" check only looks at reviews from the same author role.
+        // Returns null when there's nothing left to review for this pairing.
+        public static int? FindReviewableBooking(int parentId, int babysitterId, string authorRole)
         {
             using var conn = Db.Open();
             using var cmd = new MySqlCommand(
                 @"SELECT b.booking_id
                   FROM bookings b
-                  LEFT JOIN reviews r ON r.booking_id = b.booking_id
+                  LEFT JOIN reviews r ON r.booking_id = b.booking_id AND r.author_role = @role
                   WHERE b.parent_id = @p AND b.babysitter_id = @b AND r.review_id IS NULL
                     AND (b.status = 'completed'
                          OR (b.status = 'confirmed' AND b.booking_date < CURDATE()))
@@ -460,6 +487,7 @@ namespace Meraki_Project
                   LIMIT 1", conn);
             cmd.Parameters.AddWithValue("@p", parentId);
             cmd.Parameters.AddWithValue("@b", babysitterId);
+            cmd.Parameters.AddWithValue("@role", authorRole);
             object? v = cmd.ExecuteScalar();
             return v == null || v is DBNull ? (int?)null : Convert.ToInt32(v);
         }
@@ -570,21 +598,41 @@ namespace Meraki_Project
         }
     }
 
-    // ----- Reviews -----
+    // ----- Reviews (two-way: parent-about-sitter and sitter-about-parent) -----
     internal static class ReviewRepository
     {
+        // Reviews a babysitter received from parents.
         public static List<ReviewInfo> GetForBabysitter(int babysitterId)
         {
-            var list = new List<ReviewInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            const string sql =
                 @"SELECT CONCAT(u.first_name, ' ', LEFT(u.last_name, 1), '.') AS author,
                          r.rating, COALESCE(r.comment,'') AS comment, r.created_at
                   FROM reviews r
                   JOIN users u ON u.user_id = r.parent_id
-                  WHERE r.babysitter_id = @id
-                  ORDER BY r.created_at DESC", conn);
-            cmd.Parameters.AddWithValue("@id", babysitterId);
+                  WHERE r.babysitter_id = @id AND r.author_role = 'parent'
+                  ORDER BY r.created_at DESC";
+            return Query(sql, babysitterId);
+        }
+
+        // Reviews a parent received from babysitters.
+        public static List<ReviewInfo> GetForParent(int parentId)
+        {
+            const string sql =
+                @"SELECT CONCAT(u.first_name, ' ', LEFT(u.last_name, 1), '.') AS author,
+                         r.rating, COALESCE(r.comment,'') AS comment, r.created_at
+                  FROM reviews r
+                  JOIN users u ON u.user_id = r.babysitter_id
+                  WHERE r.parent_id = @id AND r.author_role = 'babysitter'
+                  ORDER BY r.created_at DESC";
+            return Query(sql, parentId);
+        }
+
+        private static List<ReviewInfo> Query(string sql, int id)
+        {
+            var list = new List<ReviewInfo>();
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", id);
             using var r = cmd.ExecuteReader();
             while (r.Read())
             {
@@ -601,17 +649,21 @@ namespace Meraki_Project
 
         // bookingId is optional: reviews written from a finished booking link to
         // it (and complete it); reviews written straight from a profile don't.
-        public static void Add(int? bookingId, int parentId, int babysitterId, int rating, string comment)
+        // authorRole is "parent" when a parent is reviewing the sitter, or
+        // "babysitter" when the sitter is reviewing the parent right back.
+        public static void Add(int? bookingId, int parentId, int babysitterId,
+                               string authorRole, int rating, string comment)
         {
             using var conn = Db.Open();
             using var tx = conn.BeginTransaction();
             using (var cmd = new MySqlCommand(
-                @"INSERT INTO reviews (booking_id, parent_id, babysitter_id, rating, comment)
-                  VALUES (@b, @p, @s, @r, @c)", conn, tx))
+                @"INSERT INTO reviews (booking_id, parent_id, babysitter_id, author_role, rating, comment)
+                  VALUES (@b, @p, @s, @role, @r, @c)", conn, tx))
             {
                 cmd.Parameters.AddWithValue("@b", (object?)bookingId ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@p", parentId);
                 cmd.Parameters.AddWithValue("@s", babysitterId);
+                cmd.Parameters.AddWithValue("@role", authorRole);
                 cmd.Parameters.AddWithValue("@r", rating);
                 cmd.Parameters.AddWithValue("@c", comment);
                 cmd.ExecuteNonQuery();
@@ -625,6 +677,71 @@ namespace Meraki_Project
                 done.ExecuteNonQuery();
             }
             tx.Commit();
+        }
+    }
+
+    // ----- Parents: profile page babysitters see, "Find Parents" search -----
+    internal static class ParentRepository
+    {
+        // Every parent with at least one booking, for the babysitter-side search
+        // page. (Parents don't set up a public profile the way sitters do, so
+        // there's no "active/available" gate here - any parent who has ever
+        // booked is discoverable.)
+        public static List<ParentInfo> GetAllParents()
+        {
+            var list = new List<ParentInfo>();
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name, u.created_at,
+                         COALESCE((SELECT AVG(r.rating) FROM reviews r
+                                   WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter'), 0) AS avg_rating,
+                         (SELECT COUNT(*) FROM reviews r
+                          WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter') AS review_count,
+                         (SELECT COUNT(*) FROM bookings b
+                          WHERE b.parent_id = u.user_id AND b.status = 'completed') AS completed_count
+                  FROM users u
+                  WHERE u.role = 'parent' AND u.status = 'active'
+                  ORDER BY name", conn);
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                list.Add(new ParentInfo
+                {
+                    UserId = r.GetInt32("user_id"),
+                    Name = r.GetString("name"),
+                    MemberSince = r.GetDateTime("created_at"),
+                    AvgRating = r.GetDouble("avg_rating"),
+                    ReviewCount = r.GetInt32("review_count"),
+                    CompletedBookingCount = r.GetInt32("completed_count"),
+                });
+            }
+            return list;
+        }
+
+        public static ParentInfo? GetParentInfo(int parentId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name, u.created_at,
+                         COALESCE((SELECT AVG(r.rating) FROM reviews r
+                                   WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter'), 0) AS avg_rating,
+                         (SELECT COUNT(*) FROM reviews r
+                          WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter') AS review_count,
+                         (SELECT COUNT(*) FROM bookings b
+                          WHERE b.parent_id = u.user_id AND b.status = 'completed') AS completed_count
+                  FROM users u WHERE u.user_id = @id", conn);
+            cmd.Parameters.AddWithValue("@id", parentId);
+            using var r = cmd.ExecuteReader();
+            if (!r.Read()) return null;
+            return new ParentInfo
+            {
+                UserId = r.GetInt32("user_id"),
+                Name = r.GetString("name"),
+                MemberSince = r.GetDateTime("created_at"),
+                AvgRating = r.GetDouble("avg_rating"),
+                ReviewCount = r.GetInt32("review_count"),
+                CompletedBookingCount = r.GetInt32("completed_count"),
+            };
         }
     }
 

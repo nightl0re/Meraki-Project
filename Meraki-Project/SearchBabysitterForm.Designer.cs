@@ -457,7 +457,7 @@
             // flpResults
             //
             flpResults.AutoScroll = true;
-            flpResults.BackColor = Color.Transparent;
+            flpResults.BackColor = Color.FromArgb(253, 238, 232);
             flpResults.FlowDirection = FlowDirection.TopDown;
             flpResults.Location = new Point(330, 96);
             flpResults.Name = "flpResults";

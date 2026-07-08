@@ -146,6 +146,14 @@ namespace Meraki_Project
                     "Account suspended", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (user.Status == "declined")
+            {
+                MessageBox.Show(
+                    "Your account was declined by the administrator.\n" +
+                    "Please register again with your details.",
+                    "Account declined", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             Session.CurrentUserId = user.UserId;
             Session.CurrentUserEmail = user.Email;

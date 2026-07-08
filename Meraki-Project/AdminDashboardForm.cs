@@ -64,11 +64,12 @@ namespace Meraki_Project
             tbSearchUsers.PlaceholderText = "Search pending users...";
 
             dgvUsers.Columns.Clear();
-            AddCol("Name", 200);
-            AddCol("Role", 120);
-            AddCol("Email", 260);
-            AddCol("Requested", 130);
-            AddCol("Action", 110);
+            AddCol("Name", 190);
+            AddCol("Role", 110);
+            AddCol("Email", 240);
+            AddCol("Requested", 120);
+            AddCol("Approve", 95);
+            AddCol("Decline", 95);
 
             ReloadPendingApprovals();
         }
@@ -81,9 +82,10 @@ namespace Meraki_Project
             foreach (var u in _users)
             {
                 int idx = dgvUsers.Rows.Add(u.FullName, Capitalize(u.Role), u.Email,
-                                            u.CreatedAt.ToString("MMM d, yyyy"), "Approve");
+                                            u.CreatedAt.ToString("MMM d, yyyy"), "Approve", "Decline");
                 dgvUsers.Rows[idx].Tag = u;
-                StyleActionCell(dgvUsers.Rows[idx].Cells[4], approve: true);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[4], ActionStyle.Green);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[5], ActionStyle.Red);
             }
             if (_users.Count == 0)
                 lblUserTableTitle.Text = "Pending Approvals  ·  all caught up!";
@@ -165,7 +167,8 @@ namespace Meraki_Project
                                             u.CreatedAt.ToString("MMM d, yyyy"), action);
                 dgvUsers.Rows[idx].Tag = u;
                 StyleStatusCell(dgvUsers.Rows[idx].Cells[3], u.Status);
-                StyleActionCell(dgvUsers.Rows[idx].Cells[5], approve: u.Status != "active");
+                StyleActionCell(dgvUsers.Rows[idx].Cells[5],
+                    u.Status == "active" ? ActionStyle.Neutral : ActionStyle.Green);
             }
         }
 
@@ -190,11 +193,17 @@ namespace Meraki_Project
             cell.Style.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
         }
 
+        private enum ActionStyle { Green, Red, Neutral }
+
         // Action cells look like small buttons so they're obviously clickable.
-        private static void StyleActionCell(DataGridViewCell cell, bool approve)
+        private static void StyleActionCell(DataGridViewCell cell, ActionStyle kind)
         {
-            var back = approve ? Color.FromArgb(46, 125, 50) : Color.FromArgb(253, 238, 232);
-            var fore = approve ? Color.White : ColorCoral;
+            var (back, fore) = kind switch
+            {
+                ActionStyle.Green => (Color.FromArgb(46, 125, 50), Color.White),
+                ActionStyle.Red => (Color.FromArgb(198, 63, 63), Color.White),
+                _ => (Color.FromArgb(253, 238, 232), ColorCoral),
+            };
             cell.Style.BackColor = back;
             cell.Style.ForeColor = fore;
             cell.Style.SelectionBackColor = back;
@@ -212,14 +221,16 @@ namespace Meraki_Project
             tbSearchUsers.PlaceholderText = "Search by parent or babysitter...";
 
             dgvUsers.Columns.Clear();
-            AddCol("Date", 105);
-            AddCol("Time", 145);
-            AddCol("Parent", 160);
-            AddCol("Babysitter", 160);
-            AddCol("Children", 75);
-            AddCol("Total", 85);
-            AddCol("Status", 105);
-            AddCol("Action", 80);
+            AddCol("Date", 100);
+            AddCol("Time", 135);
+            AddCol("Parent", 145);
+            AddCol("Babysitter", 145);
+            AddCol("Children", 70);
+            AddCol("Total", 80);
+            AddCol("Status", 95);
+            AddCol("View", 70);
+            AddCol("Accept", 80);
+            AddCol("Decline", 80);
 
             try { _bookings = BookingRepository.GetAll(); }
             catch (Exception ex)
@@ -240,12 +251,19 @@ namespace Meraki_Project
                          || b.ParentName.Contains(search, StringComparison.OrdinalIgnoreCase)
                          || b.SitterName.Contains(search, StringComparison.OrdinalIgnoreCase)))
             {
+                bool pending = b.Status == "pending";
                 int idx = dgvUsers.Rows.Add(b.Date.ToString("MMM d, yyyy"), b.TimeRangeText,
                                             b.ParentName, b.SitterName, b.ChildrenCount,
-                                            "$" + b.Total.ToString("0.00"), b.Status, "View");
+                                            "$" + b.Total.ToString("0.00"), b.Status, "View",
+                                            pending ? "Accept" : "", pending ? "Decline" : "");
                 dgvUsers.Rows[idx].Tag = b;
                 StyleStatusCell(dgvUsers.Rows[idx].Cells[6], b.Status);
-                StyleActionCell(dgvUsers.Rows[idx].Cells[7], approve: false);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[7], ActionStyle.Neutral);
+                if (pending)
+                {
+                    StyleActionCell(dgvUsers.Rows[idx].Cells[8], ActionStyle.Green);
+                    StyleActionCell(dgvUsers.Rows[idx].Cells[9], ActionStyle.Red);
+                }
             }
         }
 
@@ -256,31 +274,46 @@ namespace Meraki_Project
             else ReloadBookings();
         }
 
-        // Row actions: Approve/Suspend/Activate a user, or View a booking receipt.
+        // Row actions: approve/decline/suspend users, view/accept/decline bookings.
         private void dgvUsers_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
-            if (_mode == GridMode.Bookings && e.ColumnIndex == 7)
+            if (_mode == GridMode.Bookings)
             {
-                if (dgvUsers.Rows[e.RowIndex].Tag is BookingInfo booking)
+                if (dgvUsers.Rows[e.RowIndex].Tag is not BookingInfo booking) return;
+                if (e.ColumnIndex == 7)
                 {
                     using var dlg = new ReceiptDialog(booking, showParentSide: true);
                     dlg.ShowDialog(this);
                 }
+                else if ((e.ColumnIndex == 8 || e.ColumnIndex == 9) && booking.Status == "pending")
+                {
+                    DecideBooking(booking, accept: e.ColumnIndex == 8);
+                }
                 return;
             }
 
-            int actionCol = _mode == GridMode.Users ? 5
-                          : _mode == GridMode.PendingApprovals ? 4 : -1;
-            if (e.ColumnIndex != actionCol) return;
             if (dgvUsers.Rows[e.RowIndex].Tag is not User u || u.Role == "admin") return;
 
-            string newStatus = u.Status == "active" ? "suspended" : "active";
-            string verb = newStatus == "active"
-                ? (u.Status == "pending" ? "approve" : "re-activate")
-                : "suspend";
+            string? newStatus = null;
+            if (_mode == GridMode.PendingApprovals)
+            {
+                if (e.ColumnIndex == 4) newStatus = "active";
+                else if (e.ColumnIndex == 5) newStatus = "declined";
+            }
+            else if (_mode == GridMode.Users && e.ColumnIndex == 5)
+            {
+                newStatus = u.Status == "active" ? "suspended" : "active";
+            }
+            if (newStatus == null) return;
 
+            string verb = newStatus switch
+            {
+                "declined" => "decline",
+                "suspended" => "suspend",
+                _ => u.Status == "pending" ? "approve" : "re-activate",
+            };
             if (MessageBox.Show($"Do you want to {verb} {u.FullName}?", "Confirm",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
@@ -293,6 +326,34 @@ namespace Meraki_Project
                         "Your Meraki account has been approved. Welcome!");
                 if (_mode == GridMode.PendingApprovals) ShowPendingApprovalsGrid();
                 else ReloadUsers();
+                LoadKpisAndCharts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Admin can settle a pending booking directly (both sides get notified).
+        private void DecideBooking(BookingInfo booking, bool accept)
+        {
+            string verb = accept ? "accept" : "decline";
+            if (MessageBox.Show(
+                    $"Do you want to {verb} the booking between {booking.ParentName} and {booking.SitterName} on {booking.Date:MMM d}?",
+                    "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            try
+            {
+                BookingRepository.SetStatus(booking.BookingId, accept ? "confirmed" : "declined");
+                ExtrasRepository.AddNotification(booking.ParentId, accept
+                    ? $"Your booking for {booking.Date:MMM d} was confirmed by the administrator."
+                    : $"Your booking for {booking.Date:MMM d} was declined by the administrator.");
+                ExtrasRepository.AddNotification(booking.BabysitterId, accept
+                    ? $"Your booking with {booking.ParentName} on {booking.Date:MMM d} was confirmed by the administrator."
+                    : $"Your booking with {booking.ParentName} on {booking.Date:MMM d} was declined by the administrator.");
+                ShowBookingsGrid();
                 LoadKpisAndCharts();
             }
             catch (Exception ex)

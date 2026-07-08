@@ -22,6 +22,7 @@
             picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
             lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
             btnNavBabysitterHome = new Guna.UI2.WinForms.Guna2Button();
+            btnNavFindParents = new Guna.UI2.WinForms.Guna2Button();
             btnNavMyProfile = new Guna.UI2.WinForms.Guna2Button();
             btnLogout = new Guna.UI2.WinForms.Guna2Button();
             pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
@@ -114,6 +115,7 @@
             pnlNavbar.Controls.Add(picNavLogo);
             pnlNavbar.Controls.Add(lblNavBrand);
             pnlNavbar.Controls.Add(btnNavBabysitterHome);
+            pnlNavbar.Controls.Add(btnNavFindParents);
             pnlNavbar.Controls.Add(btnNavMyProfile);
             pnlNavbar.Controls.Add(btnLogout);
             pnlNavbar.Dock = DockStyle.Top;
@@ -159,6 +161,21 @@
             btnNavBabysitterHome.Text = "Babysitter Home";
             btnNavBabysitterHome.Click += btnNavBabysitterHome_Click;
             //
+            // btnNavFindParents
+            //
+            btnNavFindParents.BackColor = Color.White;
+            btnNavFindParents.BorderRadius = 8;
+            btnNavFindParents.FillColor = Color.Transparent;
+            btnNavFindParents.Font = new Font("Segoe UI", 8.5F);
+            btnNavFindParents.ForeColor = Color.FromArgb(154, 136, 128);
+            btnNavFindParents.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnNavFindParents.Location = new Point(445, 18);
+            btnNavFindParents.Name = "btnNavFindParents";
+            btnNavFindParents.Size = new Size(145, 45);
+            btnNavFindParents.TabIndex = 9;
+            btnNavFindParents.Text = "Find Parents";
+            btnNavFindParents.Click += btnNavFindParents_Click;
+            //
             // btnNavMyProfile
             //
             btnNavMyProfile.BackColor = Color.White;
@@ -167,7 +184,7 @@
             btnNavMyProfile.Font = new Font("Segoe UI", 8.5F);
             btnNavMyProfile.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavMyProfile.HoverState.FillColor = Color.FromArgb(253, 238, 232);
-            btnNavMyProfile.Location = new Point(445, 18);
+            btnNavMyProfile.Location = new Point(600, 18);
             btnNavMyProfile.Name = "btnNavMyProfile";
             btnNavMyProfile.Size = new Size(125, 45);
             btnNavMyProfile.TabIndex = 3;
@@ -327,7 +344,7 @@
             // flpNotificationsList
             //
             flpNotificationsList.AutoScroll = true;
-            flpNotificationsList.BackColor = Color.Transparent;
+            flpNotificationsList.BackColor = Color.White;
             flpNotificationsList.FlowDirection = FlowDirection.TopDown;
             flpNotificationsList.Location = new Point(12, 46);
             flpNotificationsList.Name = "flpNotificationsList";
@@ -631,7 +648,7 @@
             // flpPendingRequests
             //
             flpPendingRequests.AutoScroll = true;
-            flpPendingRequests.BackColor = Color.Transparent;
+            flpPendingRequests.BackColor = Color.White;
             flpPendingRequests.FlowDirection = FlowDirection.TopDown;
             flpPendingRequests.Location = new Point(12, 50);
             flpPendingRequests.Name = "flpPendingRequests";
@@ -823,6 +840,7 @@
         private Guna.UI2.WinForms.Guna2PictureBox picNavLogo;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblNavBrand;
         private Guna.UI2.WinForms.Guna2Button btnNavBabysitterHome;
+        private Guna.UI2.WinForms.Guna2Button btnNavFindParents;
         private Guna.UI2.WinForms.Guna2Button btnNavMyProfile;
         private Guna.UI2.WinForms.Guna2Button btnLogout;
         private Guna.UI2.WinForms.Guna2GradientPanel pnlContent;

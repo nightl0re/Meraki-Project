@@ -6,10 +6,10 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
-    // Full babysitter profile page with three tabs, like the design:
-    //   About  |  Reviews (n)  |  Write Review
-    // Reached from "View Profile" on the search page and on a parent's booking.
-    public partial class BabysitterProfileForm : Form
+    // Parent profile page a BABYSITTER sees: who the family is, the reviews
+    // other babysitters left about them, and a Write Review tab.
+    // Reached from the Find Parents page and from the babysitter's bookings.
+    public partial class ParentProfileForm : Form
     {
         private static readonly Color Coral = Color.FromArgb(232, 113, 74);
         private static readonly Color TextDark = Color.FromArgb(60, 50, 45);
@@ -17,31 +17,31 @@ namespace Meraki_Project
         private static readonly Color StarGold = Color.FromArgb(255, 179, 71);
         private static readonly Color StarGrey = Color.FromArgb(200, 190, 185);
 
-        private readonly int _babysitterId;
+        private readonly int _parentId;
         private readonly bool _backToSearch;
 
-        private BabysitterInfo? _info;
+        private ParentInfo? _info;
         private int? _reviewableBookingId;
         private int _rating;
 
-        // backToSearch: true when opened from the search page, false when opened
-        // from the parent dashboard (Back returns to where the user came from).
-        public BabysitterProfileForm(int babysitterId, bool backToSearch = true)
+        // backToSearch: true when opened from Find Parents, false when opened
+        // from the babysitter dashboard (Back returns to where the user came from).
+        public ParentProfileForm(int parentId, bool backToSearch = false)
         {
             InitializeComponent();
-            _babysitterId = babysitterId;
+            _parentId = parentId;
             _backToSearch = backToSearch;
         }
 
-        private void BabysitterProfileForm_Load(object sender, EventArgs e)
+        private void ParentProfileForm_Load(object sender, EventArgs e)
         {
             List<ReviewInfo> reviews = new();
             try
             {
-                _info = BabysitterRepository.GetBabysitterInfo(_babysitterId);
-                reviews = ReviewRepository.GetForBabysitter(_babysitterId);
+                _info = ParentRepository.GetParentInfo(_parentId);
+                reviews = ReviewRepository.GetForParent(_parentId);
                 _reviewableBookingId = BookingRepository.FindReviewableBooking(
-                    Session.CurrentUserId, _babysitterId, "parent");
+                    _parentId, Session.CurrentUserId, "babysitter");
             }
             catch (Exception ex)
             {
@@ -52,40 +52,20 @@ namespace Meraki_Project
             if (_info == null)
             {
                 lblName.Text = "Profile unavailable";
-                btnBookNow.Enabled = false;
                 btnTabWrite.Enabled = false;
                 return;
             }
 
             // Header card
             lblAvatarInitial.Text = _info.Name.Length > 0 ? _info.Name.Substring(0, 1).ToUpper() : "?";
-            lblName.Text = _info.Name + (_info.Verified ? "  ✓" : "");
-            lblMeta.Text = $"📍 {(_info.Location.Length > 0 ? _info.Location : "No location set")}   ·   {_info.ExperienceYears}yr exp";
+            lblName.Text = _info.Name;
+            lblMeta.Text = $"Member since {_info.MemberSince:MMMM yyyy}   ·   " +
+                           $"{_info.CompletedBookingCount} completed booking{(_info.CompletedBookingCount == 1 ? "" : "s")}";
             lblRatingSummary.Text = _info.ReviewCount > 0
-                ? $"★ {_info.AvgRating:0.0}  ({_info.ReviewCount} review{(_info.ReviewCount == 1 ? "" : "s")})"
-                : "★ No reviews yet";
-            lblRate.Text = $"${_info.HourlyRate:0}/hr";
-            btnBookNow.Enabled = _info.Available;
-            btnBookNow.Text = _info.Available ? "Book Now" : "Unavailable";
+                ? $"★ {_info.AvgRating:0.0}  ({_info.ReviewCount} review{(_info.ReviewCount == 1 ? "" : "s")} from babysitters)"
+                : "★ No reviews from babysitters yet";
             btnTabReviews.Text = $"Reviews ({_info.ReviewCount})";
             lblWriteTitle.Text = $"Review {_info.Name}";
-
-            // About tab
-            lblBio.Text = _info.Bio.Length > 0 ? _info.Bio : "This babysitter hasn't written a bio yet.";
-            flpSkills.Controls.Clear();
-            foreach (var skill in _info.Skills)
-            {
-                flpSkills.Controls.Add(new Label
-                {
-                    Text = skill,
-                    AutoSize = true,
-                    Padding = new Padding(12, 6, 12, 6),
-                    Margin = new Padding(0, 0, 10, 8),
-                    BackColor = Color.FromArgb(253, 238, 232),
-                    ForeColor = Coral,
-                    Font = new Font("Segoe UI", 9F),
-                });
-            }
 
             // Reviews tab
             flpReviews.Controls.Clear();
@@ -157,18 +137,15 @@ namespace Meraki_Project
 
         // ----- Tabs -----
 
-        private void btnTabAbout_Click(object sender, EventArgs e) => ShowTab(0);
-        private void btnTabReviews_Click(object sender, EventArgs e) => ShowTab(1);
-        private void btnTabWrite_Click(object sender, EventArgs e) => ShowTab(2);
+        private void btnTabReviews_Click(object sender, EventArgs e) => ShowTab(0);
+        private void btnTabWrite_Click(object sender, EventArgs e) => ShowTab(1);
 
         private void ShowTab(int index)
         {
-            pnlTabAbout.Visible = index == 0;
-            pnlTabReviews.Visible = index == 1;
-            pnlTabWrite.Visible = index == 2;
-            StyleTab(btnTabAbout, index == 0);
-            StyleTab(btnTabReviews, index == 1);
-            StyleTab(btnTabWrite, index == 2);
+            pnlTabReviews.Visible = index == 0;
+            pnlTabWrite.Visible = index == 1;
+            StyleTab(btnTabReviews, index == 0);
+            StyleTab(btnTabWrite, index == 1);
         }
 
         private static void StyleTab(Guna2Button tab, bool active)
@@ -204,26 +181,24 @@ namespace Meraki_Project
 
             try
             {
-                // Linked to the parent's finished booking when there is one;
-                // a review is allowed either way.
-                ReviewRepository.Add(_reviewableBookingId, Session.CurrentUserId,
-                                     _babysitterId, "parent", _rating, tbComment.Text.Trim());
-                ExtrasRepository.AddNotification(_info.UserId,
+                // Linked to the finished booking when there is one; allowed either way.
+                ReviewRepository.Add(_reviewableBookingId, _parentId,
+                                     Session.CurrentUserId, "babysitter", _rating, tbComment.Text.Trim());
+                ExtrasRepository.AddNotification(_parentId,
                     $"{Session.CurrentUserName} left you a {_rating}-star review!");
                 MessageBox.Show("Thank you! Your review was saved.", "Meraki",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Reload: the header's overall rating and the Reviews tab update
-                // immediately with the new review included.
+                // Reload: the header rating and Reviews tab update immediately.
                 _rating = 0;
                 tbComment.Text = "";
                 foreach (var star in new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 })
                 {
-                    star.Text = "\u2606";
+                    star.Text = "☆";
                     star.ForeColor = StarGrey;
                 }
-                BabysitterProfileForm_Load(this, EventArgs.Empty);
-                ShowTab(1);
+                ParentProfileForm_Load(this, EventArgs.Empty);
+                ShowTab(0);
             }
             catch (Exception ex)
             {
@@ -232,17 +207,12 @@ namespace Meraki_Project
             }
         }
 
-        // ----- Header actions -----
-
-        private void btnBookNow_Click(object sender, EventArgs e) =>
-            Navigation.GoTo(this, new BookingForm(_babysitterId));
-
         private void btnBack_Click(object sender, EventArgs e)
         {
             if (_backToSearch)
-                Navigation.GoTo(this, new SearchBabysitterForm());
+                Navigation.GoTo(this, new FindParentsForm());
             else
-                Navigation.GoTo(this, new ParentDashboardForm());
+                Navigation.GoTo(this, new BabysitterDashboardForm());
         }
     }
 }

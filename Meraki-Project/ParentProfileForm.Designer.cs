@@ -1,6 +1,6 @@
 namespace Meraki_Project
 {
-    partial class BabysitterProfileForm
+    partial class ParentProfileForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -29,16 +29,8 @@ namespace Meraki_Project
             lblName = new Label();
             lblMeta = new Label();
             lblRatingSummary = new Label();
-            lblRate = new Label();
-            btnBookNow = new Guna.UI2.WinForms.Guna2Button();
-            btnTabAbout = new Guna.UI2.WinForms.Guna2Button();
             btnTabReviews = new Guna.UI2.WinForms.Guna2Button();
             btnTabWrite = new Guna.UI2.WinForms.Guna2Button();
-            pnlTabAbout = new Guna.UI2.WinForms.Guna2Panel();
-            lblAboutTitle = new Label();
-            lblBio = new Label();
-            lblSkillsTitle = new Label();
-            flpSkills = new FlowLayoutPanel();
             pnlTabReviews = new Guna.UI2.WinForms.Guna2Panel();
             flpReviews = new FlowLayoutPanel();
             pnlTabWrite = new Guna.UI2.WinForms.Guna2Panel();
@@ -59,7 +51,6 @@ namespace Meraki_Project
             pnlContent.SuspendLayout();
             pnlProfileHeaderCard.SuspendLayout();
             pnlAvatar.SuspendLayout();
-            pnlTabAbout.SuspendLayout();
             pnlTabReviews.SuspendLayout();
             pnlTabWrite.SuspendLayout();
             SuspendLayout();
@@ -129,10 +120,8 @@ namespace Meraki_Project
             //
             pnlContent.BackColor = Color.FromArgb(253, 238, 232);
             pnlContent.Controls.Add(pnlProfileHeaderCard);
-            pnlContent.Controls.Add(btnTabAbout);
             pnlContent.Controls.Add(btnTabReviews);
             pnlContent.Controls.Add(btnTabWrite);
-            pnlContent.Controls.Add(pnlTabAbout);
             pnlContent.Controls.Add(pnlTabReviews);
             pnlContent.Controls.Add(pnlTabWrite);
             pnlContent.FillColor = Color.FromArgb(253, 238, 232);
@@ -152,8 +141,6 @@ namespace Meraki_Project
             pnlProfileHeaderCard.Controls.Add(lblName);
             pnlProfileHeaderCard.Controls.Add(lblMeta);
             pnlProfileHeaderCard.Controls.Add(lblRatingSummary);
-            pnlProfileHeaderCard.Controls.Add(lblRate);
-            pnlProfileHeaderCard.Controls.Add(btnBookNow);
             pnlProfileHeaderCard.FillColor = Color.White;
             pnlProfileHeaderCard.Location = new Point(30, 24);
             pnlProfileHeaderCard.Name = "pnlProfileHeaderCard";
@@ -165,7 +152,7 @@ namespace Meraki_Project
             pnlAvatar.BackColor = Color.Transparent;
             pnlAvatar.BorderRadius = 24;
             pnlAvatar.Controls.Add(lblAvatarInitial);
-            pnlAvatar.FillColor = Color.FromArgb(253, 238, 232);
+            pnlAvatar.FillColor = Color.FromArgb(232, 247, 247);
             pnlAvatar.Location = new Point(24, 25);
             pnlAvatar.Name = "pnlAvatar";
             pnlAvatar.Size = new Size(100, 100);
@@ -176,7 +163,7 @@ namespace Meraki_Project
             lblAvatarInitial.BackColor = Color.Transparent;
             lblAvatarInitial.Dock = DockStyle.Fill;
             lblAvatarInitial.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
-            lblAvatarInitial.ForeColor = Color.FromArgb(232, 113, 74);
+            lblAvatarInitial.ForeColor = Color.FromArgb(42, 112, 112);
             lblAvatarInitial.Location = new Point(0, 0);
             lblAvatarInitial.Name = "lblAvatarInitial";
             lblAvatarInitial.Size = new Size(100, 100);
@@ -191,9 +178,9 @@ namespace Meraki_Project
             lblName.ForeColor = Color.FromArgb(60, 50, 45);
             lblName.Location = new Point(150, 28);
             lblName.Name = "lblName";
-            lblName.Size = new Size(560, 32);
+            lblName.Size = new Size(700, 32);
             lblName.TabIndex = 1;
-            lblName.Text = "Babysitter";
+            lblName.Text = "Parent";
             //
             // lblMeta
             //
@@ -202,9 +189,9 @@ namespace Meraki_Project
             lblMeta.ForeColor = Color.FromArgb(154, 136, 128);
             lblMeta.Location = new Point(150, 64);
             lblMeta.Name = "lblMeta";
-            lblMeta.Size = new Size(700, 24);
+            lblMeta.Size = new Size(800, 24);
             lblMeta.TabIndex = 2;
-            lblMeta.Text = "Location · Experience";
+            lblMeta.Text = "Member since · Completed bookings";
             //
             // lblRatingSummary
             //
@@ -217,57 +204,17 @@ namespace Meraki_Project
             lblRatingSummary.TabIndex = 3;
             lblRatingSummary.Text = "★ No reviews yet";
             //
-            // lblRate
-            //
-            lblRate.BackColor = Color.Transparent;
-            lblRate.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            lblRate.ForeColor = Color.FromArgb(232, 113, 74);
-            lblRate.Location = new Point(1140, 28);
-            lblRate.Name = "lblRate";
-            lblRate.Size = new Size(276, 34);
-            lblRate.TabIndex = 4;
-            lblRate.Text = "$15/hr";
-            lblRate.TextAlign = ContentAlignment.MiddleRight;
-            //
-            // btnBookNow
-            //
-            btnBookNow.BackColor = Color.Transparent;
-            btnBookNow.BorderRadius = 10;
-            btnBookNow.FillColor = Color.FromArgb(232, 113, 74);
-            btnBookNow.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnBookNow.ForeColor = Color.White;
-            btnBookNow.Location = new Point(1196, 78);
-            btnBookNow.Name = "btnBookNow";
-            btnBookNow.Size = new Size(220, 48);
-            btnBookNow.TabIndex = 5;
-            btnBookNow.Text = "Book Now";
-            btnBookNow.Click += btnBookNow_Click;
-            //
-            // btnTabAbout
-            //
-            btnTabAbout.BackColor = Color.Transparent;
-            btnTabAbout.BorderRadius = 10;
-            btnTabAbout.FillColor = Color.FromArgb(232, 113, 74);
-            btnTabAbout.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnTabAbout.ForeColor = Color.White;
-            btnTabAbout.Location = new Point(30, 192);
-            btnTabAbout.Name = "btnTabAbout";
-            btnTabAbout.Size = new Size(150, 44);
-            btnTabAbout.TabIndex = 1;
-            btnTabAbout.Text = "About";
-            btnTabAbout.Click += btnTabAbout_Click;
-            //
             // btnTabReviews
             //
             btnTabReviews.BackColor = Color.Transparent;
             btnTabReviews.BorderRadius = 10;
-            btnTabReviews.FillColor = Color.White;
-            btnTabReviews.Font = new Font("Segoe UI", 9.5F);
-            btnTabReviews.ForeColor = Color.FromArgb(154, 136, 128);
-            btnTabReviews.Location = new Point(190, 192);
+            btnTabReviews.FillColor = Color.FromArgb(232, 113, 74);
+            btnTabReviews.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnTabReviews.ForeColor = Color.White;
+            btnTabReviews.Location = new Point(30, 192);
             btnTabReviews.Name = "btnTabReviews";
             btnTabReviews.Size = new Size(180, 44);
-            btnTabReviews.TabIndex = 2;
+            btnTabReviews.TabIndex = 1;
             btnTabReviews.Text = "Reviews";
             btnTabReviews.Click += btnTabReviews_Click;
             //
@@ -278,69 +225,12 @@ namespace Meraki_Project
             btnTabWrite.FillColor = Color.White;
             btnTabWrite.Font = new Font("Segoe UI", 9.5F);
             btnTabWrite.ForeColor = Color.FromArgb(154, 136, 128);
-            btnTabWrite.Location = new Point(380, 192);
+            btnTabWrite.Location = new Point(220, 192);
             btnTabWrite.Name = "btnTabWrite";
             btnTabWrite.Size = new Size(200, 44);
-            btnTabWrite.TabIndex = 3;
+            btnTabWrite.TabIndex = 2;
             btnTabWrite.Text = "✏ Write Review";
             btnTabWrite.Click += btnTabWrite_Click;
-            //
-            // pnlTabAbout
-            //
-            pnlTabAbout.BackColor = Color.Transparent;
-            pnlTabAbout.BorderRadius = 16;
-            pnlTabAbout.BorderThickness = 1;
-            pnlTabAbout.BorderColor = Color.FromArgb(238, 230, 224);
-            pnlTabAbout.Controls.Add(lblAboutTitle);
-            pnlTabAbout.Controls.Add(lblBio);
-            pnlTabAbout.Controls.Add(lblSkillsTitle);
-            pnlTabAbout.Controls.Add(flpSkills);
-            pnlTabAbout.FillColor = Color.White;
-            pnlTabAbout.Location = new Point(30, 252);
-            pnlTabAbout.Name = "pnlTabAbout";
-            pnlTabAbout.Size = new Size(1440, 520);
-            pnlTabAbout.TabIndex = 4;
-            //
-            // lblAboutTitle
-            //
-            lblAboutTitle.BackColor = Color.Transparent;
-            lblAboutTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblAboutTitle.ForeColor = Color.FromArgb(60, 50, 45);
-            lblAboutTitle.Location = new Point(24, 20);
-            lblAboutTitle.Name = "lblAboutTitle";
-            lblAboutTitle.Size = new Size(300, 28);
-            lblAboutTitle.TabIndex = 0;
-            lblAboutTitle.Text = "About";
-            //
-            // lblBio
-            //
-            lblBio.BackColor = Color.Transparent;
-            lblBio.Font = new Font("Segoe UI", 10F);
-            lblBio.ForeColor = Color.FromArgb(120, 108, 100);
-            lblBio.Location = new Point(24, 56);
-            lblBio.Name = "lblBio";
-            lblBio.Size = new Size(1390, 80);
-            lblBio.TabIndex = 1;
-            lblBio.Text = "Bio";
-            //
-            // lblSkillsTitle
-            //
-            lblSkillsTitle.BackColor = Color.Transparent;
-            lblSkillsTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblSkillsTitle.ForeColor = Color.FromArgb(60, 50, 45);
-            lblSkillsTitle.Location = new Point(24, 152);
-            lblSkillsTitle.Name = "lblSkillsTitle";
-            lblSkillsTitle.Size = new Size(300, 28);
-            lblSkillsTitle.TabIndex = 2;
-            lblSkillsTitle.Text = "Skills";
-            //
-            // flpSkills
-            //
-            flpSkills.BackColor = Color.White;
-            flpSkills.Location = new Point(22, 188);
-            flpSkills.Name = "flpSkills";
-            flpSkills.Size = new Size(1394, 70);
-            flpSkills.TabIndex = 3;
             //
             // pnlTabReviews
             //
@@ -353,8 +243,7 @@ namespace Meraki_Project
             pnlTabReviews.Location = new Point(30, 252);
             pnlTabReviews.Name = "pnlTabReviews";
             pnlTabReviews.Size = new Size(1440, 520);
-            pnlTabReviews.TabIndex = 5;
-            pnlTabReviews.Visible = false;
+            pnlTabReviews.TabIndex = 3;
             //
             // flpReviews
             //
@@ -388,7 +277,7 @@ namespace Meraki_Project
             pnlTabWrite.Location = new Point(30, 252);
             pnlTabWrite.Name = "pnlTabWrite";
             pnlTabWrite.Size = new Size(1440, 520);
-            pnlTabWrite.TabIndex = 6;
+            pnlTabWrite.TabIndex = 4;
             pnlTabWrite.Visible = false;
             //
             // lblWriteTitle
@@ -411,7 +300,7 @@ namespace Meraki_Project
             lblWriteSubtitle.Name = "lblWriteSubtitle";
             lblWriteSubtitle.Size = new Size(700, 22);
             lblWriteSubtitle.TabIndex = 1;
-            lblWriteSubtitle.Text = "Share your experience to help other parents in the community.";
+            lblWriteSubtitle.Text = "Share your experience to help other babysitters in the community.";
             //
             // lblOverallCaption
             //
@@ -520,7 +409,7 @@ namespace Meraki_Project
             tbComment.Location = new Point(24, 214);
             tbComment.Multiline = true;
             tbComment.Name = "tbComment";
-            tbComment.PlaceholderText = "Tell other parents about your experience. Was the babysitter punctual? How did the children respond? Would you book again?";
+            tbComment.PlaceholderText = "Tell other babysitters about this family. Were they respectful and on time? Would you sit for them again?";
             tbComment.SelectedText = "";
             tbComment.Size = new Size(900, 140);
             tbComment.TabIndex = 9;
@@ -539,21 +428,20 @@ namespace Meraki_Project
             btnSubmitReview.Text = "Submit Review";
             btnSubmitReview.Click += btnSubmitReview_Click;
             //
-            // BabysitterProfileForm
+            // ParentProfileForm
             //
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1500, 900);
             Controls.Add(pnlPageBackground);
             MinimumSize = new Size(1246, 738);
-            Name = "BabysitterProfileForm";
+            Name = "ParentProfileForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Meraki - Babysitter Profile";
-            Load += BabysitterProfileForm_Load;
+            Text = "Meraki - Parent Profile";
+            Load += ParentProfileForm_Load;
             ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
             pnlTabWrite.ResumeLayout(false);
             pnlTabReviews.ResumeLayout(false);
-            pnlTabAbout.ResumeLayout(false);
             pnlAvatar.ResumeLayout(false);
             pnlProfileHeaderCard.ResumeLayout(false);
             pnlContent.ResumeLayout(false);
@@ -576,16 +464,8 @@ namespace Meraki_Project
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblMeta;
         private System.Windows.Forms.Label lblRatingSummary;
-        private System.Windows.Forms.Label lblRate;
-        private Guna.UI2.WinForms.Guna2Button btnBookNow;
-        private Guna.UI2.WinForms.Guna2Button btnTabAbout;
         private Guna.UI2.WinForms.Guna2Button btnTabReviews;
         private Guna.UI2.WinForms.Guna2Button btnTabWrite;
-        private Guna.UI2.WinForms.Guna2Panel pnlTabAbout;
-        private System.Windows.Forms.Label lblAboutTitle;
-        private System.Windows.Forms.Label lblBio;
-        private System.Windows.Forms.Label lblSkillsTitle;
-        private System.Windows.Forms.FlowLayoutPanel flpSkills;
         private Guna.UI2.WinForms.Guna2Panel pnlTabReviews;
         private System.Windows.Forms.FlowLayoutPanel flpReviews;
         private Guna.UI2.WinForms.Guna2Panel pnlTabWrite;

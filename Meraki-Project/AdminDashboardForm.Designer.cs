@@ -177,6 +177,8 @@
             // pnlSidebar
             // 
             this.pnlSidebar.BorderRadius = 16;
+            this.pnlSidebar.BorderThickness = 1;
+            this.pnlSidebar.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlSidebar.FillColor = System.Drawing.Color.White;
             this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlSidebar.Location = new System.Drawing.Point(20, 84);
@@ -318,6 +320,8 @@
             // pnlKpiParents
             // 
             this.pnlKpiParents.BorderRadius = 16;
+            this.pnlKpiParents.BorderThickness = 1;
+            this.pnlKpiParents.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlKpiParents.FillColor = System.Drawing.Color.White;
             this.pnlKpiParents.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlKpiParents.Location = new System.Drawing.Point(4, 64);
@@ -371,6 +375,8 @@
             // pnlKpiBabysitters
             // 
             this.pnlKpiBabysitters.BorderRadius = 16;
+            this.pnlKpiBabysitters.BorderThickness = 1;
+            this.pnlKpiBabysitters.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlKpiBabysitters.FillColor = System.Drawing.Color.White;
             this.pnlKpiBabysitters.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlKpiBabysitters.Location = new System.Drawing.Point(256, 64);
@@ -424,6 +430,8 @@
             // pnlKpiBookings
             // 
             this.pnlKpiBookings.BorderRadius = 16;
+            this.pnlKpiBookings.BorderThickness = 1;
+            this.pnlKpiBookings.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlKpiBookings.FillColor = System.Drawing.Color.White;
             this.pnlKpiBookings.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlKpiBookings.Location = new System.Drawing.Point(508, 64);
@@ -477,6 +485,8 @@
             // pnlKpiRevenue
             // 
             this.pnlKpiRevenue.BorderRadius = 16;
+            this.pnlKpiRevenue.BorderThickness = 1;
+            this.pnlKpiRevenue.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlKpiRevenue.FillColor = System.Drawing.Color.White;
             this.pnlKpiRevenue.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlKpiRevenue.Location = new System.Drawing.Point(760, 64);
@@ -530,6 +540,8 @@
             // pnlBookingsChart (visual placeholder card - wire up a real chart control later)
             // 
             this.pnlBookingsChart.BorderRadius = 16;
+            this.pnlBookingsChart.BorderThickness = 1;
+            this.pnlBookingsChart.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlBookingsChart.FillColor = System.Drawing.Color.White;
             this.pnlBookingsChart.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlBookingsChart.Location = new System.Drawing.Point(4, 208);
@@ -645,6 +657,8 @@
             // pnlRevenueChart
             // 
             this.pnlRevenueChart.BorderRadius = 16;
+            this.pnlRevenueChart.BorderThickness = 1;
+            this.pnlRevenueChart.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlRevenueChart.FillColor = System.Drawing.Color.White;
             this.pnlRevenueChart.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlRevenueChart.Location = new System.Drawing.Point(508, 208);
@@ -760,6 +774,8 @@
             // pnlUserTableCard
             // 
             this.pnlUserTableCard.BorderRadius = 16;
+            this.pnlUserTableCard.BorderThickness = 1;
+            this.pnlUserTableCard.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
             this.pnlUserTableCard.FillColor = System.Drawing.Color.White;
             this.pnlUserTableCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
             this.pnlUserTableCard.Location = new System.Drawing.Point(4, 424);

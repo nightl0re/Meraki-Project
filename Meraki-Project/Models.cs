@@ -35,6 +35,16 @@ namespace Meraki_Project
         public List<string> Skills = new();
     }
 
+    public class ParentInfo
+    {
+        public int UserId;
+        public string Name = "";
+        public DateTime MemberSince;
+        public double AvgRating;      // as rated by babysitters, 0 when no reviews yet
+        public int ReviewCount;
+        public int CompletedBookingCount;
+    }
+
     public class BookingInfo
     {
         public int BookingId;

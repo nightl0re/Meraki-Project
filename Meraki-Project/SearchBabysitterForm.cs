@@ -26,9 +26,15 @@ namespace Meraki_Project
         private bool _availableOnly;
         private bool _verifiedOnly;
 
+        // Rebuilding the result cards is the expensive part (rounded Guna panels,
+        // several child controls each) - debounce so fast typing doesn't rebuild
+        // on every keystroke, only once typing pauses.
+        private readonly System.Windows.Forms.Timer _searchDebounce = new() { Interval = 220 };
+
         public SearchBabysitterForm()
         {
             InitializeComponent();
+            _searchDebounce.Tick += (s, e) => { _searchDebounce.Stop(); RenderResults(); };
         }
 
         private void SearchBabysitterForm_Load(object sender, EventArgs e)
@@ -50,13 +56,19 @@ namespace Meraki_Project
 
         // ----- Filters (fixed left sidebar - the layout never moves) -----
 
-        private void tbSearch_TextChanged(object sender, EventArgs e) => RenderResults();
+        private void tbSearch_TextChanged(object sender, EventArgs e)
+        {
+            _searchDebounce.Stop();
+            _searchDebounce.Start();
+        }
 
         private void tbMaxRate_Scroll(object sender, EventArgs e)
         {
             _maxRate = tbMaxRate.Value;
             lblMaxRateCaption.Text = $"Max Rate: ${_maxRate}/hr";
-            RenderResults();
+            // Dragging fires this continuously - debounce like the search box.
+            _searchDebounce.Stop();
+            _searchDebounce.Start();
         }
 
         private void btnRatingAny_Click(object sender, EventArgs e) => SetMinRating(0, btnRatingAny);

@@ -24,8 +24,21 @@ namespace Meraki_Project
             panel.Tag = "no-scrollbars";
 
             panel.AutoScroll = true;
-            void Hide() { if (panel.IsHandleCreated) ShowScrollBar(panel.Handle, SB_BOTH, false); }
+
+            void Hide()
+            {
+                if (!panel.IsHandleCreated) return;
+                ShowScrollBar(panel.Handle, SB_BOTH, false);
+                // Windows recalculates scrollbar visibility internally right after
+                // layout/scroll, which can silently re-show it in the same message
+                // pass. A deferred second hide (next idle tick) catches that.
+                panel.BeginInvoke(new Action(() =>
+                {
+                    if (panel.IsHandleCreated) ShowScrollBar(panel.Handle, SB_BOTH, false);
+                }));
+            }
             panel.Layout += (s, e) => Hide();
+            panel.Resize += (s, e) => Hide();
             panel.Scroll += (s, e) => Hide();
             panel.MouseWheel += (s, e) => Hide();
             panel.ControlAdded += (s, e) => Hide();

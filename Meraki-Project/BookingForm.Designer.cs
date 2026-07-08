@@ -506,7 +506,7 @@
             //
             // pnlStepDateTime
             //
-            pnlStepDateTime.BackColor = Color.Transparent;
+            pnlStepDateTime.BackColor = Color.FromArgb(253, 238, 232);
             pnlStepDateTime.Controls.Add(pnlDateTimeCard);
             pnlStepDateTime.Location = new Point(30, 136);
             pnlStepDateTime.Name = "pnlStepDateTime";
@@ -672,7 +672,7 @@
             //
             // flpDurations
             //
-            flpDurations.BackColor = Color.Transparent;
+            flpDurations.BackColor = Color.White;
             flpDurations.Location = new Point(24, 274);
             flpDurations.Name = "flpDurations";
             flpDurations.Size = new Size(850, 170);
@@ -680,7 +680,7 @@
             //
             // pnlStepBabysitter
             //
-            pnlStepBabysitter.BackColor = Color.Transparent;
+            pnlStepBabysitter.BackColor = Color.FromArgb(253, 238, 232);
             pnlStepBabysitter.Controls.Add(flpBabysitterSelect);
             pnlStepBabysitter.Location = new Point(30, 140);
             pnlStepBabysitter.Name = "pnlStepBabysitter";
@@ -691,7 +691,7 @@
             // flpBabysitterSelect
             //
             flpBabysitterSelect.AutoScroll = true;
-            flpBabysitterSelect.BackColor = Color.Transparent;
+            flpBabysitterSelect.BackColor = Color.FromArgb(253, 238, 232);
             flpBabysitterSelect.FlowDirection = FlowDirection.TopDown;
             flpBabysitterSelect.Location = new Point(0, 0);
             flpBabysitterSelect.Name = "flpBabysitterSelect";
@@ -701,7 +701,7 @@
             //
             // pnlStepDetails
             //
-            pnlStepDetails.BackColor = Color.Transparent;
+            pnlStepDetails.BackColor = Color.FromArgb(253, 238, 232);
             pnlStepDetails.Controls.Add(pnlDetailsCard);
             pnlStepDetails.Location = new Point(30, 140);
             pnlStepDetails.Name = "pnlStepDetails";
@@ -843,7 +843,7 @@
             //
             // pnlStepConfirm
             //
-            pnlStepConfirm.BackColor = Color.Transparent;
+            pnlStepConfirm.BackColor = Color.FromArgb(253, 238, 232);
             pnlStepConfirm.Controls.Add(pnlConfirmCard);
             pnlStepConfirm.Location = new Point(30, 140);
             pnlStepConfirm.Name = "pnlStepConfirm";

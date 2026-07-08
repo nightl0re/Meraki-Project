@@ -258,7 +258,7 @@ namespace Meraki_Project
             try
             {
                 ReviewRepository.Add(booking.BookingId, Session.CurrentUserId,
-                                     booking.BabysitterId, dialog.Rating, dialog.Comment);
+                                     booking.BabysitterId, "parent", dialog.Rating, dialog.Comment);
                 ExtrasRepository.AddNotification(booking.BabysitterId,
                     $"{Session.CurrentUserName} left you a {dialog.Rating}-star review!");
                 MessageBox.Show("Thank you! Your review was saved.", "Meraki",

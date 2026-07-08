@@ -532,7 +532,7 @@
             //
             // pnlTabProfile
             //
-            pnlTabProfile.BackColor = Color.Transparent;
+            pnlTabProfile.BackColor = Color.FromArgb(253, 238, 232);
             pnlTabProfile.Controls.Add(pnlPersonalInfoCard);
             pnlTabProfile.Controls.Add(pnlSkillsCard);
             pnlTabProfile.Location = new Point(30, 384);
@@ -750,7 +750,7 @@
             //
             // flpSkills
             //
-            flpSkills.BackColor = Color.Transparent;
+            flpSkills.BackColor = Color.White;
             flpSkills.Location = new Point(12, 46);
             flpSkills.Name = "flpSkills";
             flpSkills.Size = new Size(876, 140);
@@ -758,7 +758,7 @@
             //
             // pnlTabReviews
             //
-            pnlTabReviews.BackColor = Color.Transparent;
+            pnlTabReviews.BackColor = Color.FromArgb(253, 238, 232);
             pnlTabReviews.Controls.Add(flpReviews);
             pnlTabReviews.Location = new Point(30, 384);
             pnlTabReviews.Name = "pnlTabReviews";
@@ -769,7 +769,7 @@
             // flpReviews
             //
             flpReviews.AutoScroll = true;
-            flpReviews.BackColor = Color.Transparent;
+            flpReviews.BackColor = Color.FromArgb(253, 238, 232);
             flpReviews.FlowDirection = FlowDirection.TopDown;
             flpReviews.Location = new Point(0, 0);
             flpReviews.Name = "flpReviews";
@@ -779,7 +779,7 @@
             //
             // pnlTabSettings (rows are generated at runtime in ProfileForm.cs)
             //
-            pnlTabSettings.BackColor = Color.Transparent;
+            pnlTabSettings.BackColor = Color.FromArgb(253, 238, 232);
             pnlTabSettings.Location = new Point(30, 384);
             pnlTabSettings.Name = "pnlTabSettings";
             pnlTabSettings.Size = new Size(900, 560);

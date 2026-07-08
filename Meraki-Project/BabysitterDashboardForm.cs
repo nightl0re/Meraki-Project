@@ -209,23 +209,40 @@ namespace Meraki_Project
                 Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
             };
 
+            // A small explicit receipt link; clicking anywhere else on the card
+            // opens the parent's profile (reviews + write one).
+            var receiptLink = new Label
+            {
+                Text = "Receipt",
+                Location = new Point(680, 52),
+                Size = new Size(120, 20),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 8F, FontStyle.Underline),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+                Cursor = Cursors.Hand,
+            };
+            receiptLink.Click += (s, e) =>
+            {
+                using var dlg = new ReceiptDialog(b, showParentSide: false);
+                dlg.ShowDialog(this);
+            };
+
             card.Controls.Add(accentBar);
             card.Controls.Add(avatar);
             card.Controls.Add(nameLabel);
             card.Controls.Add(whenLabel);
             card.Controls.Add(payLabel);
             card.Controls.Add(statusLabel);
+            card.Controls.Add(receiptLink);
 
-            EventHandler openReceipt = (s, e) =>
-            {
-                using var dlg = new ReceiptDialog(b, showParentSide: false);
-                dlg.ShowDialog(this);
-            };
-            card.Click += openReceipt;
-            nameLabel.Click += openReceipt;
-            whenLabel.Click += openReceipt;
-            payLabel.Click += openReceipt;
-            statusLabel.Click += openReceipt;
+            EventHandler openParent = (s, e) =>
+                Navigation.GoTo(this, new ParentProfileForm(b.ParentId));
+            card.Click += openParent;
+            nameLabel.Click += openParent;
+            whenLabel.Click += openParent;
+            payLabel.Click += openParent;
+            statusLabel.Click += openParent;
 
             return card;
         }
@@ -419,8 +436,25 @@ namespace Meraki_Project
             };
             declineBtn.Click += (s, e) => RespondToRequest(r, accepted: false);
 
+            var viewParentBtn = new Guna2Button
+            {
+                Text = "View Parent",
+                Location = new Point(328, 68),
+                Size = new Size(130, 26),
+                BorderRadius = 8,
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(238, 230, 224),
+                FillColor = Color.White,
+                ForeColor = Color.FromArgb(154, 136, 128),
+                Font = new Font("Segoe UI", 8F),
+                BackColor = Color.Transparent,
+            };
+            viewParentBtn.Click += (s, e) =>
+                Navigation.GoTo(this, new ParentProfileForm(r.ParentId));
+
             card.Controls.Add(acceptBtn);
             card.Controls.Add(declineBtn);
+            card.Controls.Add(viewParentBtn);
             return card;
         }
 
@@ -465,6 +499,8 @@ namespace Meraki_Project
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
+
+        private void btnNavFindParents_Click(object sender, EventArgs e) => Navigation.GoTo(this, new FindParentsForm());
 
         private void btnNavMyProfile_Click(object sender, EventArgs e) => Navigation.GoTo(this, new ProfileForm());
 
