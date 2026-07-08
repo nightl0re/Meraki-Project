@@ -17,932 +17,1269 @@
 
         private void InitializeComponent()
         {
-            // ===== Page root =====
-            this.pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
-
-            // ===== Top navbar (logo + Logout only) =====
-            this.pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
-            this.picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.btnLogout = new Guna.UI2.WinForms.Guna2Button();
-
-            // ===== Sidebar =====
-            this.pnlSidebar = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblSidebarTitle = new System.Windows.Forms.Label();
-            this.btnSidebarOverview = new Guna.UI2.WinForms.Guna2Button();
-            this.btnSidebarUsers = new Guna.UI2.WinForms.Guna2Button();
-            this.btnSidebarBookings = new Guna.UI2.WinForms.Guna2Button();
-            this.btnSidebarReports = new Guna.UI2.WinForms.Guna2Button();
-            this.btnSidebarSettings = new Guna.UI2.WinForms.Guna2Button();
-
-            // ===== Main content =====
-            this.pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
-            this.lblPageTitle = new System.Windows.Forms.Label();
-            this.lblPageSubtitle = new System.Windows.Forms.Label();
-
-            // ----- KPI cards -----
-            this.pnlKpiParents = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlKpiParentsIcon = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblKpiParentsIcon = new System.Windows.Forms.Label();
-            this.lblKpiParentsValue = new System.Windows.Forms.Label();
-            this.lblKpiParentsLabel = new System.Windows.Forms.Label();
-            this.pnlKpiBabysitters = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlKpiBabysittersIcon = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblKpiBabysittersIcon = new System.Windows.Forms.Label();
-            this.lblKpiBabysittersValue = new System.Windows.Forms.Label();
-            this.lblKpiBabysittersLabel = new System.Windows.Forms.Label();
-            this.pnlKpiBookings = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlKpiBookingsIcon = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblKpiBookingsIcon = new System.Windows.Forms.Label();
-            this.lblKpiBookingsValue = new System.Windows.Forms.Label();
-            this.lblKpiBookingsLabel = new System.Windows.Forms.Label();
-            this.pnlKpiRevenue = new Guna.UI2.WinForms.Guna2Panel();
-            this.pnlKpiRevenueIcon = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblKpiRevenueIcon = new System.Windows.Forms.Label();
-            this.lblKpiRevenueValue = new System.Windows.Forms.Label();
-            this.lblKpiRevenueLabel = new System.Windows.Forms.Label();
-
-            // ----- Chart placeholders (visual only - real charting wired up later) -----
-            this.pnlBookingsChart = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblBookingsChartTitle = new System.Windows.Forms.Label();
-            this.barJan = new Guna.UI2.WinForms.Guna2Panel();
-            this.barFeb = new Guna.UI2.WinForms.Guna2Panel();
-            this.barMar = new Guna.UI2.WinForms.Guna2Panel();
-            this.barApr = new Guna.UI2.WinForms.Guna2Panel();
-            this.barMay = new Guna.UI2.WinForms.Guna2Panel();
-            this.barJun = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblBarJan = new System.Windows.Forms.Label();
-            this.lblBarFeb = new System.Windows.Forms.Label();
-            this.lblBarMar = new System.Windows.Forms.Label();
-            this.lblBarApr = new System.Windows.Forms.Label();
-            this.lblBarMay = new System.Windows.Forms.Label();
-            this.lblBarJun = new System.Windows.Forms.Label();
-            this.pnlRevenueChart = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblRevenueChartTitle = new System.Windows.Forms.Label();
-            this.revJan = new Guna.UI2.WinForms.Guna2Panel();
-            this.revFeb = new Guna.UI2.WinForms.Guna2Panel();
-            this.revMar = new Guna.UI2.WinForms.Guna2Panel();
-            this.revApr = new Guna.UI2.WinForms.Guna2Panel();
-            this.revMay = new Guna.UI2.WinForms.Guna2Panel();
-            this.revJun = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblRevJan = new System.Windows.Forms.Label();
-            this.lblRevFeb = new System.Windows.Forms.Label();
-            this.lblRevMar = new System.Windows.Forms.Label();
-            this.lblRevApr = new System.Windows.Forms.Label();
-            this.lblRevMay = new System.Windows.Forms.Label();
-            this.lblRevJun = new System.Windows.Forms.Label();
-
-            // ----- User management table -----
-            this.pnlUserTableCard = new Guna.UI2.WinForms.Guna2Panel();
-            this.lblUserTableTitle = new System.Windows.Forms.Label();
-            this.tbSearchUsers = new Guna.UI2.WinForms.Guna2TextBox();
-            this.dgvUsers = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colRole = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colJoined = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colActions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).BeginInit();
-            this.pnlPageBackground.SuspendLayout();
-            this.pnlNavbar.SuspendLayout();
-            this.pnlSidebar.SuspendLayout();
-            this.pnlContent.SuspendLayout();
-            this.pnlKpiParents.SuspendLayout();
-            this.pnlKpiBabysitters.SuspendLayout();
-            this.pnlKpiBookings.SuspendLayout();
-            this.pnlKpiRevenue.SuspendLayout();
-            this.pnlUserTableCard.SuspendLayout();
-            this.SuspendLayout();
-
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges69 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges70 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges49 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges50 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges43 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges44 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges33 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges34 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges35 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges36 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges37 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges38 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges39 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges40 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges41 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges42 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges47 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges48 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges45 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges46 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges61 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges62 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges51 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges52 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges53 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges54 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges55 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges56 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges57 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges58 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges59 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges60 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges67 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges68 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges63 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges64 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges65 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges66 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
+            pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
+            lblPageTitle = new Label();
+            lblPageSubtitle = new Label();
+            pnlKpiParents = new Guna.UI2.WinForms.Guna2Panel();
+            pnlKpiParentsIcon = new Guna.UI2.WinForms.Guna2Panel();
+            lblKpiParentsIcon = new Label();
+            lblKpiParentsValue = new Label();
+            lblKpiParentsLabel = new Label();
+            pnlKpiBabysitters = new Guna.UI2.WinForms.Guna2Panel();
+            pnlKpiBabysittersIcon = new Guna.UI2.WinForms.Guna2Panel();
+            lblKpiBabysittersIcon = new Label();
+            lblKpiBabysittersValue = new Label();
+            lblKpiBabysittersLabel = new Label();
+            pnlKpiBookings = new Guna.UI2.WinForms.Guna2Panel();
+            pnlKpiBookingsIcon = new Guna.UI2.WinForms.Guna2Panel();
+            lblKpiBookingsIcon = new Label();
+            lblKpiBookingsValue = new Label();
+            lblKpiBookingsLabel = new Label();
+            pnlKpiRevenue = new Guna.UI2.WinForms.Guna2Panel();
+            pnlKpiRevenueIcon = new Guna.UI2.WinForms.Guna2Panel();
+            lblKpiRevenueIcon = new Label();
+            lblKpiRevenueValue = new Label();
+            lblKpiRevenueLabel = new Label();
+            pnlBookingsChart = new Guna.UI2.WinForms.Guna2Panel();
+            lblBookingsChartTitle = new Label();
+            barJan = new Guna.UI2.WinForms.Guna2Panel();
+            barFeb = new Guna.UI2.WinForms.Guna2Panel();
+            barMar = new Guna.UI2.WinForms.Guna2Panel();
+            barApr = new Guna.UI2.WinForms.Guna2Panel();
+            barMay = new Guna.UI2.WinForms.Guna2Panel();
+            barJun = new Guna.UI2.WinForms.Guna2Panel();
+            lblBarJan = new Label();
+            lblBarFeb = new Label();
+            lblBarMar = new Label();
+            lblBarApr = new Label();
+            lblBarMay = new Label();
+            lblBarJun = new Label();
+            pnlRevenueChart = new Guna.UI2.WinForms.Guna2Panel();
+            lblRevenueChartTitle = new Label();
+            revJan = new Guna.UI2.WinForms.Guna2Panel();
+            revFeb = new Guna.UI2.WinForms.Guna2Panel();
+            revMar = new Guna.UI2.WinForms.Guna2Panel();
+            revApr = new Guna.UI2.WinForms.Guna2Panel();
+            revMay = new Guna.UI2.WinForms.Guna2Panel();
+            revJun = new Guna.UI2.WinForms.Guna2Panel();
+            lblRevJan = new Label();
+            lblRevFeb = new Label();
+            lblRevMar = new Label();
+            lblRevApr = new Label();
+            lblRevMay = new Label();
+            lblRevJun = new Label();
+            pnlUserTableCard = new Guna.UI2.WinForms.Guna2Panel();
+            lblUserTableTitle = new Label();
+            tbSearchUsers = new Guna.UI2.WinForms.Guna2TextBox();
+            dgvUsers = new Guna.UI2.WinForms.Guna2DataGridView();
+            colName = new DataGridViewTextBoxColumn();
+            colRole = new DataGridViewTextBoxColumn();
+            colEmail = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
+            colJoined = new DataGridViewTextBoxColumn();
+            colActions = new DataGridViewTextBoxColumn();
+            pnlSidebar = new Guna.UI2.WinForms.Guna2Panel();
+            lblSidebarTitle = new Label();
+            btnSidebarOverview = new Guna.UI2.WinForms.Guna2Button();
+            btnSidebarUsers = new Guna.UI2.WinForms.Guna2Button();
+            btnSidebarBookings = new Guna.UI2.WinForms.Guna2Button();
+            btnSidebarReports = new Guna.UI2.WinForms.Guna2Button();
+            btnSidebarSettings = new Guna.UI2.WinForms.Guna2Button();
+            pnlNavbar = new Guna.UI2.WinForms.Guna2Panel();
+            picNavLogo = new Guna.UI2.WinForms.Guna2PictureBox();
+            lblNavBrand = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            btnLogout = new Guna.UI2.WinForms.Guna2Button();
+            pnlPageBackground.SuspendLayout();
+            pnlContent.SuspendLayout();
+            pnlKpiParents.SuspendLayout();
+            pnlKpiParentsIcon.SuspendLayout();
+            pnlKpiBabysitters.SuspendLayout();
+            pnlKpiBabysittersIcon.SuspendLayout();
+            pnlKpiBookings.SuspendLayout();
+            pnlKpiBookingsIcon.SuspendLayout();
+            pnlKpiRevenue.SuspendLayout();
+            pnlKpiRevenueIcon.SuspendLayout();
+            pnlBookingsChart.SuspendLayout();
+            pnlRevenueChart.SuspendLayout();
+            pnlUserTableCard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
+            pnlSidebar.SuspendLayout();
+            pnlNavbar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).BeginInit();
+            SuspendLayout();
             // 
             // pnlPageBackground
             // 
-            this.pnlPageBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPageBackground.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlPageBackground.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlPageBackground.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlPageBackground.Name = "pnlPageBackground";
-            this.pnlPageBackground.Size = new System.Drawing.Size(1280, 800);
-            this.pnlPageBackground.Controls.Add(this.pnlContent);
-            this.pnlPageBackground.Controls.Add(this.pnlSidebar);
-            this.pnlPageBackground.Controls.Add(this.pnlNavbar);
-
-            // 
-            // pnlNavbar (logo + Logout only - Admin uses sidebar for navigation)
-            // 
-            this.pnlNavbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNavbar.FillColor = System.Drawing.Color.White;
-            this.pnlNavbar.BackColor = System.Drawing.Color.White;
-            this.pnlNavbar.Name = "pnlNavbar";
-            this.pnlNavbar.Size = new System.Drawing.Size(1280, 64);
-
-            // 
-            // picNavLogo
-            // 
-            this.picNavLogo.Location = new System.Drawing.Point(20, 12);
-            this.picNavLogo.Name = "picNavLogo";
-            this.picNavLogo.Size = new System.Drawing.Size(40, 40);
-            this.picNavLogo.BorderRadius = 10;
-            this.picNavLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-
-            // 
-            // lblNavBrand
-            // 
-            this.lblNavBrand.Location = new System.Drawing.Point(68, 20);
-            this.lblNavBrand.Name = "lblNavBrand";
-            this.lblNavBrand.Size = new System.Drawing.Size(100, 24);
-            this.lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
-
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.BorderRadius = 8;
-            this.btnLogout.BorderThickness = 0;
-            this.btnLogout.ShadowDecoration.Enabled = false;
-            this.btnLogout.FillColor = System.Drawing.Color.Transparent;
-            this.btnLogout.BackColor = System.Drawing.Color.White;
-            this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(224, 90, 90);
-            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.btnLogout.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 232, 232);
-            this.btnLogout.Location = new System.Drawing.Point(1160, 14);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(100, 36);
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-
-            // 
-            // pnlSidebar
-            // 
-            this.pnlSidebar.BorderRadius = 16;
-            this.pnlSidebar.BorderThickness = 1;
-            this.pnlSidebar.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlSidebar.FillColor = System.Drawing.Color.White;
-            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlSidebar.Location = new System.Drawing.Point(20, 84);
-            this.pnlSidebar.Name = "pnlSidebar";
-            this.pnlSidebar.Size = new System.Drawing.Size(200, 420);
-
-            // 
-            // lblSidebarTitle
-            // 
-            this.lblSidebarTitle.Location = new System.Drawing.Point(16, 16);
-            this.lblSidebarTitle.Size = new System.Drawing.Size(160, 22);
-            this.lblSidebarTitle.Text = "Admin Panel";
-            this.lblSidebarTitle.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.lblSidebarTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblSidebarTitle.BackColor = System.Drawing.Color.Transparent;
-
-            // 
-            // btnSidebarOverview (active)
-            // 
-            this.btnSidebarOverview.BorderRadius = 10;
-            this.btnSidebarOverview.BorderThickness = 0;
-            this.btnSidebarOverview.ShadowDecoration.Enabled = false;
-            this.btnSidebarOverview.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnSidebarOverview.BackColor = System.Drawing.Color.White;
-            this.btnSidebarOverview.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.btnSidebarOverview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSidebarOverview.HoverState.FillColor = System.Drawing.Color.FromArgb(250, 226, 216);
-            this.btnSidebarOverview.Location = new System.Drawing.Point(12, 56);
-            this.btnSidebarOverview.Name = "btnSidebarOverview";
-            this.btnSidebarOverview.Size = new System.Drawing.Size(176, 40);
-            this.btnSidebarOverview.Text = "Overview";
-            this.btnSidebarOverview.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.btnSidebarOverview.Click += new System.EventHandler(this.btnSidebarOverview_Click);
-
-            // 
-            // btnSidebarUsers
-            // 
-            this.btnSidebarUsers.BorderRadius = 10;
-            this.btnSidebarUsers.BorderThickness = 0;
-            this.btnSidebarUsers.ShadowDecoration.Enabled = false;
-            this.btnSidebarUsers.FillColor = System.Drawing.Color.Transparent;
-            this.btnSidebarUsers.BackColor = System.Drawing.Color.White;
-            this.btnSidebarUsers.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnSidebarUsers.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSidebarUsers.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnSidebarUsers.Location = new System.Drawing.Point(12, 102);
-            this.btnSidebarUsers.Name = "btnSidebarUsers";
-            this.btnSidebarUsers.Size = new System.Drawing.Size(176, 40);
-            this.btnSidebarUsers.Text = "Users";
-            this.btnSidebarUsers.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.btnSidebarUsers.Click += new System.EventHandler(this.btnSidebarUsers_Click);
-
-            // 
-            // btnSidebarBookings
-            // 
-            this.btnSidebarBookings.BorderRadius = 10;
-            this.btnSidebarBookings.BorderThickness = 0;
-            this.btnSidebarBookings.ShadowDecoration.Enabled = false;
-            this.btnSidebarBookings.FillColor = System.Drawing.Color.Transparent;
-            this.btnSidebarBookings.BackColor = System.Drawing.Color.White;
-            this.btnSidebarBookings.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnSidebarBookings.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSidebarBookings.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnSidebarBookings.Location = new System.Drawing.Point(12, 148);
-            this.btnSidebarBookings.Name = "btnSidebarBookings";
-            this.btnSidebarBookings.Size = new System.Drawing.Size(176, 40);
-            this.btnSidebarBookings.Text = "Bookings";
-            this.btnSidebarBookings.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.btnSidebarBookings.Click += new System.EventHandler(this.btnSidebarBookings_Click);
-
-            // 
-            // btnSidebarReports
-            // 
-            this.btnSidebarReports.BorderRadius = 10;
-            this.btnSidebarReports.BorderThickness = 0;
-            this.btnSidebarReports.ShadowDecoration.Enabled = false;
-            this.btnSidebarReports.FillColor = System.Drawing.Color.Transparent;
-            this.btnSidebarReports.BackColor = System.Drawing.Color.White;
-            this.btnSidebarReports.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnSidebarReports.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSidebarReports.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnSidebarReports.Location = new System.Drawing.Point(12, 194);
-            this.btnSidebarReports.Name = "btnSidebarReports";
-            this.btnSidebarReports.Size = new System.Drawing.Size(176, 40);
-            this.btnSidebarReports.Text = "Reports";
-            this.btnSidebarReports.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.btnSidebarReports.Click += new System.EventHandler(this.btnSidebarReports_Click);
-
-            // 
-            // btnSidebarSettings
-            // 
-            this.btnSidebarSettings.BorderRadius = 10;
-            this.btnSidebarSettings.BorderThickness = 0;
-            this.btnSidebarSettings.ShadowDecoration.Enabled = false;
-            this.btnSidebarSettings.FillColor = System.Drawing.Color.Transparent;
-            this.btnSidebarSettings.BackColor = System.Drawing.Color.White;
-            this.btnSidebarSettings.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.btnSidebarSettings.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSidebarSettings.HoverState.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.btnSidebarSettings.Location = new System.Drawing.Point(12, 240);
-            this.btnSidebarSettings.Name = "btnSidebarSettings";
-            this.btnSidebarSettings.Size = new System.Drawing.Size(176, 40);
-            this.btnSidebarSettings.Text = "Settings";
-            this.btnSidebarSettings.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.btnSidebarSettings.Click += new System.EventHandler(this.btnSidebarSettings_Click);
-
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
+            pnlPageBackground.Controls.Add(pnlContent);
+            pnlPageBackground.Controls.Add(pnlSidebar);
+            pnlPageBackground.Controls.Add(pnlNavbar);
+            pnlPageBackground.CustomizableEdges = customizableEdges69;
+            pnlPageBackground.Dock = DockStyle.Fill;
+            pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
+            pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlPageBackground.Location = new Point(0, 0);
+            pnlPageBackground.Margin = new Padding(4, 4, 4, 4);
+            pnlPageBackground.Name = "pnlPageBackground";
+            pnlPageBackground.ShadowDecoration.CustomizableEdges = customizableEdges70;
+            pnlPageBackground.Size = new Size(1600, 1055);
+            pnlPageBackground.TabIndex = 0;
             // 
             // pnlContent
             // 
-            this.pnlContent.AutoScroll = false;
-            this.pnlContent.FillColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlContent.FillColor2 = System.Drawing.Color.FromArgb(225, 240, 239);
-            this.pnlContent.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlContent.Location = new System.Drawing.Point(236, 84);
-            this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1024, 780);
-
+            pnlContent.BackColor = Color.FromArgb(253, 238, 232);
+            pnlContent.Controls.Add(lblPageTitle);
+            pnlContent.Controls.Add(lblPageSubtitle);
+            pnlContent.Controls.Add(pnlKpiParents);
+            pnlContent.Controls.Add(pnlKpiBabysitters);
+            pnlContent.Controls.Add(pnlKpiBookings);
+            pnlContent.Controls.Add(pnlKpiRevenue);
+            pnlContent.Controls.Add(pnlBookingsChart);
+            pnlContent.Controls.Add(pnlRevenueChart);
+            pnlContent.Controls.Add(pnlUserTableCard);
+            pnlContent.CustomizableEdges = customizableEdges49;
+            pnlContent.FillColor = Color.FromArgb(253, 238, 232);
+            pnlContent.FillColor2 = Color.FromArgb(225, 240, 239);
+            pnlContent.Location = new Point(295, 105);
+            pnlContent.Margin = new Padding(4, 4, 4, 4);
+            pnlContent.Name = "pnlContent";
+            pnlContent.ShadowDecoration.CustomizableEdges = customizableEdges50;
+            pnlContent.Size = new Size(1280, 975);
+            pnlContent.TabIndex = 0;
             // 
             // lblPageTitle
             // 
-            this.lblPageTitle.Location = new System.Drawing.Point(4, 4);
-            this.lblPageTitle.Size = new System.Drawing.Size(300, 26);
-            this.lblPageTitle.Text = "Admin Dashboard";
-            this.lblPageTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPageTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblPageTitle.BackColor = System.Drawing.Color.Transparent;
-
+            lblPageTitle.BackColor = Color.Transparent;
+            lblPageTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblPageTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPageTitle.Location = new Point(5, 5);
+            lblPageTitle.Margin = new Padding(4, 0, 4, 0);
+            lblPageTitle.Name = "lblPageTitle";
+            lblPageTitle.Size = new Size(375, 32);
+            lblPageTitle.TabIndex = 0;
+            lblPageTitle.Text = "Admin Dashboard";
             // 
             // lblPageSubtitle
             // 
-            this.lblPageSubtitle.Location = new System.Drawing.Point(4, 32);
-            this.lblPageSubtitle.Size = new System.Drawing.Size(300, 20);
-            this.lblPageSubtitle.Text = "Welcome back, Administrator";
-            this.lblPageSubtitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblPageSubtitle.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblPageSubtitle.BackColor = System.Drawing.Color.Transparent;
-
+            lblPageSubtitle.BackColor = Color.Transparent;
+            lblPageSubtitle.Font = new Font("Segoe UI", 8.5F);
+            lblPageSubtitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblPageSubtitle.Location = new Point(5, 40);
+            lblPageSubtitle.Margin = new Padding(4, 0, 4, 0);
+            lblPageSubtitle.Name = "lblPageSubtitle";
+            lblPageSubtitle.Size = new Size(375, 25);
+            lblPageSubtitle.TabIndex = 1;
+            lblPageSubtitle.Text = "Welcome back, Administrator";
             // 
             // pnlKpiParents
             // 
-            this.pnlKpiParents.BorderRadius = 16;
-            this.pnlKpiParents.BorderThickness = 1;
-            this.pnlKpiParents.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlKpiParents.FillColor = System.Drawing.Color.White;
-            this.pnlKpiParents.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlKpiParents.Location = new System.Drawing.Point(4, 64);
-            this.pnlKpiParents.Name = "pnlKpiParents";
-            this.pnlKpiParents.Size = new System.Drawing.Size(240, 130);
-            this.pnlKpiParents.Controls.Add(this.pnlKpiParentsIcon);
-            this.pnlKpiParents.Controls.Add(this.lblKpiParentsValue);
-            this.pnlKpiParents.Controls.Add(this.lblKpiParentsLabel);
-
+            pnlKpiParents.BackColor = Color.Transparent;
+            pnlKpiParents.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlKpiParents.BorderRadius = 16;
+            pnlKpiParents.BorderThickness = 1;
+            pnlKpiParents.Controls.Add(pnlKpiParentsIcon);
+            pnlKpiParents.Controls.Add(lblKpiParentsValue);
+            pnlKpiParents.Controls.Add(lblKpiParentsLabel);
+            pnlKpiParents.CustomizableEdges = customizableEdges3;
+            pnlKpiParents.FillColor = Color.White;
+            pnlKpiParents.Location = new Point(5, 80);
+            pnlKpiParents.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiParents.Name = "pnlKpiParents";
+            pnlKpiParents.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            pnlKpiParents.Size = new Size(300, 162);
+            pnlKpiParents.TabIndex = 2;
             // 
             // pnlKpiParentsIcon
             // 
-            this.pnlKpiParentsIcon.BorderRadius = 24;
-            this.pnlKpiParentsIcon.FillColor = System.Drawing.Color.FromArgb(253, 226, 220);
-            this.pnlKpiParentsIcon.BackColor = System.Drawing.Color.White;
-            this.pnlKpiParentsIcon.Location = new System.Drawing.Point(20, 20);
-            this.pnlKpiParentsIcon.Size = new System.Drawing.Size(48, 48);
-            this.pnlKpiParentsIcon.Controls.Add(this.lblKpiParentsIcon);
-
+            pnlKpiParentsIcon.BackColor = Color.White;
+            pnlKpiParentsIcon.BorderRadius = 24;
+            pnlKpiParentsIcon.Controls.Add(lblKpiParentsIcon);
+            pnlKpiParentsIcon.CustomizableEdges = customizableEdges1;
+            pnlKpiParentsIcon.FillColor = Color.FromArgb(253, 226, 220);
+            pnlKpiParentsIcon.Location = new Point(25, 25);
+            pnlKpiParentsIcon.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiParentsIcon.Name = "pnlKpiParentsIcon";
+            pnlKpiParentsIcon.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            pnlKpiParentsIcon.Size = new Size(60, 60);
+            pnlKpiParentsIcon.TabIndex = 0;
             // 
             // lblKpiParentsIcon
             // 
-            this.lblKpiParentsIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKpiParentsIcon.Text = "P";
-            this.lblKpiParentsIcon.ForeColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.lblKpiParentsIcon.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblKpiParentsIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblKpiParentsIcon.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiParentsIcon.BackColor = Color.Transparent;
+            lblKpiParentsIcon.Dock = DockStyle.Fill;
+            lblKpiParentsIcon.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblKpiParentsIcon.ForeColor = Color.FromArgb(232, 113, 74);
+            lblKpiParentsIcon.Location = new Point(0, 0);
+            lblKpiParentsIcon.Margin = new Padding(4, 0, 4, 0);
+            lblKpiParentsIcon.Name = "lblKpiParentsIcon";
+            lblKpiParentsIcon.Size = new Size(60, 60);
+            lblKpiParentsIcon.TabIndex = 0;
+            lblKpiParentsIcon.Text = "P";
+            lblKpiParentsIcon.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblKpiParentsValue
             // 
-            this.lblKpiParentsValue.Location = new System.Drawing.Point(20, 76);
-            this.lblKpiParentsValue.Size = new System.Drawing.Size(160, 30);
-            this.lblKpiParentsValue.Text = "1,284";
-            this.lblKpiParentsValue.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblKpiParentsValue.Font = new System.Drawing.Font("Segoe UI", 17F, System.Drawing.FontStyle.Bold);
-            this.lblKpiParentsValue.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiParentsValue.BackColor = Color.Transparent;
+            lblKpiParentsValue.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+            lblKpiParentsValue.ForeColor = Color.FromArgb(60, 50, 45);
+            lblKpiParentsValue.Location = new Point(25, 95);
+            lblKpiParentsValue.Margin = new Padding(4, 0, 4, 0);
+            lblKpiParentsValue.Name = "lblKpiParentsValue";
+            lblKpiParentsValue.Size = new Size(200, 38);
+            lblKpiParentsValue.TabIndex = 1;
+            lblKpiParentsValue.Text = "1,284";
             // 
             // lblKpiParentsLabel
             // 
-            this.lblKpiParentsLabel.Location = new System.Drawing.Point(20, 106);
-            this.lblKpiParentsLabel.Size = new System.Drawing.Size(200, 20);
-            this.lblKpiParentsLabel.Text = "Total Parents";
-            this.lblKpiParentsLabel.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblKpiParentsLabel.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblKpiParentsLabel.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiParentsLabel.BackColor = Color.Transparent;
+            lblKpiParentsLabel.Font = new Font("Segoe UI", 8.5F);
+            lblKpiParentsLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblKpiParentsLabel.Location = new Point(25, 132);
+            lblKpiParentsLabel.Margin = new Padding(4, 0, 4, 0);
+            lblKpiParentsLabel.Name = "lblKpiParentsLabel";
+            lblKpiParentsLabel.Size = new Size(250, 25);
+            lblKpiParentsLabel.TabIndex = 2;
+            lblKpiParentsLabel.Text = "Total Parents";
             // 
             // pnlKpiBabysitters
             // 
-            this.pnlKpiBabysitters.BorderRadius = 16;
-            this.pnlKpiBabysitters.BorderThickness = 1;
-            this.pnlKpiBabysitters.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlKpiBabysitters.FillColor = System.Drawing.Color.White;
-            this.pnlKpiBabysitters.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlKpiBabysitters.Location = new System.Drawing.Point(256, 64);
-            this.pnlKpiBabysitters.Name = "pnlKpiBabysitters";
-            this.pnlKpiBabysitters.Size = new System.Drawing.Size(240, 130);
-            this.pnlKpiBabysitters.Controls.Add(this.pnlKpiBabysittersIcon);
-            this.pnlKpiBabysitters.Controls.Add(this.lblKpiBabysittersValue);
-            this.pnlKpiBabysitters.Controls.Add(this.lblKpiBabysittersLabel);
-
+            pnlKpiBabysitters.BackColor = Color.Transparent;
+            pnlKpiBabysitters.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlKpiBabysitters.BorderRadius = 16;
+            pnlKpiBabysitters.BorderThickness = 1;
+            pnlKpiBabysitters.Controls.Add(pnlKpiBabysittersIcon);
+            pnlKpiBabysitters.Controls.Add(lblKpiBabysittersValue);
+            pnlKpiBabysitters.Controls.Add(lblKpiBabysittersLabel);
+            pnlKpiBabysitters.CustomizableEdges = customizableEdges7;
+            pnlKpiBabysitters.FillColor = Color.White;
+            pnlKpiBabysitters.Location = new Point(320, 80);
+            pnlKpiBabysitters.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiBabysitters.Name = "pnlKpiBabysitters";
+            pnlKpiBabysitters.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            pnlKpiBabysitters.Size = new Size(300, 162);
+            pnlKpiBabysitters.TabIndex = 3;
             // 
             // pnlKpiBabysittersIcon
             // 
-            this.pnlKpiBabysittersIcon.BorderRadius = 24;
-            this.pnlKpiBabysittersIcon.FillColor = System.Drawing.Color.FromArgb(222, 245, 244);
-            this.pnlKpiBabysittersIcon.BackColor = System.Drawing.Color.White;
-            this.pnlKpiBabysittersIcon.Location = new System.Drawing.Point(20, 20);
-            this.pnlKpiBabysittersIcon.Size = new System.Drawing.Size(48, 48);
-            this.pnlKpiBabysittersIcon.Controls.Add(this.lblKpiBabysittersIcon);
-
+            pnlKpiBabysittersIcon.BackColor = Color.White;
+            pnlKpiBabysittersIcon.BorderRadius = 24;
+            pnlKpiBabysittersIcon.Controls.Add(lblKpiBabysittersIcon);
+            pnlKpiBabysittersIcon.CustomizableEdges = customizableEdges5;
+            pnlKpiBabysittersIcon.FillColor = Color.FromArgb(222, 245, 244);
+            pnlKpiBabysittersIcon.Location = new Point(25, 25);
+            pnlKpiBabysittersIcon.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiBabysittersIcon.Name = "pnlKpiBabysittersIcon";
+            pnlKpiBabysittersIcon.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            pnlKpiBabysittersIcon.Size = new Size(60, 60);
+            pnlKpiBabysittersIcon.TabIndex = 0;
             // 
             // lblKpiBabysittersIcon
             // 
-            this.lblKpiBabysittersIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKpiBabysittersIcon.Text = "B";
-            this.lblKpiBabysittersIcon.ForeColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.lblKpiBabysittersIcon.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblKpiBabysittersIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblKpiBabysittersIcon.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBabysittersIcon.BackColor = Color.Transparent;
+            lblKpiBabysittersIcon.Dock = DockStyle.Fill;
+            lblKpiBabysittersIcon.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblKpiBabysittersIcon.ForeColor = Color.FromArgb(94, 200, 196);
+            lblKpiBabysittersIcon.Location = new Point(0, 0);
+            lblKpiBabysittersIcon.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBabysittersIcon.Name = "lblKpiBabysittersIcon";
+            lblKpiBabysittersIcon.Size = new Size(60, 60);
+            lblKpiBabysittersIcon.TabIndex = 0;
+            lblKpiBabysittersIcon.Text = "B";
+            lblKpiBabysittersIcon.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblKpiBabysittersValue
             // 
-            this.lblKpiBabysittersValue.Location = new System.Drawing.Point(20, 76);
-            this.lblKpiBabysittersValue.Size = new System.Drawing.Size(160, 30);
-            this.lblKpiBabysittersValue.Text = "342";
-            this.lblKpiBabysittersValue.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblKpiBabysittersValue.Font = new System.Drawing.Font("Segoe UI", 17F, System.Drawing.FontStyle.Bold);
-            this.lblKpiBabysittersValue.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBabysittersValue.BackColor = Color.Transparent;
+            lblKpiBabysittersValue.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+            lblKpiBabysittersValue.ForeColor = Color.FromArgb(60, 50, 45);
+            lblKpiBabysittersValue.Location = new Point(25, 95);
+            lblKpiBabysittersValue.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBabysittersValue.Name = "lblKpiBabysittersValue";
+            lblKpiBabysittersValue.Size = new Size(200, 38);
+            lblKpiBabysittersValue.TabIndex = 1;
+            lblKpiBabysittersValue.Text = "342";
             // 
             // lblKpiBabysittersLabel
             // 
-            this.lblKpiBabysittersLabel.Location = new System.Drawing.Point(20, 106);
-            this.lblKpiBabysittersLabel.Size = new System.Drawing.Size(200, 20);
-            this.lblKpiBabysittersLabel.Text = "Babysitters";
-            this.lblKpiBabysittersLabel.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblKpiBabysittersLabel.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblKpiBabysittersLabel.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBabysittersLabel.BackColor = Color.Transparent;
+            lblKpiBabysittersLabel.Font = new Font("Segoe UI", 8.5F);
+            lblKpiBabysittersLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblKpiBabysittersLabel.Location = new Point(25, 132);
+            lblKpiBabysittersLabel.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBabysittersLabel.Name = "lblKpiBabysittersLabel";
+            lblKpiBabysittersLabel.Size = new Size(250, 25);
+            lblKpiBabysittersLabel.TabIndex = 2;
+            lblKpiBabysittersLabel.Text = "Babysitters";
             // 
             // pnlKpiBookings
             // 
-            this.pnlKpiBookings.BorderRadius = 16;
-            this.pnlKpiBookings.BorderThickness = 1;
-            this.pnlKpiBookings.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlKpiBookings.FillColor = System.Drawing.Color.White;
-            this.pnlKpiBookings.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlKpiBookings.Location = new System.Drawing.Point(508, 64);
-            this.pnlKpiBookings.Name = "pnlKpiBookings";
-            this.pnlKpiBookings.Size = new System.Drawing.Size(240, 130);
-            this.pnlKpiBookings.Controls.Add(this.pnlKpiBookingsIcon);
-            this.pnlKpiBookings.Controls.Add(this.lblKpiBookingsValue);
-            this.pnlKpiBookings.Controls.Add(this.lblKpiBookingsLabel);
-
+            pnlKpiBookings.BackColor = Color.Transparent;
+            pnlKpiBookings.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlKpiBookings.BorderRadius = 16;
+            pnlKpiBookings.BorderThickness = 1;
+            pnlKpiBookings.Controls.Add(pnlKpiBookingsIcon);
+            pnlKpiBookings.Controls.Add(lblKpiBookingsValue);
+            pnlKpiBookings.Controls.Add(lblKpiBookingsLabel);
+            pnlKpiBookings.CustomizableEdges = customizableEdges11;
+            pnlKpiBookings.FillColor = Color.White;
+            pnlKpiBookings.Location = new Point(635, 80);
+            pnlKpiBookings.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiBookings.Name = "pnlKpiBookings";
+            pnlKpiBookings.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            pnlKpiBookings.Size = new Size(300, 162);
+            pnlKpiBookings.TabIndex = 4;
             // 
             // pnlKpiBookingsIcon
             // 
-            this.pnlKpiBookingsIcon.BorderRadius = 24;
-            this.pnlKpiBookingsIcon.FillColor = System.Drawing.Color.FromArgb(255, 244, 217);
-            this.pnlKpiBookingsIcon.BackColor = System.Drawing.Color.White;
-            this.pnlKpiBookingsIcon.Location = new System.Drawing.Point(20, 20);
-            this.pnlKpiBookingsIcon.Size = new System.Drawing.Size(48, 48);
-            this.pnlKpiBookingsIcon.Controls.Add(this.lblKpiBookingsIcon);
-
+            pnlKpiBookingsIcon.BackColor = Color.White;
+            pnlKpiBookingsIcon.BorderRadius = 24;
+            pnlKpiBookingsIcon.Controls.Add(lblKpiBookingsIcon);
+            pnlKpiBookingsIcon.CustomizableEdges = customizableEdges9;
+            pnlKpiBookingsIcon.FillColor = Color.FromArgb(255, 244, 217);
+            pnlKpiBookingsIcon.Location = new Point(25, 25);
+            pnlKpiBookingsIcon.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiBookingsIcon.Name = "pnlKpiBookingsIcon";
+            pnlKpiBookingsIcon.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            pnlKpiBookingsIcon.Size = new Size(60, 60);
+            pnlKpiBookingsIcon.TabIndex = 0;
             // 
             // lblKpiBookingsIcon
             // 
-            this.lblKpiBookingsIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKpiBookingsIcon.Text = "C";
-            this.lblKpiBookingsIcon.ForeColor = System.Drawing.Color.FromArgb(255, 209, 102);
-            this.lblKpiBookingsIcon.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblKpiBookingsIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblKpiBookingsIcon.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBookingsIcon.BackColor = Color.Transparent;
+            lblKpiBookingsIcon.Dock = DockStyle.Fill;
+            lblKpiBookingsIcon.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblKpiBookingsIcon.ForeColor = Color.FromArgb(255, 209, 102);
+            lblKpiBookingsIcon.Location = new Point(0, 0);
+            lblKpiBookingsIcon.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBookingsIcon.Name = "lblKpiBookingsIcon";
+            lblKpiBookingsIcon.Size = new Size(60, 60);
+            lblKpiBookingsIcon.TabIndex = 0;
+            lblKpiBookingsIcon.Text = "C";
+            lblKpiBookingsIcon.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblKpiBookingsValue
             // 
-            this.lblKpiBookingsValue.Location = new System.Drawing.Point(20, 76);
-            this.lblKpiBookingsValue.Size = new System.Drawing.Size(160, 30);
-            this.lblKpiBookingsValue.Text = "891";
-            this.lblKpiBookingsValue.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblKpiBookingsValue.Font = new System.Drawing.Font("Segoe UI", 17F, System.Drawing.FontStyle.Bold);
-            this.lblKpiBookingsValue.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBookingsValue.BackColor = Color.Transparent;
+            lblKpiBookingsValue.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+            lblKpiBookingsValue.ForeColor = Color.FromArgb(60, 50, 45);
+            lblKpiBookingsValue.Location = new Point(25, 95);
+            lblKpiBookingsValue.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBookingsValue.Name = "lblKpiBookingsValue";
+            lblKpiBookingsValue.Size = new Size(200, 38);
+            lblKpiBookingsValue.TabIndex = 1;
+            lblKpiBookingsValue.Text = "891";
             // 
             // lblKpiBookingsLabel
             // 
-            this.lblKpiBookingsLabel.Location = new System.Drawing.Point(20, 106);
-            this.lblKpiBookingsLabel.Size = new System.Drawing.Size(200, 20);
-            this.lblKpiBookingsLabel.Text = "Bookings This Month";
-            this.lblKpiBookingsLabel.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblKpiBookingsLabel.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblKpiBookingsLabel.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiBookingsLabel.BackColor = Color.Transparent;
+            lblKpiBookingsLabel.Font = new Font("Segoe UI", 8.5F);
+            lblKpiBookingsLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblKpiBookingsLabel.Location = new Point(25, 132);
+            lblKpiBookingsLabel.Margin = new Padding(4, 0, 4, 0);
+            lblKpiBookingsLabel.Name = "lblKpiBookingsLabel";
+            lblKpiBookingsLabel.Size = new Size(250, 25);
+            lblKpiBookingsLabel.TabIndex = 2;
+            lblKpiBookingsLabel.Text = "Bookings This Month";
             // 
             // pnlKpiRevenue
             // 
-            this.pnlKpiRevenue.BorderRadius = 16;
-            this.pnlKpiRevenue.BorderThickness = 1;
-            this.pnlKpiRevenue.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlKpiRevenue.FillColor = System.Drawing.Color.White;
-            this.pnlKpiRevenue.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlKpiRevenue.Location = new System.Drawing.Point(760, 64);
-            this.pnlKpiRevenue.Name = "pnlKpiRevenue";
-            this.pnlKpiRevenue.Size = new System.Drawing.Size(240, 130);
-            this.pnlKpiRevenue.Controls.Add(this.pnlKpiRevenueIcon);
-            this.pnlKpiRevenue.Controls.Add(this.lblKpiRevenueValue);
-            this.pnlKpiRevenue.Controls.Add(this.lblKpiRevenueLabel);
-
+            pnlKpiRevenue.BackColor = Color.Transparent;
+            pnlKpiRevenue.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlKpiRevenue.BorderRadius = 16;
+            pnlKpiRevenue.BorderThickness = 1;
+            pnlKpiRevenue.Controls.Add(pnlKpiRevenueIcon);
+            pnlKpiRevenue.Controls.Add(lblKpiRevenueValue);
+            pnlKpiRevenue.Controls.Add(lblKpiRevenueLabel);
+            pnlKpiRevenue.CustomizableEdges = customizableEdges15;
+            pnlKpiRevenue.FillColor = Color.White;
+            pnlKpiRevenue.Location = new Point(950, 80);
+            pnlKpiRevenue.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiRevenue.Name = "pnlKpiRevenue";
+            pnlKpiRevenue.ShadowDecoration.CustomizableEdges = customizableEdges16;
+            pnlKpiRevenue.Size = new Size(300, 162);
+            pnlKpiRevenue.TabIndex = 5;
             // 
             // pnlKpiRevenueIcon
             // 
-            this.pnlKpiRevenueIcon.BorderRadius = 24;
-            this.pnlKpiRevenueIcon.FillColor = System.Drawing.Color.FromArgb(253, 225, 225);
-            this.pnlKpiRevenueIcon.BackColor = System.Drawing.Color.White;
-            this.pnlKpiRevenueIcon.Location = new System.Drawing.Point(20, 20);
-            this.pnlKpiRevenueIcon.Size = new System.Drawing.Size(48, 48);
-            this.pnlKpiRevenueIcon.Controls.Add(this.lblKpiRevenueIcon);
-
+            pnlKpiRevenueIcon.BackColor = Color.White;
+            pnlKpiRevenueIcon.BorderRadius = 24;
+            pnlKpiRevenueIcon.Controls.Add(lblKpiRevenueIcon);
+            pnlKpiRevenueIcon.CustomizableEdges = customizableEdges13;
+            pnlKpiRevenueIcon.FillColor = Color.FromArgb(253, 225, 225);
+            pnlKpiRevenueIcon.Location = new Point(25, 25);
+            pnlKpiRevenueIcon.Margin = new Padding(4, 4, 4, 4);
+            pnlKpiRevenueIcon.Name = "pnlKpiRevenueIcon";
+            pnlKpiRevenueIcon.ShadowDecoration.CustomizableEdges = customizableEdges14;
+            pnlKpiRevenueIcon.Size = new Size(60, 60);
+            pnlKpiRevenueIcon.TabIndex = 0;
             // 
             // lblKpiRevenueIcon
             // 
-            this.lblKpiRevenueIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKpiRevenueIcon.Text = "$";
-            this.lblKpiRevenueIcon.ForeColor = System.Drawing.Color.FromArgb(224, 90, 90);
-            this.lblKpiRevenueIcon.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblKpiRevenueIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblKpiRevenueIcon.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiRevenueIcon.BackColor = Color.Transparent;
+            lblKpiRevenueIcon.Dock = DockStyle.Fill;
+            lblKpiRevenueIcon.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblKpiRevenueIcon.ForeColor = Color.FromArgb(224, 90, 90);
+            lblKpiRevenueIcon.Location = new Point(0, 0);
+            lblKpiRevenueIcon.Margin = new Padding(4, 0, 4, 0);
+            lblKpiRevenueIcon.Name = "lblKpiRevenueIcon";
+            lblKpiRevenueIcon.Size = new Size(60, 60);
+            lblKpiRevenueIcon.TabIndex = 0;
+            lblKpiRevenueIcon.Text = "$";
+            lblKpiRevenueIcon.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblKpiRevenueValue
             // 
-            this.lblKpiRevenueValue.Location = new System.Drawing.Point(20, 76);
-            this.lblKpiRevenueValue.Size = new System.Drawing.Size(180, 30);
-            this.lblKpiRevenueValue.Text = "$42,800";
-            this.lblKpiRevenueValue.ForeColor = System.Drawing.Color.FromArgb(60, 50, 45);
-            this.lblKpiRevenueValue.Font = new System.Drawing.Font("Segoe UI", 17F, System.Drawing.FontStyle.Bold);
-            this.lblKpiRevenueValue.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiRevenueValue.BackColor = Color.Transparent;
+            lblKpiRevenueValue.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+            lblKpiRevenueValue.ForeColor = Color.FromArgb(60, 50, 45);
+            lblKpiRevenueValue.Location = new Point(25, 95);
+            lblKpiRevenueValue.Margin = new Padding(4, 0, 4, 0);
+            lblKpiRevenueValue.Name = "lblKpiRevenueValue";
+            lblKpiRevenueValue.Size = new Size(225, 38);
+            lblKpiRevenueValue.TabIndex = 1;
+            lblKpiRevenueValue.Text = "$42,800";
             // 
             // lblKpiRevenueLabel
             // 
-            this.lblKpiRevenueLabel.Location = new System.Drawing.Point(20, 106);
-            this.lblKpiRevenueLabel.Size = new System.Drawing.Size(200, 20);
-            this.lblKpiRevenueLabel.Text = "Revenue";
-            this.lblKpiRevenueLabel.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblKpiRevenueLabel.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblKpiRevenueLabel.BackColor = System.Drawing.Color.Transparent;
-
+            lblKpiRevenueLabel.BackColor = Color.Transparent;
+            lblKpiRevenueLabel.Font = new Font("Segoe UI", 8.5F);
+            lblKpiRevenueLabel.ForeColor = Color.FromArgb(154, 136, 128);
+            lblKpiRevenueLabel.Location = new Point(25, 132);
+            lblKpiRevenueLabel.Margin = new Padding(4, 0, 4, 0);
+            lblKpiRevenueLabel.Name = "lblKpiRevenueLabel";
+            lblKpiRevenueLabel.Size = new Size(250, 25);
+            lblKpiRevenueLabel.TabIndex = 2;
+            lblKpiRevenueLabel.Text = "Revenue";
             // 
-            // pnlBookingsChart (visual placeholder card - wire up a real chart control later)
+            // pnlBookingsChart
             // 
-            this.pnlBookingsChart.BorderRadius = 16;
-            this.pnlBookingsChart.BorderThickness = 1;
-            this.pnlBookingsChart.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlBookingsChart.FillColor = System.Drawing.Color.White;
-            this.pnlBookingsChart.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlBookingsChart.Location = new System.Drawing.Point(4, 208);
-            this.pnlBookingsChart.Name = "pnlBookingsChart";
-            this.pnlBookingsChart.Size = new System.Drawing.Size(496, 200);
-            this.pnlBookingsChart.Controls.Add(this.lblBookingsChartTitle);
-
-            // 
-            // Monthly Bookings bars (static fake data: 65,78,90,110,125,145 - chart area ~140px tall)
-            // 
-            this.barJan.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barJan.BackColor = System.Drawing.Color.White;
-            this.barJan.BorderRadius = 4;
-            this.barJan.Location = new System.Drawing.Point(40, 116);
-            this.barJan.Size = new System.Drawing.Size(36, 63);
-            this.lblBarJan.Text = "Jan";
-            this.lblBarJan.Location = new System.Drawing.Point(34, 182);
-            this.lblBarJan.Size = new System.Drawing.Size(48, 18);
-            this.lblBarJan.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarJan.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarJan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarJan.BackColor = System.Drawing.Color.Transparent;
-
-            this.barFeb.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barFeb.BackColor = System.Drawing.Color.White;
-            this.barFeb.BorderRadius = 4;
-            this.barFeb.Location = new System.Drawing.Point(112, 104);
-            this.barFeb.Size = new System.Drawing.Size(36, 75);
-            this.lblBarFeb.Text = "Feb";
-            this.lblBarFeb.Location = new System.Drawing.Point(106, 182);
-            this.lblBarFeb.Size = new System.Drawing.Size(48, 18);
-            this.lblBarFeb.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarFeb.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarFeb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarFeb.BackColor = System.Drawing.Color.Transparent;
-
-            this.barMar.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barMar.BackColor = System.Drawing.Color.White;
-            this.barMar.BorderRadius = 4;
-            this.barMar.Location = new System.Drawing.Point(184, 92);
-            this.barMar.Size = new System.Drawing.Size(36, 87);
-            this.lblBarMar.Text = "Mar";
-            this.lblBarMar.Location = new System.Drawing.Point(178, 182);
-            this.lblBarMar.Size = new System.Drawing.Size(48, 18);
-            this.lblBarMar.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarMar.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarMar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarMar.BackColor = System.Drawing.Color.Transparent;
-
-            this.barApr.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barApr.BackColor = System.Drawing.Color.White;
-            this.barApr.BorderRadius = 4;
-            this.barApr.Location = new System.Drawing.Point(256, 72);
-            this.barApr.Size = new System.Drawing.Size(36, 107);
-            this.lblBarApr.Text = "Apr";
-            this.lblBarApr.Location = new System.Drawing.Point(250, 182);
-            this.lblBarApr.Size = new System.Drawing.Size(48, 18);
-            this.lblBarApr.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarApr.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarApr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarApr.BackColor = System.Drawing.Color.Transparent;
-
-            this.barMay.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barMay.BackColor = System.Drawing.Color.White;
-            this.barMay.BorderRadius = 4;
-            this.barMay.Location = new System.Drawing.Point(328, 58);
-            this.barMay.Size = new System.Drawing.Size(36, 121);
-            this.lblBarMay.Text = "May";
-            this.lblBarMay.Location = new System.Drawing.Point(322, 182);
-            this.lblBarMay.Size = new System.Drawing.Size(48, 18);
-            this.lblBarMay.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarMay.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarMay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarMay.BackColor = System.Drawing.Color.Transparent;
-
-            this.barJun.FillColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.barJun.BackColor = System.Drawing.Color.White;
-            this.barJun.BorderRadius = 4;
-            this.barJun.Location = new System.Drawing.Point(400, 38);
-            this.barJun.Size = new System.Drawing.Size(36, 141);
-            this.lblBarJun.Text = "Jun";
-            this.lblBarJun.Location = new System.Drawing.Point(394, 182);
-            this.lblBarJun.Size = new System.Drawing.Size(48, 18);
-            this.lblBarJun.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBarJun.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblBarJun.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblBarJun.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlBookingsChart.Controls.Add(this.barJan);
-            this.pnlBookingsChart.Controls.Add(this.barFeb);
-            this.pnlBookingsChart.Controls.Add(this.barMar);
-            this.pnlBookingsChart.Controls.Add(this.barApr);
-            this.pnlBookingsChart.Controls.Add(this.barMay);
-            this.pnlBookingsChart.Controls.Add(this.barJun);
-            this.pnlBookingsChart.Controls.Add(this.lblBarJan);
-            this.pnlBookingsChart.Controls.Add(this.lblBarFeb);
-            this.pnlBookingsChart.Controls.Add(this.lblBarMar);
-            this.pnlBookingsChart.Controls.Add(this.lblBarApr);
-            this.pnlBookingsChart.Controls.Add(this.lblBarMay);
-            this.pnlBookingsChart.Controls.Add(this.lblBarJun);
-
+            pnlBookingsChart.BackColor = Color.Transparent;
+            pnlBookingsChart.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlBookingsChart.BorderRadius = 16;
+            pnlBookingsChart.BorderThickness = 1;
+            pnlBookingsChart.Controls.Add(lblBookingsChartTitle);
+            pnlBookingsChart.Controls.Add(barJan);
+            pnlBookingsChart.Controls.Add(barFeb);
+            pnlBookingsChart.Controls.Add(barMar);
+            pnlBookingsChart.Controls.Add(barApr);
+            pnlBookingsChart.Controls.Add(barMay);
+            pnlBookingsChart.Controls.Add(barJun);
+            pnlBookingsChart.Controls.Add(lblBarJan);
+            pnlBookingsChart.Controls.Add(lblBarFeb);
+            pnlBookingsChart.Controls.Add(lblBarMar);
+            pnlBookingsChart.Controls.Add(lblBarApr);
+            pnlBookingsChart.Controls.Add(lblBarMay);
+            pnlBookingsChart.Controls.Add(lblBarJun);
+            pnlBookingsChart.CustomizableEdges = customizableEdges29;
+            pnlBookingsChart.FillColor = Color.White;
+            pnlBookingsChart.Location = new Point(5, 260);
+            pnlBookingsChart.Margin = new Padding(4, 4, 4, 4);
+            pnlBookingsChart.Name = "pnlBookingsChart";
+            pnlBookingsChart.ShadowDecoration.CustomizableEdges = customizableEdges30;
+            pnlBookingsChart.Size = new Size(620, 250);
+            pnlBookingsChart.TabIndex = 6;
+            pnlBookingsChart.Paint += pnlBookingsChart_Paint;
             // 
             // lblBookingsChartTitle
             // 
-            this.lblBookingsChartTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblBookingsChartTitle.Size = new System.Drawing.Size(300, 22);
-            this.lblBookingsChartTitle.Text = "Monthly Bookings";
-            this.lblBookingsChartTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblBookingsChartTitle.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblBookingsChartTitle.BackColor = System.Drawing.Color.Transparent;
-
+            lblBookingsChartTitle.BackColor = Color.Transparent;
+            lblBookingsChartTitle.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblBookingsChartTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBookingsChartTitle.Location = new Point(20, 18);
+            lblBookingsChartTitle.Margin = new Padding(4, 0, 4, 0);
+            lblBookingsChartTitle.Name = "lblBookingsChartTitle";
+            lblBookingsChartTitle.Size = new Size(375, 28);
+            lblBookingsChartTitle.TabIndex = 0;
+            lblBookingsChartTitle.Text = "Monthly Bookings";
+            // 
+            // barJan
+            // 
+            barJan.BackColor = Color.White;
+            barJan.BorderRadius = 4;
+            barJan.CustomizableEdges = customizableEdges17;
+            barJan.FillColor = Color.FromArgb(232, 113, 74);
+            barJan.Location = new Point(50, 145);
+            barJan.Margin = new Padding(4, 4, 4, 4);
+            barJan.Name = "barJan";
+            barJan.ShadowDecoration.CustomizableEdges = customizableEdges18;
+            barJan.Size = new Size(45, 79);
+            barJan.TabIndex = 1;
+            // 
+            // barFeb
+            // 
+            barFeb.BackColor = Color.White;
+            barFeb.BorderRadius = 4;
+            barFeb.CustomizableEdges = customizableEdges19;
+            barFeb.FillColor = Color.FromArgb(232, 113, 74);
+            barFeb.Location = new Point(140, 130);
+            barFeb.Margin = new Padding(4, 4, 4, 4);
+            barFeb.Name = "barFeb";
+            barFeb.ShadowDecoration.CustomizableEdges = customizableEdges20;
+            barFeb.Size = new Size(45, 94);
+            barFeb.TabIndex = 2;
+            // 
+            // barMar
+            // 
+            barMar.BackColor = Color.White;
+            barMar.BorderRadius = 4;
+            barMar.CustomizableEdges = customizableEdges21;
+            barMar.FillColor = Color.FromArgb(232, 113, 74);
+            barMar.Location = new Point(230, 115);
+            barMar.Margin = new Padding(4, 4, 4, 4);
+            barMar.Name = "barMar";
+            barMar.ShadowDecoration.CustomizableEdges = customizableEdges22;
+            barMar.Size = new Size(45, 109);
+            barMar.TabIndex = 3;
+            // 
+            // barApr
+            // 
+            barApr.BackColor = Color.White;
+            barApr.BorderRadius = 4;
+            barApr.CustomizableEdges = customizableEdges23;
+            barApr.FillColor = Color.FromArgb(232, 113, 74);
+            barApr.Location = new Point(320, 90);
+            barApr.Margin = new Padding(4, 4, 4, 4);
+            barApr.Name = "barApr";
+            barApr.ShadowDecoration.CustomizableEdges = customizableEdges24;
+            barApr.Size = new Size(45, 134);
+            barApr.TabIndex = 4;
+            // 
+            // barMay
+            // 
+            barMay.BackColor = Color.White;
+            barMay.BorderRadius = 4;
+            barMay.CustomizableEdges = customizableEdges25;
+            barMay.FillColor = Color.FromArgb(232, 113, 74);
+            barMay.Location = new Point(410, 72);
+            barMay.Margin = new Padding(4, 4, 4, 4);
+            barMay.Name = "barMay";
+            barMay.ShadowDecoration.CustomizableEdges = customizableEdges26;
+            barMay.Size = new Size(45, 151);
+            barMay.TabIndex = 5;
+            // 
+            // barJun
+            // 
+            barJun.BackColor = Color.White;
+            barJun.BorderRadius = 4;
+            barJun.CustomizableEdges = customizableEdges27;
+            barJun.FillColor = Color.FromArgb(232, 113, 74);
+            barJun.Location = new Point(500, 48);
+            barJun.Margin = new Padding(4, 4, 4, 4);
+            barJun.Name = "barJun";
+            barJun.ShadowDecoration.CustomizableEdges = customizableEdges28;
+            barJun.Size = new Size(45, 176);
+            barJun.TabIndex = 6;
+            // 
+            // lblBarJan
+            // 
+            lblBarJan.BackColor = Color.Transparent;
+            lblBarJan.Font = new Font("Segoe UI", 8F);
+            lblBarJan.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarJan.Location = new Point(42, 228);
+            lblBarJan.Margin = new Padding(4, 0, 4, 0);
+            lblBarJan.Name = "lblBarJan";
+            lblBarJan.Size = new Size(60, 22);
+            lblBarJan.TabIndex = 7;
+            lblBarJan.Text = "Jan";
+            lblBarJan.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblBarFeb
+            // 
+            lblBarFeb.BackColor = Color.Transparent;
+            lblBarFeb.Font = new Font("Segoe UI", 8F);
+            lblBarFeb.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarFeb.Location = new Point(132, 228);
+            lblBarFeb.Margin = new Padding(4, 0, 4, 0);
+            lblBarFeb.Name = "lblBarFeb";
+            lblBarFeb.Size = new Size(60, 22);
+            lblBarFeb.TabIndex = 8;
+            lblBarFeb.Text = "Feb";
+            lblBarFeb.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblBarMar
+            // 
+            lblBarMar.BackColor = Color.Transparent;
+            lblBarMar.Font = new Font("Segoe UI", 8F);
+            lblBarMar.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarMar.Location = new Point(222, 228);
+            lblBarMar.Margin = new Padding(4, 0, 4, 0);
+            lblBarMar.Name = "lblBarMar";
+            lblBarMar.Size = new Size(60, 22);
+            lblBarMar.TabIndex = 9;
+            lblBarMar.Text = "Mar";
+            lblBarMar.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblBarApr
+            // 
+            lblBarApr.BackColor = Color.Transparent;
+            lblBarApr.Font = new Font("Segoe UI", 8F);
+            lblBarApr.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarApr.Location = new Point(312, 228);
+            lblBarApr.Margin = new Padding(4, 0, 4, 0);
+            lblBarApr.Name = "lblBarApr";
+            lblBarApr.Size = new Size(60, 22);
+            lblBarApr.TabIndex = 10;
+            lblBarApr.Text = "Apr";
+            lblBarApr.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblBarMay
+            // 
+            lblBarMay.BackColor = Color.Transparent;
+            lblBarMay.Font = new Font("Segoe UI", 8F);
+            lblBarMay.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarMay.Location = new Point(402, 228);
+            lblBarMay.Margin = new Padding(4, 0, 4, 0);
+            lblBarMay.Name = "lblBarMay";
+            lblBarMay.Size = new Size(60, 22);
+            lblBarMay.TabIndex = 11;
+            lblBarMay.Text = "May";
+            lblBarMay.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblBarJun
+            // 
+            lblBarJun.BackColor = Color.Transparent;
+            lblBarJun.Font = new Font("Segoe UI", 8F);
+            lblBarJun.ForeColor = Color.FromArgb(154, 136, 128);
+            lblBarJun.Location = new Point(492, 228);
+            lblBarJun.Margin = new Padding(4, 0, 4, 0);
+            lblBarJun.Name = "lblBarJun";
+            lblBarJun.Size = new Size(60, 22);
+            lblBarJun.TabIndex = 12;
+            lblBarJun.Text = "Jun";
+            lblBarJun.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // pnlRevenueChart
             // 
-            this.pnlRevenueChart.BorderRadius = 16;
-            this.pnlRevenueChart.BorderThickness = 1;
-            this.pnlRevenueChart.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlRevenueChart.FillColor = System.Drawing.Color.White;
-            this.pnlRevenueChart.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlRevenueChart.Location = new System.Drawing.Point(508, 208);
-            this.pnlRevenueChart.Name = "pnlRevenueChart";
-            this.pnlRevenueChart.Size = new System.Drawing.Size(496, 200);
-            this.pnlRevenueChart.Controls.Add(this.lblRevenueChartTitle);
-
-            // 
-            // Revenue Trend bars (static fake data: 3200,4100,3800,5200,4900,6100 - chart area ~140px tall)
-            // 
-            this.revJan.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revJan.BackColor = System.Drawing.Color.White;
-            this.revJan.BorderRadius = 4;
-            this.revJan.Location = new System.Drawing.Point(40, 109);
-            this.revJan.Size = new System.Drawing.Size(36, 70);
-            this.lblRevJan.Text = "Jan";
-            this.lblRevJan.Location = new System.Drawing.Point(34, 182);
-            this.lblRevJan.Size = new System.Drawing.Size(48, 18);
-            this.lblRevJan.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevJan.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevJan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevJan.BackColor = System.Drawing.Color.Transparent;
-
-            this.revFeb.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revFeb.BackColor = System.Drawing.Color.White;
-            this.revFeb.BorderRadius = 4;
-            this.revFeb.Location = new System.Drawing.Point(112, 89);
-            this.revFeb.Size = new System.Drawing.Size(36, 90);
-            this.lblRevFeb.Text = "Feb";
-            this.lblRevFeb.Location = new System.Drawing.Point(106, 182);
-            this.lblRevFeb.Size = new System.Drawing.Size(48, 18);
-            this.lblRevFeb.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevFeb.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevFeb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevFeb.BackColor = System.Drawing.Color.Transparent;
-
-            this.revMar.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revMar.BackColor = System.Drawing.Color.White;
-            this.revMar.BorderRadius = 4;
-            this.revMar.Location = new System.Drawing.Point(184, 96);
-            this.revMar.Size = new System.Drawing.Size(36, 83);
-            this.lblRevMar.Text = "Mar";
-            this.lblRevMar.Location = new System.Drawing.Point(178, 182);
-            this.lblRevMar.Size = new System.Drawing.Size(48, 18);
-            this.lblRevMar.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevMar.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevMar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevMar.BackColor = System.Drawing.Color.Transparent;
-
-            this.revApr.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revApr.BackColor = System.Drawing.Color.White;
-            this.revApr.BorderRadius = 4;
-            this.revApr.Location = new System.Drawing.Point(256, 65);
-            this.revApr.Size = new System.Drawing.Size(36, 114);
-            this.lblRevApr.Text = "Apr";
-            this.lblRevApr.Location = new System.Drawing.Point(250, 182);
-            this.lblRevApr.Size = new System.Drawing.Size(48, 18);
-            this.lblRevApr.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevApr.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevApr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevApr.BackColor = System.Drawing.Color.Transparent;
-
-            this.revMay.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revMay.BackColor = System.Drawing.Color.White;
-            this.revMay.BorderRadius = 4;
-            this.revMay.Location = new System.Drawing.Point(328, 72);
-            this.revMay.Size = new System.Drawing.Size(36, 107);
-            this.lblRevMay.Text = "May";
-            this.lblRevMay.Location = new System.Drawing.Point(322, 182);
-            this.lblRevMay.Size = new System.Drawing.Size(48, 18);
-            this.lblRevMay.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevMay.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevMay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevMay.BackColor = System.Drawing.Color.Transparent;
-
-            this.revJun.FillColor = System.Drawing.Color.FromArgb(94, 200, 196);
-            this.revJun.BackColor = System.Drawing.Color.White;
-            this.revJun.BorderRadius = 4;
-            this.revJun.Location = new System.Drawing.Point(400, 38);
-            this.revJun.Size = new System.Drawing.Size(36, 141);
-            this.lblRevJun.Text = "Jun";
-            this.lblRevJun.Location = new System.Drawing.Point(394, 182);
-            this.lblRevJun.Size = new System.Drawing.Size(48, 18);
-            this.lblRevJun.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevJun.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblRevJun.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblRevJun.BackColor = System.Drawing.Color.Transparent;
-
-            this.pnlRevenueChart.Controls.Add(this.revJan);
-            this.pnlRevenueChart.Controls.Add(this.revFeb);
-            this.pnlRevenueChart.Controls.Add(this.revMar);
-            this.pnlRevenueChart.Controls.Add(this.revApr);
-            this.pnlRevenueChart.Controls.Add(this.revMay);
-            this.pnlRevenueChart.Controls.Add(this.revJun);
-            this.pnlRevenueChart.Controls.Add(this.lblRevJan);
-            this.pnlRevenueChart.Controls.Add(this.lblRevFeb);
-            this.pnlRevenueChart.Controls.Add(this.lblRevMar);
-            this.pnlRevenueChart.Controls.Add(this.lblRevApr);
-            this.pnlRevenueChart.Controls.Add(this.lblRevMay);
-            this.pnlRevenueChart.Controls.Add(this.lblRevJun);
-
+            pnlRevenueChart.BackColor = Color.Transparent;
+            pnlRevenueChart.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlRevenueChart.BorderRadius = 16;
+            pnlRevenueChart.BorderThickness = 1;
+            pnlRevenueChart.Controls.Add(lblRevenueChartTitle);
+            pnlRevenueChart.Controls.Add(revJan);
+            pnlRevenueChart.Controls.Add(revFeb);
+            pnlRevenueChart.Controls.Add(revMar);
+            pnlRevenueChart.Controls.Add(revApr);
+            pnlRevenueChart.Controls.Add(revMay);
+            pnlRevenueChart.Controls.Add(revJun);
+            pnlRevenueChart.Controls.Add(lblRevJan);
+            pnlRevenueChart.Controls.Add(lblRevFeb);
+            pnlRevenueChart.Controls.Add(lblRevMar);
+            pnlRevenueChart.Controls.Add(lblRevApr);
+            pnlRevenueChart.Controls.Add(lblRevMay);
+            pnlRevenueChart.Controls.Add(lblRevJun);
+            pnlRevenueChart.CustomizableEdges = customizableEdges43;
+            pnlRevenueChart.FillColor = Color.White;
+            pnlRevenueChart.Location = new Point(635, 260);
+            pnlRevenueChart.Margin = new Padding(4, 4, 4, 4);
+            pnlRevenueChart.Name = "pnlRevenueChart";
+            pnlRevenueChart.ShadowDecoration.CustomizableEdges = customizableEdges44;
+            pnlRevenueChart.Size = new Size(620, 250);
+            pnlRevenueChart.TabIndex = 7;
             // 
             // lblRevenueChartTitle
             // 
-            this.lblRevenueChartTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblRevenueChartTitle.Size = new System.Drawing.Size(300, 22);
-            this.lblRevenueChartTitle.Text = "Revenue Trend";
-            this.lblRevenueChartTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblRevenueChartTitle.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblRevenueChartTitle.BackColor = System.Drawing.Color.Transparent;
-
+            lblRevenueChartTitle.BackColor = Color.Transparent;
+            lblRevenueChartTitle.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblRevenueChartTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevenueChartTitle.Location = new Point(20, 18);
+            lblRevenueChartTitle.Margin = new Padding(4, 0, 4, 0);
+            lblRevenueChartTitle.Name = "lblRevenueChartTitle";
+            lblRevenueChartTitle.Size = new Size(375, 28);
+            lblRevenueChartTitle.TabIndex = 0;
+            lblRevenueChartTitle.Text = "Revenue Trend";
+            // 
+            // revJan
+            // 
+            revJan.BackColor = Color.White;
+            revJan.BorderRadius = 4;
+            revJan.CustomizableEdges = customizableEdges31;
+            revJan.FillColor = Color.FromArgb(94, 200, 196);
+            revJan.Location = new Point(50, 136);
+            revJan.Margin = new Padding(4, 4, 4, 4);
+            revJan.Name = "revJan";
+            revJan.ShadowDecoration.CustomizableEdges = customizableEdges32;
+            revJan.Size = new Size(45, 88);
+            revJan.TabIndex = 1;
+            // 
+            // revFeb
+            // 
+            revFeb.BackColor = Color.White;
+            revFeb.BorderRadius = 4;
+            revFeb.CustomizableEdges = customizableEdges33;
+            revFeb.FillColor = Color.FromArgb(94, 200, 196);
+            revFeb.Location = new Point(140, 111);
+            revFeb.Margin = new Padding(4, 4, 4, 4);
+            revFeb.Name = "revFeb";
+            revFeb.ShadowDecoration.CustomizableEdges = customizableEdges34;
+            revFeb.Size = new Size(45, 112);
+            revFeb.TabIndex = 2;
+            // 
+            // revMar
+            // 
+            revMar.BackColor = Color.White;
+            revMar.BorderRadius = 4;
+            revMar.CustomizableEdges = customizableEdges35;
+            revMar.FillColor = Color.FromArgb(94, 200, 196);
+            revMar.Location = new Point(230, 120);
+            revMar.Margin = new Padding(4, 4, 4, 4);
+            revMar.Name = "revMar";
+            revMar.ShadowDecoration.CustomizableEdges = customizableEdges36;
+            revMar.Size = new Size(45, 104);
+            revMar.TabIndex = 3;
+            // 
+            // revApr
+            // 
+            revApr.BackColor = Color.White;
+            revApr.BorderRadius = 4;
+            revApr.CustomizableEdges = customizableEdges37;
+            revApr.FillColor = Color.FromArgb(94, 200, 196);
+            revApr.Location = new Point(320, 81);
+            revApr.Margin = new Padding(4, 4, 4, 4);
+            revApr.Name = "revApr";
+            revApr.ShadowDecoration.CustomizableEdges = customizableEdges38;
+            revApr.Size = new Size(45, 142);
+            revApr.TabIndex = 4;
+            // 
+            // revMay
+            // 
+            revMay.BackColor = Color.White;
+            revMay.BorderRadius = 4;
+            revMay.CustomizableEdges = customizableEdges39;
+            revMay.FillColor = Color.FromArgb(94, 200, 196);
+            revMay.Location = new Point(410, 90);
+            revMay.Margin = new Padding(4, 4, 4, 4);
+            revMay.Name = "revMay";
+            revMay.ShadowDecoration.CustomizableEdges = customizableEdges40;
+            revMay.Size = new Size(45, 134);
+            revMay.TabIndex = 5;
+            // 
+            // revJun
+            // 
+            revJun.BackColor = Color.White;
+            revJun.BorderRadius = 4;
+            revJun.CustomizableEdges = customizableEdges41;
+            revJun.FillColor = Color.FromArgb(94, 200, 196);
+            revJun.Location = new Point(500, 48);
+            revJun.Margin = new Padding(4, 4, 4, 4);
+            revJun.Name = "revJun";
+            revJun.ShadowDecoration.CustomizableEdges = customizableEdges42;
+            revJun.Size = new Size(45, 176);
+            revJun.TabIndex = 6;
+            // 
+            // lblRevJan
+            // 
+            lblRevJan.BackColor = Color.Transparent;
+            lblRevJan.Font = new Font("Segoe UI", 8F);
+            lblRevJan.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevJan.Location = new Point(42, 228);
+            lblRevJan.Margin = new Padding(4, 0, 4, 0);
+            lblRevJan.Name = "lblRevJan";
+            lblRevJan.Size = new Size(60, 22);
+            lblRevJan.TabIndex = 7;
+            lblRevJan.Text = "Jan";
+            lblRevJan.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblRevFeb
+            // 
+            lblRevFeb.BackColor = Color.Transparent;
+            lblRevFeb.Font = new Font("Segoe UI", 8F);
+            lblRevFeb.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevFeb.Location = new Point(132, 228);
+            lblRevFeb.Margin = new Padding(4, 0, 4, 0);
+            lblRevFeb.Name = "lblRevFeb";
+            lblRevFeb.Size = new Size(60, 22);
+            lblRevFeb.TabIndex = 8;
+            lblRevFeb.Text = "Feb";
+            lblRevFeb.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblRevMar
+            // 
+            lblRevMar.BackColor = Color.Transparent;
+            lblRevMar.Font = new Font("Segoe UI", 8F);
+            lblRevMar.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevMar.Location = new Point(222, 228);
+            lblRevMar.Margin = new Padding(4, 0, 4, 0);
+            lblRevMar.Name = "lblRevMar";
+            lblRevMar.Size = new Size(60, 22);
+            lblRevMar.TabIndex = 9;
+            lblRevMar.Text = "Mar";
+            lblRevMar.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblRevApr
+            // 
+            lblRevApr.BackColor = Color.Transparent;
+            lblRevApr.Font = new Font("Segoe UI", 8F);
+            lblRevApr.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevApr.Location = new Point(312, 228);
+            lblRevApr.Margin = new Padding(4, 0, 4, 0);
+            lblRevApr.Name = "lblRevApr";
+            lblRevApr.Size = new Size(60, 22);
+            lblRevApr.TabIndex = 10;
+            lblRevApr.Text = "Apr";
+            lblRevApr.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblRevMay
+            // 
+            lblRevMay.BackColor = Color.Transparent;
+            lblRevMay.Font = new Font("Segoe UI", 8F);
+            lblRevMay.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevMay.Location = new Point(402, 228);
+            lblRevMay.Margin = new Padding(4, 0, 4, 0);
+            lblRevMay.Name = "lblRevMay";
+            lblRevMay.Size = new Size(60, 22);
+            lblRevMay.TabIndex = 11;
+            lblRevMay.Text = "May";
+            lblRevMay.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblRevJun
+            // 
+            lblRevJun.BackColor = Color.Transparent;
+            lblRevJun.Font = new Font("Segoe UI", 8F);
+            lblRevJun.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRevJun.Location = new Point(492, 228);
+            lblRevJun.Margin = new Padding(4, 0, 4, 0);
+            lblRevJun.Name = "lblRevJun";
+            lblRevJun.Size = new Size(60, 22);
+            lblRevJun.TabIndex = 12;
+            lblRevJun.Text = "Jun";
+            lblRevJun.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // pnlUserTableCard
             // 
-            this.pnlUserTableCard.BorderRadius = 16;
-            this.pnlUserTableCard.BorderThickness = 1;
-            this.pnlUserTableCard.BorderColor = System.Drawing.Color.FromArgb(238, 230, 224);
-            this.pnlUserTableCard.FillColor = System.Drawing.Color.White;
-            this.pnlUserTableCard.BackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.pnlUserTableCard.Location = new System.Drawing.Point(4, 424);
-            this.pnlUserTableCard.Name = "pnlUserTableCard";
-            this.pnlUserTableCard.Size = new System.Drawing.Size(1000, 300);
-            this.pnlUserTableCard.Controls.Add(this.lblUserTableTitle);
-            this.pnlUserTableCard.Controls.Add(this.tbSearchUsers);
-            this.pnlUserTableCard.Controls.Add(this.dgvUsers);
-
+            pnlUserTableCard.BackColor = Color.Transparent;
+            pnlUserTableCard.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlUserTableCard.BorderRadius = 16;
+            pnlUserTableCard.BorderThickness = 1;
+            pnlUserTableCard.Controls.Add(lblUserTableTitle);
+            pnlUserTableCard.Controls.Add(tbSearchUsers);
+            pnlUserTableCard.Controls.Add(dgvUsers);
+            pnlUserTableCard.CustomizableEdges = customizableEdges47;
+            pnlUserTableCard.FillColor = Color.White;
+            pnlUserTableCard.Location = new Point(5, 530);
+            pnlUserTableCard.Margin = new Padding(4, 4, 4, 4);
+            pnlUserTableCard.Name = "pnlUserTableCard";
+            pnlUserTableCard.ShadowDecoration.CustomizableEdges = customizableEdges48;
+            pnlUserTableCard.Size = new Size(1250, 375);
+            pnlUserTableCard.TabIndex = 8;
             // 
             // lblUserTableTitle
             // 
-            this.lblUserTableTitle.Location = new System.Drawing.Point(16, 14);
-            this.lblUserTableTitle.Size = new System.Drawing.Size(220, 22);
-            this.lblUserTableTitle.Text = "User Management";
-            this.lblUserTableTitle.ForeColor = System.Drawing.Color.FromArgb(154, 136, 128);
-            this.lblUserTableTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblUserTableTitle.BackColor = System.Drawing.Color.Transparent;
-
+            lblUserTableTitle.BackColor = Color.Transparent;
+            lblUserTableTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblUserTableTitle.ForeColor = Color.FromArgb(154, 136, 128);
+            lblUserTableTitle.Location = new Point(20, 18);
+            lblUserTableTitle.Margin = new Padding(4, 0, 4, 0);
+            lblUserTableTitle.Name = "lblUserTableTitle";
+            lblUserTableTitle.Size = new Size(275, 28);
+            lblUserTableTitle.TabIndex = 0;
+            lblUserTableTitle.Text = "User Management";
             // 
             // tbSearchUsers
             // 
-            this.tbSearchUsers.BorderRadius = 10;
-            this.tbSearchUsers.FillColor = System.Drawing.Color.FromArgb(247, 245, 242);
-            this.tbSearchUsers.PlaceholderText = "Search users...";
-            this.tbSearchUsers.Location = new System.Drawing.Point(770, 10);
-            this.tbSearchUsers.Name = "tbSearchUsers";
-            this.tbSearchUsers.Size = new System.Drawing.Size(214, 36);
-            this.tbSearchUsers.FocusedState.BorderColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.tbSearchUsers.TextChanged += new System.EventHandler(this.tbSearchUsers_TextChanged);
-
+            tbSearchUsers.BorderRadius = 10;
+            tbSearchUsers.CustomizableEdges = customizableEdges45;
+            tbSearchUsers.DefaultText = "";
+            tbSearchUsers.FillColor = Color.FromArgb(247, 245, 242);
+            tbSearchUsers.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbSearchUsers.Font = new Font("Segoe UI", 9F);
+            tbSearchUsers.Location = new Point(962, 12);
+            tbSearchUsers.Margin = new Padding(4, 5, 4, 5);
+            tbSearchUsers.Name = "tbSearchUsers";
+            tbSearchUsers.PlaceholderText = "Search users...";
+            tbSearchUsers.SelectedText = "";
+            tbSearchUsers.ShadowDecoration.CustomizableEdges = customizableEdges46;
+            tbSearchUsers.Size = new Size(268, 45);
+            tbSearchUsers.TabIndex = 1;
+            tbSearchUsers.TextChanged += tbSearchUsers_TextChanged;
             // 
-            // dgvUsers (columns ready for data binding; no sample rows)
+            // dgvUsers
             // 
-            this.dgvUsers.AllowUserToAddRows = false;
-            this.dgvUsers.AllowUserToDeleteRows = false;
-            this.dgvUsers.ReadOnly = true;
-            this.dgvUsers.RowHeadersVisible = false;
-            this.dgvUsers.BackgroundColor = System.Drawing.Color.White;
-            this.dgvUsers.GridColor = System.Drawing.Color.FromArgb(240, 235, 228);
-            this.dgvUsers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvUsers.EnableHeadersVisualStyles = false;
-            this.dgvUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(232, 113, 74);
-            this.dgvUsers.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
-            this.dgvUsers.ColumnHeadersHeight = 40;
-            this.dgvUsers.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.dgvUsers.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
-            this.dgvUsers.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.dgvUsers.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
-            this.dgvUsers.RowsDefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.dgvUsers.RowsDefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
-            this.dgvUsers.RowsDefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(253, 238, 232);
-            this.dgvUsers.RowsDefaultCellStyle.SelectionForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
-            this.dgvUsers.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.dgvUsers.AlternatingRowsDefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(80, 70, 65);
-            this.dgvUsers.RowTemplate.Height = 36;
-            this.dgvUsers.Location = new System.Drawing.Point(16, 56);
-            this.dgvUsers.Name = "dgvUsers";
-            this.dgvUsers.Size = new System.Drawing.Size(968, 230);
-            this.dgvUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                this.colName,
-                this.colRole,
-                this.colEmail,
-                this.colStatus,
-                this.colJoined,
-                this.colActions});
-            // Sample/fake data for design preview only - replace with real data binding later
-            // Sample/fake data is now added in AdminDashboardForm.cs (LoadSampleUsers),
-            // since the VS Designer regenerates this file and would silently drop
-            // any hand-typed Rows.Add() calls here on the next property edit.
-
+            dgvUsers.AllowUserToAddRows = false;
+            dgvUsers.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = Color.White;
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(80, 70, 65);
+            dgvUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(232, 113, 74);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(232, 113, 74);
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvUsers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvUsers.ColumnHeadersHeight = 40;
+            dgvUsers.Columns.AddRange(new DataGridViewColumn[] { colName, colRole, colEmail, colStatus, colJoined, colActions });
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = Color.FromArgb(80, 70, 65);
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(253, 238, 232);
+            dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(80, 70, 65);
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvUsers.DefaultCellStyle = dataGridViewCellStyle3;
+            dgvUsers.GridColor = Color.FromArgb(240, 235, 228);
+            dgvUsers.Location = new Point(20, 70);
+            dgvUsers.Margin = new Padding(4, 4, 4, 4);
+            dgvUsers.Name = "dgvUsers";
+            dgvUsers.ReadOnly = true;
+            dgvUsers.RowHeadersVisible = false;
+            dgvUsers.RowHeadersWidth = 51;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(80, 70, 65);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(253, 238, 232);
+            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(80, 70, 65);
+            dgvUsers.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dgvUsers.RowTemplate.Height = 36;
+            dgvUsers.Size = new Size(1210, 288);
+            dgvUsers.TabIndex = 2;
+            dgvUsers.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
+            dgvUsers.ThemeStyle.AlternatingRowsStyle.ForeColor = Color.FromArgb(80, 70, 65);
+            dgvUsers.ThemeStyle.GridColor = Color.FromArgb(240, 235, 228);
+            dgvUsers.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(232, 113, 74);
+            dgvUsers.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dgvUsers.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvUsers.ThemeStyle.HeaderStyle.Height = 40;
+            dgvUsers.ThemeStyle.ReadOnly = true;
+            dgvUsers.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
+            dgvUsers.ThemeStyle.RowsStyle.ForeColor = Color.FromArgb(80, 70, 65);
+            dgvUsers.ThemeStyle.RowsStyle.Height = 36;
+            dgvUsers.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(253, 238, 232);
+            dgvUsers.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(80, 70, 65);
             // 
             // colName
             // 
-            this.colName.HeaderText = "Name";
-            this.colName.Name = "colName";
-            this.colName.Width = 180;
+            colName.HeaderText = "Name";
+            colName.MinimumWidth = 6;
+            colName.Name = "colName";
+            colName.ReadOnly = true;
             // 
             // colRole
             // 
-            this.colRole.HeaderText = "Role";
-            this.colRole.Name = "colRole";
-            this.colRole.Width = 110;
+            colRole.HeaderText = "Role";
+            colRole.MinimumWidth = 6;
+            colRole.Name = "colRole";
+            colRole.ReadOnly = true;
             // 
             // colEmail
             // 
-            this.colEmail.HeaderText = "Email";
-            this.colEmail.Name = "colEmail";
-            this.colEmail.Width = 220;
+            colEmail.HeaderText = "Email";
+            colEmail.MinimumWidth = 6;
+            colEmail.Name = "colEmail";
+            colEmail.ReadOnly = true;
             // 
             // colStatus
             // 
-            this.colStatus.HeaderText = "Status";
-            this.colStatus.Name = "colStatus";
-            this.colStatus.Width = 110;
+            colStatus.HeaderText = "Status";
+            colStatus.MinimumWidth = 6;
+            colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
             // 
             // colJoined
             // 
-            this.colJoined.HeaderText = "Joined";
-            this.colJoined.Name = "colJoined";
-            this.colJoined.Width = 120;
+            colJoined.HeaderText = "Joined";
+            colJoined.MinimumWidth = 6;
+            colJoined.Name = "colJoined";
+            colJoined.ReadOnly = true;
             // 
             // colActions
             // 
-            this.colActions.HeaderText = "Actions";
-            this.colActions.Name = "colActions";
-            this.colActions.Width = 100;
-
+            colActions.HeaderText = "Actions";
+            colActions.MinimumWidth = 6;
+            colActions.Name = "colActions";
+            colActions.ReadOnly = true;
             // 
-            // pnlNavbar.Controls
+            // pnlSidebar
             // 
-            this.pnlNavbar.Controls.Add(this.picNavLogo);
-            this.pnlNavbar.Controls.Add(this.lblNavBrand);
-            this.pnlNavbar.Controls.Add(this.btnLogout);
-
+            pnlSidebar.BackColor = Color.Transparent;
+            pnlSidebar.BorderColor = Color.FromArgb(238, 230, 224);
+            pnlSidebar.BorderRadius = 16;
+            pnlSidebar.BorderThickness = 1;
+            pnlSidebar.Controls.Add(lblSidebarTitle);
+            pnlSidebar.Controls.Add(btnSidebarOverview);
+            pnlSidebar.Controls.Add(btnSidebarUsers);
+            pnlSidebar.Controls.Add(btnSidebarBookings);
+            pnlSidebar.Controls.Add(btnSidebarReports);
+            pnlSidebar.Controls.Add(btnSidebarSettings);
+            pnlSidebar.CustomizableEdges = customizableEdges61;
+            pnlSidebar.FillColor = Color.White;
+            pnlSidebar.Location = new Point(25, 105);
+            pnlSidebar.Margin = new Padding(4, 4, 4, 4);
+            pnlSidebar.Name = "pnlSidebar";
+            pnlSidebar.ShadowDecoration.CustomizableEdges = customizableEdges62;
+            pnlSidebar.Size = new Size(250, 525);
+            pnlSidebar.TabIndex = 1;
             // 
-            // pnlSidebar.Controls
+            // lblSidebarTitle
             // 
-            this.pnlSidebar.Controls.Add(this.lblSidebarTitle);
-            this.pnlSidebar.Controls.Add(this.btnSidebarOverview);
-            this.pnlSidebar.Controls.Add(this.btnSidebarUsers);
-            this.pnlSidebar.Controls.Add(this.btnSidebarBookings);
-            this.pnlSidebar.Controls.Add(this.btnSidebarReports);
-            this.pnlSidebar.Controls.Add(this.btnSidebarSettings);
-
+            lblSidebarTitle.BackColor = Color.Transparent;
+            lblSidebarTitle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSidebarTitle.ForeColor = Color.FromArgb(232, 113, 74);
+            lblSidebarTitle.Location = new Point(20, 20);
+            lblSidebarTitle.Margin = new Padding(4, 0, 4, 0);
+            lblSidebarTitle.Name = "lblSidebarTitle";
+            lblSidebarTitle.Size = new Size(200, 28);
+            lblSidebarTitle.TabIndex = 0;
+            lblSidebarTitle.Text = "Admin Panel";
             // 
-            // pnlContent.Controls
+            // btnSidebarOverview
             // 
-            this.pnlContent.Controls.Add(this.lblPageTitle);
-            this.pnlContent.Controls.Add(this.lblPageSubtitle);
-            this.pnlContent.Controls.Add(this.pnlKpiParents);
-            this.pnlContent.Controls.Add(this.pnlKpiBabysitters);
-            this.pnlContent.Controls.Add(this.pnlKpiBookings);
-            this.pnlContent.Controls.Add(this.pnlKpiRevenue);
-            this.pnlContent.Controls.Add(this.pnlBookingsChart);
-            this.pnlContent.Controls.Add(this.pnlRevenueChart);
-            this.pnlContent.Controls.Add(this.pnlUserTableCard);
-
+            btnSidebarOverview.BackColor = Color.White;
+            btnSidebarOverview.BorderRadius = 10;
+            btnSidebarOverview.CustomizableEdges = customizableEdges51;
+            btnSidebarOverview.FillColor = Color.FromArgb(253, 238, 232);
+            btnSidebarOverview.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnSidebarOverview.ForeColor = Color.FromArgb(232, 113, 74);
+            btnSidebarOverview.HoverState.FillColor = Color.FromArgb(250, 226, 216);
+            btnSidebarOverview.Location = new Point(15, 70);
+            btnSidebarOverview.Margin = new Padding(4, 4, 4, 4);
+            btnSidebarOverview.Name = "btnSidebarOverview";
+            btnSidebarOverview.ShadowDecoration.CustomizableEdges = customizableEdges52;
+            btnSidebarOverview.Size = new Size(220, 50);
+            btnSidebarOverview.TabIndex = 1;
+            btnSidebarOverview.Text = "Overview";
+            btnSidebarOverview.TextAlign = HorizontalAlignment.Left;
+            btnSidebarOverview.Click += btnSidebarOverview_Click;
+            // 
+            // btnSidebarUsers
+            // 
+            btnSidebarUsers.BackColor = Color.White;
+            btnSidebarUsers.BorderRadius = 10;
+            btnSidebarUsers.CustomizableEdges = customizableEdges53;
+            btnSidebarUsers.FillColor = Color.Transparent;
+            btnSidebarUsers.Font = new Font("Segoe UI", 9F);
+            btnSidebarUsers.ForeColor = Color.FromArgb(154, 136, 128);
+            btnSidebarUsers.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnSidebarUsers.Location = new Point(15, 128);
+            btnSidebarUsers.Margin = new Padding(4, 4, 4, 4);
+            btnSidebarUsers.Name = "btnSidebarUsers";
+            btnSidebarUsers.ShadowDecoration.CustomizableEdges = customizableEdges54;
+            btnSidebarUsers.Size = new Size(220, 50);
+            btnSidebarUsers.TabIndex = 2;
+            btnSidebarUsers.Text = "Users";
+            btnSidebarUsers.TextAlign = HorizontalAlignment.Left;
+            btnSidebarUsers.Click += btnSidebarUsers_Click;
+            // 
+            // btnSidebarBookings
+            // 
+            btnSidebarBookings.BackColor = Color.White;
+            btnSidebarBookings.BorderRadius = 10;
+            btnSidebarBookings.CustomizableEdges = customizableEdges55;
+            btnSidebarBookings.FillColor = Color.Transparent;
+            btnSidebarBookings.Font = new Font("Segoe UI", 9F);
+            btnSidebarBookings.ForeColor = Color.FromArgb(154, 136, 128);
+            btnSidebarBookings.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnSidebarBookings.Location = new Point(15, 185);
+            btnSidebarBookings.Margin = new Padding(4, 4, 4, 4);
+            btnSidebarBookings.Name = "btnSidebarBookings";
+            btnSidebarBookings.ShadowDecoration.CustomizableEdges = customizableEdges56;
+            btnSidebarBookings.Size = new Size(220, 50);
+            btnSidebarBookings.TabIndex = 3;
+            btnSidebarBookings.Text = "Bookings";
+            btnSidebarBookings.TextAlign = HorizontalAlignment.Left;
+            btnSidebarBookings.Click += btnSidebarBookings_Click;
+            // 
+            // btnSidebarReports
+            // 
+            btnSidebarReports.BackColor = Color.White;
+            btnSidebarReports.BorderRadius = 10;
+            btnSidebarReports.CustomizableEdges = customizableEdges57;
+            btnSidebarReports.FillColor = Color.Transparent;
+            btnSidebarReports.Font = new Font("Segoe UI", 9F);
+            btnSidebarReports.ForeColor = Color.FromArgb(154, 136, 128);
+            btnSidebarReports.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnSidebarReports.Location = new Point(15, 242);
+            btnSidebarReports.Margin = new Padding(4, 4, 4, 4);
+            btnSidebarReports.Name = "btnSidebarReports";
+            btnSidebarReports.ShadowDecoration.CustomizableEdges = customizableEdges58;
+            btnSidebarReports.Size = new Size(220, 50);
+            btnSidebarReports.TabIndex = 4;
+            btnSidebarReports.Text = "Reports";
+            btnSidebarReports.TextAlign = HorizontalAlignment.Left;
+            btnSidebarReports.Click += btnSidebarReports_Click;
+            // 
+            // btnSidebarSettings
+            // 
+            btnSidebarSettings.BackColor = Color.White;
+            btnSidebarSettings.BorderRadius = 10;
+            btnSidebarSettings.CustomizableEdges = customizableEdges59;
+            btnSidebarSettings.FillColor = Color.Transparent;
+            btnSidebarSettings.Font = new Font("Segoe UI", 9F);
+            btnSidebarSettings.ForeColor = Color.FromArgb(154, 136, 128);
+            btnSidebarSettings.HoverState.FillColor = Color.FromArgb(253, 238, 232);
+            btnSidebarSettings.Location = new Point(15, 300);
+            btnSidebarSettings.Margin = new Padding(4, 4, 4, 4);
+            btnSidebarSettings.Name = "btnSidebarSettings";
+            btnSidebarSettings.ShadowDecoration.CustomizableEdges = customizableEdges60;
+            btnSidebarSettings.Size = new Size(220, 50);
+            btnSidebarSettings.TabIndex = 5;
+            btnSidebarSettings.Text = "Settings";
+            btnSidebarSettings.TextAlign = HorizontalAlignment.Left;
+            btnSidebarSettings.Click += btnSidebarSettings_Click;
+            // 
+            // pnlNavbar
+            // 
+            pnlNavbar.BackColor = Color.White;
+            pnlNavbar.Controls.Add(picNavLogo);
+            pnlNavbar.Controls.Add(lblNavBrand);
+            pnlNavbar.Controls.Add(btnLogout);
+            pnlNavbar.CustomizableEdges = customizableEdges67;
+            pnlNavbar.Dock = DockStyle.Top;
+            pnlNavbar.FillColor = Color.White;
+            pnlNavbar.Location = new Point(0, 0);
+            pnlNavbar.Margin = new Padding(4, 4, 4, 4);
+            pnlNavbar.Name = "pnlNavbar";
+            pnlNavbar.ShadowDecoration.CustomizableEdges = customizableEdges68;
+            pnlNavbar.Size = new Size(1600, 80);
+            pnlNavbar.TabIndex = 2;
+            // 
+            // picNavLogo
+            // 
+            picNavLogo.BorderRadius = 10;
+            picNavLogo.CustomizableEdges = customizableEdges63;
+            picNavLogo.ImageRotate = 0F;
+            picNavLogo.Location = new Point(25, 15);
+            picNavLogo.Margin = new Padding(4, 4, 4, 4);
+            picNavLogo.Name = "picNavLogo";
+            picNavLogo.ShadowDecoration.CustomizableEdges = customizableEdges64;
+            picNavLogo.Size = new Size(50, 50);
+            picNavLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            picNavLogo.TabIndex = 0;
+            picNavLogo.TabStop = false;
+            // 
+            // lblNavBrand
+            // 
+            lblNavBrand.BackColor = Color.Transparent;
+            lblNavBrand.Location = new Point(85, 25);
+            lblNavBrand.Margin = new Padding(4, 4, 4, 4);
+            lblNavBrand.Name = "lblNavBrand";
+            lblNavBrand.Size = new Size(69, 30);
+            lblNavBrand.TabIndex = 1;
+            lblNavBrand.Text = "<div style=\"color:#E8714A;font-weight:bold;font-size:12pt;\">Meraki</div>";
+            // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.White;
+            btnLogout.BorderRadius = 8;
+            btnLogout.CustomizableEdges = customizableEdges65;
+            btnLogout.FillColor = Color.Transparent;
+            btnLogout.Font = new Font("Segoe UI", 8.5F);
+            btnLogout.ForeColor = Color.FromArgb(224, 90, 90);
+            btnLogout.HoverState.FillColor = Color.FromArgb(253, 232, 232);
+            btnLogout.Location = new Point(1450, 18);
+            btnLogout.Margin = new Padding(4, 4, 4, 4);
+            btnLogout.Name = "btnLogout";
+            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges66;
+            btnLogout.Size = new Size(125, 45);
+            btnLogout.TabIndex = 2;
+            btnLogout.Text = "Logout";
+            btnLogout.Click += btnLogout_Click;
             // 
             // AdminDashboardForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1280, 880);
-            this.Controls.Add(this.pnlPageBackground);
-            this.MinimumSize = new System.Drawing.Size(1100, 780);
-            this.Name = "AdminDashboardForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Meraki - Admin Dashboard";
-            this.Load += new System.EventHandler(this.AdminDashboardForm_Load);
-
-            ((System.ComponentModel.ISupportInitialize)(this.picNavLogo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).EndInit();
-            this.pnlUserTableCard.ResumeLayout(false);
-            this.pnlKpiRevenue.ResumeLayout(false);
-            this.pnlKpiBookings.ResumeLayout(false);
-            this.pnlKpiBabysitters.ResumeLayout(false);
-            this.pnlKpiParents.ResumeLayout(false);
-            this.pnlContent.ResumeLayout(false);
-            this.pnlSidebar.ResumeLayout(false);
-            this.pnlNavbar.ResumeLayout(false);
-            this.pnlPageBackground.ResumeLayout(false);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(1600, 1055);
+            Controls.Add(pnlPageBackground);
+            Margin = new Padding(4, 4, 4, 4);
+            MinimumSize = new Size(1370, 963);
+            Name = "AdminDashboardForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Meraki - Admin Dashboard";
+            Load += AdminDashboardForm_Load;
+            pnlPageBackground.ResumeLayout(false);
+            pnlContent.ResumeLayout(false);
+            pnlKpiParents.ResumeLayout(false);
+            pnlKpiParentsIcon.ResumeLayout(false);
+            pnlKpiBabysitters.ResumeLayout(false);
+            pnlKpiBabysittersIcon.ResumeLayout(false);
+            pnlKpiBookings.ResumeLayout(false);
+            pnlKpiBookingsIcon.ResumeLayout(false);
+            pnlKpiRevenue.ResumeLayout(false);
+            pnlKpiRevenueIcon.ResumeLayout(false);
+            pnlBookingsChart.ResumeLayout(false);
+            pnlRevenueChart.ResumeLayout(false);
+            pnlUserTableCard.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
+            pnlSidebar.ResumeLayout(false);
+            pnlNavbar.ResumeLayout(false);
+            pnlNavbar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picNavLogo).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

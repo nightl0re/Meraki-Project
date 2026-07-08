@@ -452,5 +452,10 @@ namespace Meraki_Project
             Session.Clear();
             Navigation.GoTo(this, new LoginForm());
         }
+
+        private void pnlBookingsChart_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

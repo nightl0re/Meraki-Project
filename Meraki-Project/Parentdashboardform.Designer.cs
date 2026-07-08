@@ -17,10 +17,10 @@
 
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges39 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges40 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -35,32 +35,24 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges37 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges38 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges33 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges34 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges35 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges36 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges41 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges42 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges43 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges44 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             pnlPageBackground = new Guna.UI2.WinForms.Guna2GradientPanel();
             pnlContent = new Guna.UI2.WinForms.Guna2GradientPanel();
             pnlWelcomeBanner = new Guna.UI2.WinForms.Guna2GradientPanel();
@@ -97,17 +89,17 @@
             // 
             // pnlPageBackground
             // 
+            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.Controls.Add(pnlContent);
             pnlPageBackground.Controls.Add(pnlNavbar);
-            pnlPageBackground.CustomizableEdges = customizableEdges39;
-            pnlPageBackground.BackColor = Color.FromArgb(253, 238, 232);
+            pnlPageBackground.CustomizableEdges = customizableEdges31;
             pnlPageBackground.Dock = DockStyle.Fill;
             pnlPageBackground.FillColor = Color.FromArgb(253, 238, 232);
             pnlPageBackground.FillColor2 = Color.FromArgb(225, 240, 239);
             pnlPageBackground.Location = new Point(0, 0);
-            pnlPageBackground.Margin = new Padding(4, 4, 4, 4);
+            pnlPageBackground.Margin = new Padding(4);
             pnlPageBackground.Name = "pnlPageBackground";
-            pnlPageBackground.ShadowDecoration.CustomizableEdges = customizableEdges40;
+            pnlPageBackground.ShadowDecoration.CustomizableEdges = customizableEdges32;
             pnlPageBackground.Size = new Size(1500, 900);
             pnlPageBackground.TabIndex = 0;
             // 
@@ -122,15 +114,15 @@
             pnlContent.Controls.Add(lblUpcomingTitle);
             pnlContent.Controls.Add(btnViewAllBookings);
             pnlContent.Controls.Add(flpBookings);
-            pnlContent.CustomizableEdges = customizableEdges23;
+            pnlContent.CustomizableEdges = customizableEdges15;
             pnlContent.Dock = DockStyle.Fill;
             pnlContent.FillColor = Color.FromArgb(253, 238, 232);
             pnlContent.FillColor2 = Color.FromArgb(225, 240, 239);
             pnlContent.Location = new Point(0, 80);
-            pnlContent.Margin = new Padding(4, 4, 4, 4);
+            pnlContent.Margin = new Padding(4);
             pnlContent.Name = "pnlContent";
-            pnlContent.Padding = new Padding(30, 30, 30, 30);
-            pnlContent.ShadowDecoration.CustomizableEdges = customizableEdges24;
+            pnlContent.Padding = new Padding(30);
+            pnlContent.ShadowDecoration.CustomizableEdges = customizableEdges16;
             pnlContent.Size = new Size(1500, 820);
             pnlContent.TabIndex = 0;
             // 
@@ -147,7 +139,7 @@
             pnlWelcomeBanner.FillColor = Color.FromArgb(232, 113, 74);
             pnlWelcomeBanner.FillColor2 = Color.FromArgb(244, 168, 124);
             pnlWelcomeBanner.Location = new Point(30, 30);
-            pnlWelcomeBanner.Margin = new Padding(4, 4, 4, 4);
+            pnlWelcomeBanner.Margin = new Padding(4);
             pnlWelcomeBanner.Name = "pnlWelcomeBanner";
             pnlWelcomeBanner.ShadowDecoration.CustomizableEdges = customizableEdges6;
             pnlWelcomeBanner.Size = new Size(1420, 138);
@@ -168,7 +160,7 @@
             // 
             lblUserName.BackColor = Color.Transparent;
             lblUserName.Location = new Point(32, 45);
-            lblUserName.Margin = new Padding(4, 4, 4, 4);
+            lblUserName.Margin = new Padding(4);
             lblUserName.Name = "lblUserName";
             lblUserName.Size = new Size(197, 33);
             lblUserName.TabIndex = 1;
@@ -194,7 +186,7 @@
             btnNotifications.ForeColor = Color.FromArgb(232, 113, 74);
             btnNotifications.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             btnNotifications.Location = new Point(1250, 41);
-            btnNotifications.Margin = new Padding(4, 4, 4, 4);
+            btnNotifications.Margin = new Padding(4);
             btnNotifications.Name = "btnNotifications";
             btnNotifications.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnNotifications.Size = new Size(55, 55);
@@ -209,7 +201,7 @@
             picUserAvatar.CustomizableEdges = customizableEdges3;
             picUserAvatar.FillColor = Color.White;
             picUserAvatar.Location = new Point(1325, 41);
-            picUserAvatar.Margin = new Padding(4, 4, 4, 4);
+            picUserAvatar.Margin = new Padding(4);
             picUserAvatar.Name = "picUserAvatar";
             picUserAvatar.ShadowDecoration.CustomizableEdges = customizableEdges4;
             picUserAvatar.Size = new Size(55, 55);
@@ -243,6 +235,7 @@
             // 
             // btnBookBabysitter
             // 
+            btnBookBabysitter.BackColor = Color.Transparent;
             btnBookBabysitter.BorderRadius = 16;
             btnBookBabysitter.CustomizableEdges = customizableEdges7;
             btnBookBabysitter.FillColor = Color.White;
@@ -250,7 +243,7 @@
             btnBookBabysitter.ForeColor = Color.FromArgb(232, 113, 74);
             btnBookBabysitter.HoverState.FillColor = Color.FromArgb(250, 222, 208);
             btnBookBabysitter.Location = new Point(30, 222);
-            btnBookBabysitter.Margin = new Padding(4, 4, 4, 4);
+            btnBookBabysitter.Margin = new Padding(4);
             btnBookBabysitter.Name = "btnBookBabysitter";
             btnBookBabysitter.ShadowDecoration.CustomizableEdges = customizableEdges8;
             btnBookBabysitter.Size = new Size(460, 95);
@@ -260,6 +253,7 @@
             // 
             // btnFindBabysitters
             // 
+            btnFindBabysitters.BackColor = Color.Transparent;
             btnFindBabysitters.BorderRadius = 16;
             btnFindBabysitters.CustomizableEdges = customizableEdges9;
             btnFindBabysitters.FillColor = Color.White;
@@ -267,7 +261,7 @@
             btnFindBabysitters.ForeColor = Color.FromArgb(94, 200, 196);
             btnFindBabysitters.HoverState.FillColor = Color.FromArgb(214, 240, 238);
             btnFindBabysitters.Location = new Point(505, 222);
-            btnFindBabysitters.Margin = new Padding(4, 4, 4, 4);
+            btnFindBabysitters.Margin = new Padding(4);
             btnFindBabysitters.Name = "btnFindBabysitters";
             btnFindBabysitters.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnFindBabysitters.Size = new Size(460, 95);
@@ -277,6 +271,7 @@
             // 
             // btnFavorites
             // 
+            btnFavorites.BackColor = Color.Transparent;
             btnFavorites.BorderRadius = 16;
             btnFavorites.CustomizableEdges = customizableEdges11;
             btnFavorites.FillColor = Color.White;
@@ -284,7 +279,7 @@
             btnFavorites.ForeColor = Color.FromArgb(224, 90, 90);
             btnFavorites.HoverState.FillColor = Color.FromArgb(250, 219, 219);
             btnFavorites.Location = new Point(980, 222);
-            btnFavorites.Margin = new Padding(4, 4, 4, 4);
+            btnFavorites.Margin = new Padding(4);
             btnFavorites.Name = "btnFavorites";
             btnFavorites.ShadowDecoration.CustomizableEdges = customizableEdges12;
             btnFavorites.Size = new Size(460, 95);
@@ -306,14 +301,17 @@
             // 
             // btnViewAllBookings
             // 
+            btnViewAllBookings.BackColor = Color.Transparent;
+            btnViewAllBookings.BorderColor = Color.White;
             btnViewAllBookings.BorderRadius = 8;
+            btnViewAllBookings.BorderThickness = 1;
             btnViewAllBookings.CustomizableEdges = customizableEdges13;
             btnViewAllBookings.FillColor = Color.Transparent;
             btnViewAllBookings.Font = new Font("Segoe UI", 9F);
             btnViewAllBookings.ForeColor = Color.FromArgb(232, 113, 74);
             btnViewAllBookings.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             btnViewAllBookings.Location = new Point(1300, 345);
-            btnViewAllBookings.Margin = new Padding(4, 4, 4, 4);
+            btnViewAllBookings.Margin = new Padding(4);
             btnViewAllBookings.Name = "btnViewAllBookings";
             btnViewAllBookings.ShadowDecoration.CustomizableEdges = customizableEdges14;
             btnViewAllBookings.Size = new Size(150, 38);
@@ -327,7 +325,7 @@
             flpBookings.BackColor = Color.FromArgb(253, 238, 232);
             flpBookings.FlowDirection = FlowDirection.TopDown;
             flpBookings.Location = new Point(30, 388);
-            flpBookings.Margin = new Padding(4, 4, 4, 4);
+            flpBookings.Margin = new Padding(4);
             flpBookings.Name = "flpBookings";
             flpBookings.Size = new Size(1440, 400);
             flpBookings.TabIndex = 7;
@@ -343,25 +341,26 @@
             pnlNavbar.Controls.Add(btnNavBookNow);
             pnlNavbar.Controls.Add(btnNavMyProfile);
             pnlNavbar.Controls.Add(btnLogout);
-            pnlNavbar.CustomizableEdges = customizableEdges37;
+            pnlNavbar.CustomizableEdges = customizableEdges29;
             pnlNavbar.Dock = DockStyle.Top;
             pnlNavbar.FillColor = Color.White;
             pnlNavbar.Location = new Point(0, 0);
-            pnlNavbar.Margin = new Padding(4, 4, 4, 4);
+            pnlNavbar.Margin = new Padding(4);
             pnlNavbar.Name = "pnlNavbar";
-            pnlNavbar.ShadowDecoration.CustomizableEdges = customizableEdges38;
+            pnlNavbar.ShadowDecoration.CustomizableEdges = customizableEdges30;
             pnlNavbar.Size = new Size(1500, 80);
             pnlNavbar.TabIndex = 1;
             // 
             // picNavLogo
             // 
             picNavLogo.BorderRadius = 10;
-            picNavLogo.CustomizableEdges = customizableEdges25;
+            picNavLogo.CustomizableEdges = customizableEdges17;
+            picNavLogo.Image = Properties.Resources.meraki_logo;
             picNavLogo.ImageRotate = 0F;
             picNavLogo.Location = new Point(25, 15);
-            picNavLogo.Margin = new Padding(4, 4, 4, 4);
+            picNavLogo.Margin = new Padding(4);
             picNavLogo.Name = "picNavLogo";
-            picNavLogo.ShadowDecoration.CustomizableEdges = customizableEdges26;
+            picNavLogo.ShadowDecoration.CustomizableEdges = customizableEdges18;
             picNavLogo.Size = new Size(50, 50);
             picNavLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picNavLogo.TabIndex = 0;
@@ -371,7 +370,7 @@
             // 
             lblNavBrand.BackColor = Color.Transparent;
             lblNavBrand.Location = new Point(85, 25);
-            lblNavBrand.Margin = new Padding(4, 4, 4, 4);
+            lblNavBrand.Margin = new Padding(4);
             lblNavBrand.Name = "lblNavBrand";
             lblNavBrand.Size = new Size(69, 30);
             lblNavBrand.TabIndex = 1;
@@ -380,15 +379,15 @@
             // btnNavParentHome
             // 
             btnNavParentHome.BorderRadius = 8;
-            btnNavParentHome.CustomizableEdges = customizableEdges27;
+            btnNavParentHome.CustomizableEdges = customizableEdges19;
             btnNavParentHome.FillColor = Color.FromArgb(253, 238, 232);
             btnNavParentHome.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
             btnNavParentHome.ForeColor = Color.FromArgb(232, 113, 74);
             btnNavParentHome.HoverState.FillColor = Color.FromArgb(250, 226, 216);
             btnNavParentHome.Location = new Point(275, 18);
-            btnNavParentHome.Margin = new Padding(4, 4, 4, 4);
+            btnNavParentHome.Margin = new Padding(4);
             btnNavParentHome.Name = "btnNavParentHome";
-            btnNavParentHome.ShadowDecoration.CustomizableEdges = customizableEdges28;
+            btnNavParentHome.ShadowDecoration.CustomizableEdges = customizableEdges20;
             btnNavParentHome.Size = new Size(138, 45);
             btnNavParentHome.TabIndex = 2;
             btnNavParentHome.Text = "Parent Home";
@@ -397,16 +396,16 @@
             // btnNavFindBabysitter
             // 
             btnNavFindBabysitter.BorderRadius = 8;
-            btnNavFindBabysitter.CustomizableEdges = customizableEdges29;
+            btnNavFindBabysitter.CustomizableEdges = customizableEdges21;
             btnNavFindBabysitter.FillColor = Color.Transparent;
             btnNavFindBabysitter.Font = new Font("Segoe UI", 8.5F);
             btnNavFindBabysitter.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavFindBabysitter.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             btnNavFindBabysitter.HoverState.ForeColor = Color.FromArgb(232, 113, 74);
             btnNavFindBabysitter.Location = new Point(420, 18);
-            btnNavFindBabysitter.Margin = new Padding(4, 4, 4, 4);
+            btnNavFindBabysitter.Margin = new Padding(4);
             btnNavFindBabysitter.Name = "btnNavFindBabysitter";
-            btnNavFindBabysitter.ShadowDecoration.CustomizableEdges = customizableEdges30;
+            btnNavFindBabysitter.ShadowDecoration.CustomizableEdges = customizableEdges22;
             btnNavFindBabysitter.Size = new Size(162, 45);
             btnNavFindBabysitter.TabIndex = 3;
             btnNavFindBabysitter.Text = "Find a Babysitter";
@@ -415,16 +414,16 @@
             // btnNavBookNow
             // 
             btnNavBookNow.BorderRadius = 8;
-            btnNavBookNow.CustomizableEdges = customizableEdges31;
+            btnNavBookNow.CustomizableEdges = customizableEdges23;
             btnNavBookNow.FillColor = Color.Transparent;
             btnNavBookNow.Font = new Font("Segoe UI", 8.5F);
             btnNavBookNow.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavBookNow.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             btnNavBookNow.HoverState.ForeColor = Color.FromArgb(232, 113, 74);
             btnNavBookNow.Location = new Point(590, 18);
-            btnNavBookNow.Margin = new Padding(4, 4, 4, 4);
+            btnNavBookNow.Margin = new Padding(4);
             btnNavBookNow.Name = "btnNavBookNow";
-            btnNavBookNow.ShadowDecoration.CustomizableEdges = customizableEdges32;
+            btnNavBookNow.ShadowDecoration.CustomizableEdges = customizableEdges24;
             btnNavBookNow.Size = new Size(125, 45);
             btnNavBookNow.TabIndex = 4;
             btnNavBookNow.Text = "Book Now";
@@ -433,16 +432,16 @@
             // btnNavMyProfile
             // 
             btnNavMyProfile.BorderRadius = 8;
-            btnNavMyProfile.CustomizableEdges = customizableEdges33;
+            btnNavMyProfile.CustomizableEdges = customizableEdges25;
             btnNavMyProfile.FillColor = Color.Transparent;
             btnNavMyProfile.Font = new Font("Segoe UI", 8.5F);
             btnNavMyProfile.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavMyProfile.HoverState.FillColor = Color.FromArgb(253, 238, 232);
             btnNavMyProfile.HoverState.ForeColor = Color.FromArgb(232, 113, 74);
             btnNavMyProfile.Location = new Point(722, 18);
-            btnNavMyProfile.Margin = new Padding(4, 4, 4, 4);
+            btnNavMyProfile.Margin = new Padding(4);
             btnNavMyProfile.Name = "btnNavMyProfile";
-            btnNavMyProfile.ShadowDecoration.CustomizableEdges = customizableEdges34;
+            btnNavMyProfile.ShadowDecoration.CustomizableEdges = customizableEdges26;
             btnNavMyProfile.Size = new Size(125, 45);
             btnNavMyProfile.TabIndex = 5;
             btnNavMyProfile.Text = "My Profile";
@@ -451,15 +450,15 @@
             // btnLogout
             // 
             btnLogout.BorderRadius = 8;
-            btnLogout.CustomizableEdges = customizableEdges35;
+            btnLogout.CustomizableEdges = customizableEdges27;
             btnLogout.FillColor = Color.Transparent;
             btnLogout.Font = new Font("Segoe UI", 8.5F);
             btnLogout.ForeColor = Color.FromArgb(224, 90, 90);
             btnLogout.HoverState.FillColor = Color.FromArgb(253, 232, 232);
             btnLogout.Location = new Point(1350, 18);
-            btnLogout.Margin = new Padding(4, 4, 4, 4);
+            btnLogout.Margin = new Padding(4);
             btnLogout.Name = "btnLogout";
-            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges36;
+            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges28;
             btnLogout.Size = new Size(125, 45);
             btnLogout.TabIndex = 6;
             btnLogout.Text = "Logout";
@@ -468,13 +467,13 @@
             // btnNavBabysitterHome
             // 
             btnNavBabysitterHome.BorderRadius = 8;
-            btnNavBabysitterHome.CustomizableEdges = customizableEdges41;
+            btnNavBabysitterHome.CustomizableEdges = customizableEdges33;
             btnNavBabysitterHome.FillColor = Color.Transparent;
             btnNavBabysitterHome.Font = new Font("Segoe UI", 8.5F);
             btnNavBabysitterHome.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavBabysitterHome.Location = new Point(336, 14);
             btnNavBabysitterHome.Name = "btnNavBabysitterHome";
-            btnNavBabysitterHome.ShadowDecoration.CustomizableEdges = customizableEdges42;
+            btnNavBabysitterHome.ShadowDecoration.CustomizableEdges = customizableEdges34;
             btnNavBabysitterHome.Size = new Size(130, 36);
             btnNavBabysitterHome.TabIndex = 0;
             btnNavBabysitterHome.Text = "Babysitter Home";
@@ -483,13 +482,13 @@
             // btnNavAdmin
             // 
             btnNavAdmin.BorderRadius = 8;
-            btnNavAdmin.CustomizableEdges = customizableEdges43;
+            btnNavAdmin.CustomizableEdges = customizableEdges35;
             btnNavAdmin.FillColor = Color.Transparent;
             btnNavAdmin.Font = new Font("Segoe UI", 8.5F);
             btnNavAdmin.ForeColor = Color.FromArgb(154, 136, 128);
             btnNavAdmin.Location = new Point(820, 14);
             btnNavAdmin.Name = "btnNavAdmin";
-            btnNavAdmin.ShadowDecoration.CustomizableEdges = customizableEdges44;
+            btnNavAdmin.ShadowDecoration.CustomizableEdges = customizableEdges36;
             btnNavAdmin.Size = new Size(90, 36);
             btnNavAdmin.TabIndex = 0;
             btnNavAdmin.Text = "Admin";
@@ -501,7 +500,7 @@
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1500, 900);
             Controls.Add(pnlPageBackground);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             MinimumSize = new Size(1246, 738);
             Name = "ParentDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
