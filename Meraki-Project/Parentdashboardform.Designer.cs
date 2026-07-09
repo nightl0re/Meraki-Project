@@ -322,7 +322,7 @@
             // flpBookings
             // 
             flpBookings.AutoScroll = true;
-            flpBookings.BackColor = Color.FromArgb(253, 238, 232);
+            flpBookings.BackColor = Color.Transparent;
             flpBookings.FlowDirection = FlowDirection.TopDown;
             flpBookings.Location = new Point(30, 388);
             flpBookings.Margin = new Padding(4);
