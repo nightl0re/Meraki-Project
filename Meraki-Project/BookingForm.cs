@@ -35,6 +35,7 @@ namespace Meraki_Project
 
         private decimal _serviceFee = 2.50m;
         private List<BabysitterInfo> _sitters = new();
+        private List<PaymentCard> _cards = new();
 
         private int _step;
         private DateTime? _selectedDate;
@@ -368,6 +369,56 @@ namespace Meraki_Project
             lblCostTotal.Text = $"Total:  ${total:0.00}";
         }
 
+        // Fill the card picker with the parent's saved cards, keeping the
+        // current selection when possible.
+        private void LoadCards()
+        {
+            int? selectedId = cbCard.SelectedIndex >= 0 && cbCard.SelectedIndex < _cards.Count
+                ? _cards[cbCard.SelectedIndex].CardId : (int?)null;
+            try { _cards = PaymentRepository.GetCards(Session.CurrentUserId); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while loading your cards:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _cards = new List<PaymentCard>();
+            }
+
+            cbCard.Items.Clear();
+            foreach (var c in _cards)
+                cbCard.Items.Add(c.Display);
+
+            if (_cards.Count == 0)
+            {
+                cbCard.Items.Add("No saved cards - add one  →");
+                cbCard.SelectedIndex = 0;
+            }
+            else
+            {
+                int idx = selectedId.HasValue ? _cards.FindIndex(c => c.CardId == selectedId.Value) : -1;
+                cbCard.SelectedIndex = idx >= 0 ? idx : 0;
+            }
+        }
+
+        private void btnAddCard_Click(object sender, EventArgs e)
+        {
+            using var dlg = new AddCardDialog();
+            if (dlg.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                int newId = PaymentRepository.AddCard(Session.CurrentUserId,
+                    dlg.Holder, dlg.Last4, dlg.Brand, dlg.ExpMonth, dlg.ExpYear);
+                LoadCards();
+                int idx = _cards.FindIndex(c => c.CardId == newId);
+                if (idx >= 0) cbCard.SelectedIndex = idx;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while saving the card:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private static int ParseDurationHours(string? duration)
         {
             if (string.IsNullOrEmpty(duration)) return 0;
@@ -383,16 +434,27 @@ namespace Meraki_Project
             var sitter = SelectedSitter;
             if (sitter == null) return;
 
+            if (_cards.Count == 0 || cbCard.SelectedIndex < 0 || cbCard.SelectedIndex >= _cards.Count)
+            {
+                MessageBox.Show("Please add a payment card first (\"+ Add Card\").",
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            var card = _cards[cbCard.SelectedIndex];
+
             DateTime date = _selectedDate ?? DateTime.Today;
             int hours = ParseDurationHours(_selectedDuration);
             decimal total = sitter.HourlyRate * hours + _serviceFee;
 
             try
             {
-                BookingRepository.Create(
+                int bookingId = BookingRepository.Create(
                     Session.CurrentUserId, sitter.UserId, date, ParseStartTime(_selectedTime!),
                     hours, _childCount, tbAddress.Text.Trim(), tbNotes.Text.Trim(),
                     sitter.HourlyRate, _serviceFee, total);
+
+                // The payment waits as 'pending' and is charged when the sitter accepts.
+                PaymentRepository.CreatePendingPayment(bookingId, card.CardId, total);
 
                 ExtrasRepository.AddNotification(sitter.UserId,
                     $"New booking request from {Session.CurrentUserName} for {date:MMM d}");
@@ -405,8 +467,8 @@ namespace Meraki_Project
             }
 
             lblConfirmedMessage.Text =
-                $"Your booking request was sent to {sitter.Name}. You'll see it as confirmed " +
-                "once they accept.";
+                $"Your booking request was sent to {sitter.Name}. Your {card.Brand} card " +
+                $"ending {card.Last4} will be charged ${total:0.00} once they accept.";
             lblConfirmedDate.Text = $"Date:  {date:MMMM d, yyyy}";
             lblConfirmedTime.Text = $"Time:  {_selectedTime} · {_selectedDuration}";
             lblConfirmedBabysitter.Text = $"Babysitter:  {sitter.Name}";
@@ -539,7 +601,7 @@ namespace Meraki_Project
             pnlStepConfirm.Visible = step == 3;
 
             if (step == 1) EnsureBabysitterRows();
-            if (step == 3) RenderConfirmSummary();
+            if (step == 3) { LoadCards(); RenderConfirmSummary(); }
 
             btnBack.Visible = step > 0;
             btnContinue.Location = new Point(step > 0 ? 214 : 30, 11);

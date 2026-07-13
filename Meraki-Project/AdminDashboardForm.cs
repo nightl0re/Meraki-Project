@@ -347,6 +347,8 @@ namespace Meraki_Project
             try
             {
                 BookingRepository.SetStatus(booking.BookingId, accept ? "confirmed" : "declined");
+                if (accept) PaymentRepository.MarkPaid(booking.BookingId);
+                else PaymentRepository.Cancel(booking.BookingId);
                 ExtrasRepository.AddNotification(booking.ParentId, accept
                     ? $"Your booking for {booking.Date:MMM d} was confirmed by the administrator."
                     : $"Your booking for {booking.Date:MMM d} was declined by the administrator.");
@@ -451,11 +453,6 @@ namespace Meraki_Project
         {
             Session.Clear();
             Navigation.GoTo(this, new LoginForm());
-        }
-
-        private void pnlBookingsChart_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

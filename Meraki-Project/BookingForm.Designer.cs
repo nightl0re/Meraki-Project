@@ -81,6 +81,9 @@
             lblCostSitterLine = new Label();
             lblCostServiceFee = new Label();
             lblCostTotal = new Label();
+            lblPaymentCaption = new Label();
+            cbCard = new Guna.UI2.WinForms.Guna2ComboBox();
+            btnAddCard = new Guna.UI2.WinForms.Guna2Button();
             lblPaymentNote = new Label();
             pnlBottomBar = new Guna.UI2.WinForms.Guna2Panel();
             btnBack = new Guna.UI2.WinForms.Guna2Button();
@@ -864,6 +867,9 @@
             pnlConfirmCard.Controls.Add(lblCostSitterLine);
             pnlConfirmCard.Controls.Add(lblCostServiceFee);
             pnlConfirmCard.Controls.Add(lblCostTotal);
+            pnlConfirmCard.Controls.Add(lblPaymentCaption);
+            pnlConfirmCard.Controls.Add(cbCard);
+            pnlConfirmCard.Controls.Add(btnAddCard);
             pnlConfirmCard.Controls.Add(lblPaymentNote);
             pnlConfirmCard.FillColor = Color.White;
             pnlConfirmCard.Location = new Point(0, 0);
@@ -964,14 +970,60 @@
             //
             // lblPaymentNote
             //
+            //
+            // lblPaymentCaption
+            //
+            lblPaymentCaption.BackColor = Color.Transparent;
+            lblPaymentCaption.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblPaymentCaption.ForeColor = Color.FromArgb(60, 50, 45);
+            lblPaymentCaption.Location = new Point(20, 322);
+            lblPaymentCaption.Name = "lblPaymentCaption";
+            lblPaymentCaption.Size = new Size(300, 22);
+            lblPaymentCaption.TabIndex = 9;
+            lblPaymentCaption.Text = "Payment Method *";
+            //
+            // cbCard
+            //
+            cbCard.BackColor = Color.Transparent;
+            cbCard.BorderRadius = 8;
+            cbCard.DrawMode = DrawMode.OwnerDrawFixed;
+            cbCard.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbCard.FillColor = Color.FromArgb(247, 245, 242);
+            cbCard.FocusedColor = Color.FromArgb(232, 113, 74);
+            cbCard.Font = new Font("Segoe UI", 9.5F);
+            cbCard.ForeColor = Color.FromArgb(60, 50, 45);
+            cbCard.ItemHeight = 34;
+            cbCard.Location = new Point(20, 348);
+            cbCard.Name = "cbCard";
+            cbCard.Size = new Size(430, 40);
+            cbCard.TabIndex = 10;
+            //
+            // btnAddCard
+            //
+            btnAddCard.BackColor = Color.Transparent;
+            btnAddCard.BorderRadius = 8;
+            btnAddCard.BorderThickness = 1;
+            btnAddCard.BorderColor = Color.FromArgb(238, 230, 224);
+            btnAddCard.FillColor = Color.White;
+            btnAddCard.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAddCard.ForeColor = Color.FromArgb(232, 113, 74);
+            btnAddCard.Location = new Point(462, 348);
+            btnAddCard.Name = "btnAddCard";
+            btnAddCard.Size = new Size(150, 40);
+            btnAddCard.TabIndex = 11;
+            btnAddCard.Text = "+  Add Card";
+            btnAddCard.Click += btnAddCard_Click;
+            //
+            // lblPaymentNote
+            //
             lblPaymentNote.BackColor = Color.FromArgb(253, 238, 232);
             lblPaymentNote.Font = new Font("Segoe UI", 8.5F);
             lblPaymentNote.ForeColor = Color.FromArgb(154, 136, 128);
-            lblPaymentNote.Location = new Point(20, 330);
+            lblPaymentNote.Location = new Point(20, 402);
             lblPaymentNote.Name = "lblPaymentNote";
             lblPaymentNote.Size = new Size(700, 40);
-            lblPaymentNote.TabIndex = 9;
-            lblPaymentNote.Text = "  Payment will be processed after the babysitter confirms the booking.";
+            lblPaymentNote.TabIndex = 12;
+            lblPaymentNote.Text = "  Your card is charged only after the babysitter confirms the booking.";
             lblPaymentNote.TextAlign = ContentAlignment.MiddleLeft;
             //
             // pnlConfirmationScreen
@@ -1219,6 +1271,9 @@
         private System.Windows.Forms.Label lblCostSitterLine;
         private System.Windows.Forms.Label lblCostServiceFee;
         private System.Windows.Forms.Label lblCostTotal;
+        private System.Windows.Forms.Label lblPaymentCaption;
+        private Guna.UI2.WinForms.Guna2ComboBox cbCard;
+        private Guna.UI2.WinForms.Guna2Button btnAddCard;
         private System.Windows.Forms.Label lblPaymentNote;
         private Guna.UI2.WinForms.Guna2Panel pnlBottomBar;
         private Guna.UI2.WinForms.Guna2Button btnBack;

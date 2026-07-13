@@ -463,9 +463,14 @@ namespace Meraki_Project
             try
             {
                 BookingRepository.SetStatus(r.BookingId, accepted ? "confirmed" : "declined");
+
+                // Settle the (simulated) payment: charge on accept, release on decline.
+                if (accepted) PaymentRepository.MarkPaid(r.BookingId);
+                else PaymentRepository.Cancel(r.BookingId);
+
                 ExtrasRepository.AddNotification(r.ParentId, accepted
-                    ? $"{Session.CurrentUserName} confirmed your booking for {r.Date:MMM d}"
-                    : $"{Session.CurrentUserName} declined your booking request for {r.Date:MMM d}");
+                    ? $"{Session.CurrentUserName} confirmed your booking for {r.Date:MMM d}. Your card was charged ${r.Total:0.00}."
+                    : $"{Session.CurrentUserName} declined your booking request for {r.Date:MMM d}. No charge was made.");
 
                 // Defer the list rebuild so we never dispose the button that is
                 // still running its own click handler.

@@ -80,6 +80,19 @@ namespace Meraki_Project
             $"{DateTime.Today.Add(Start):%h}–{DateTime.Today.Add(End):h tt}";
     }
 
+    public class PaymentCard
+    {
+        public int CardId;
+        public string Holder = "";
+        public string Last4 = "";
+        public string Brand = "";
+        public int ExpMonth;
+        public int ExpYear;
+
+        // "Visa •••• 4242  (08/27)" - shown in the card picker.
+        public string Display => $"{Brand} •••• {Last4}  ({ExpMonth:00}/{ExpYear % 100:00})";
+    }
+
     public class ReviewInfo
     {
         public string Author = "";

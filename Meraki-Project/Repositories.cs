@@ -745,6 +745,101 @@ namespace Meraki_Project
         }
     }
 
+    // ----- Payments: saved cards + one simulated payment per booking -----
+    internal static class PaymentRepository
+    {
+        public static List<PaymentCard> GetCards(int userId)
+        {
+            var list = new List<PaymentCard>();
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT card_id, card_holder, last4, brand, exp_month, exp_year
+                  FROM payment_cards WHERE user_id = @u ORDER BY card_id", conn);
+            cmd.Parameters.AddWithValue("@u", userId);
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                list.Add(new PaymentCard
+                {
+                    CardId = r.GetInt32("card_id"),
+                    Holder = r.GetString("card_holder"),
+                    Last4 = r.GetString("last4"),
+                    Brand = r.GetString("brand"),
+                    ExpMonth = r.GetInt32("exp_month"),
+                    ExpYear = r.GetInt32("exp_year"),
+                });
+            }
+            return list;
+        }
+
+        // Only the last 4 digits and brand are persisted - the caller validates
+        // the full number (Luhn) and the CVV, then throws them away.
+        public static int AddCard(int userId, string holder, string last4, string brand,
+                                  int expMonth, int expYear)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"INSERT INTO payment_cards (user_id, card_holder, last4, brand, exp_month, exp_year)
+                  VALUES (@u, @h, @l4, @b, @m, @y)", conn);
+            cmd.Parameters.AddWithValue("@u", userId);
+            cmd.Parameters.AddWithValue("@h", holder);
+            cmd.Parameters.AddWithValue("@l4", last4);
+            cmd.Parameters.AddWithValue("@b", brand);
+            cmd.Parameters.AddWithValue("@m", expMonth);
+            cmd.Parameters.AddWithValue("@y", expYear);
+            cmd.ExecuteNonQuery();
+            return (int)cmd.LastInsertedId;
+        }
+
+        public static void CreatePendingPayment(int bookingId, int cardId, decimal amount)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"INSERT INTO payments (booking_id, card_id, amount, status)
+                  VALUES (@b, @c, @a, 'pending')", conn);
+            cmd.Parameters.AddWithValue("@b", bookingId);
+            cmd.Parameters.AddWithValue("@c", cardId);
+            cmd.Parameters.AddWithValue("@a", amount);
+            cmd.ExecuteNonQuery();
+        }
+
+        // The simulated charge: fires when the babysitter accepts the booking.
+        public static void MarkPaid(int bookingId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"UPDATE payments SET status = 'paid', paid_at = NOW()
+                  WHERE booking_id = @b AND status = 'pending'", conn);
+            cmd.Parameters.AddWithValue("@b", bookingId);
+            cmd.ExecuteNonQuery();
+        }
+
+        public static void Cancel(int bookingId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"UPDATE payments SET status = 'cancelled'
+                  WHERE booking_id = @b AND status = 'pending'", conn);
+            cmd.Parameters.AddWithValue("@b", bookingId);
+            cmd.ExecuteNonQuery();
+        }
+
+        // For the receipt: how this booking was (or will be) paid. Null when the
+        // booking predates the payment feature.
+        public static (string Status, string Brand, string Last4)? GetForBooking(int bookingId)
+        {
+            using var conn = Db.Open();
+            using var cmd = new MySqlCommand(
+                @"SELECT p.status, c.brand, c.last4
+                  FROM payments p JOIN payment_cards c ON c.card_id = p.card_id
+                  WHERE p.booking_id = @b", conn);
+            cmd.Parameters.AddWithValue("@b", bookingId);
+            using var r = cmd.ExecuteReader();
+            if (!r.Read()) return null;
+            return (r.GetString("status"), r.GetString("brand"), r.GetString("last4"));
+        }
+    }
+
     // ----- Favorites, notifications, settings -----
     internal static class ExtrasRepository
     {

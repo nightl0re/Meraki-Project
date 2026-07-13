@@ -553,7 +553,6 @@
             pnlBookingsChart.ShadowDecoration.CustomizableEdges = customizableEdges30;
             pnlBookingsChart.Size = new Size(620, 250);
             pnlBookingsChart.TabIndex = 6;
-            pnlBookingsChart.Paint += pnlBookingsChart_Paint;
             // 
             // lblBookingsChartTitle
             // 

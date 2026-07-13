@@ -91,6 +91,35 @@ namespace Meraki_Project
             };
             Controls.Add(totalLabel);
             Controls.Add(totalValue);
+            y += 34;
+
+            // Payment line (older bookings from before the payment feature have none).
+            try
+            {
+                var payment = PaymentRepository.GetForBooking(b.BookingId);
+                if (payment != null)
+                {
+                    var (payStatus, brand, last4) = payment.Value;
+                    string payText = payStatus switch
+                    {
+                        "paid" => $"Paid with {brand} •••• {last4}",
+                        "pending" => $"{brand} •••• {last4} - charged when the babysitter accepts",
+                        "cancelled" => "No charge was made (booking declined)",
+                        "refunded" => $"Refunded to {brand} •••• {last4}",
+                        _ => "",
+                    };
+                    Controls.Add(new Label
+                    {
+                        Text = payText,
+                        Location = new Point(24, y),
+                        Size = new Size(392, 22),
+                        Font = new Font("Segoe UI", 8.5F),
+                        ForeColor = payStatus == "paid" ? Color.FromArgb(34, 120, 80) : TextMuted,
+                        BackColor = Color.Transparent,
+                    });
+                }
+            }
+            catch { /* the receipt still works without the payment line */ }
 
             var close = new Guna2Button
             {
