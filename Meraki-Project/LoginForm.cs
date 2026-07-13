@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Login page. Checks the e-mail/password against the users table, blocks
+    // accounts that are not yet approved, and sends each person to the dashboard
+    // that matches their role (parent, babysitter or admin).
     public partial class LoginForm : Form
     {
         // Meraki color palette

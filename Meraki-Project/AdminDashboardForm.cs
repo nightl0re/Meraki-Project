@@ -7,6 +7,10 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Admin control panel. Shows KPI cards and monthly charts, and switches one
+    // grid between Users, Bookings, Pending Approvals and Payouts. From here the
+    // admin approves/declines accounts, accepts/declines/deletes bookings,
+    // deletes users, and settles or discards payments.
     public partial class AdminDashboardForm : Form
     {
         private static readonly Color ColorCoral = Color.FromArgb(232, 113, 74);
@@ -14,7 +18,7 @@ namespace Meraki_Project
         private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
         private static readonly Color ColorActiveTabFill = Color.FromArgb(253, 238, 232);
 
-        private enum GridMode { Users, Bookings, PendingApprovals }
+        private enum GridMode { Users, Bookings, PendingApprovals, Payouts }
         private GridMode _mode = GridMode.Users;
 
         private List<User> _users = new();
@@ -49,10 +53,11 @@ namespace Meraki_Project
             lblRevenueChartTitle.ForeColor = ColorHeading;
             lblUserTableTitle.ForeColor = ColorHeading;
 
-            // Repurpose the two unused sidebar buttons: Reports -> Pending Approvals
-            // (new registrations waiting for the admin), and hide Settings entirely.
+            // Repurpose the two spare sidebar buttons: Reports -> Pending Approvals
+            // (new registrations) and Settings -> Payouts (money ready to release).
             btnSidebarReports.Text = "Pending Approvals";
-            btnSidebarSettings.Visible = false;
+            btnSidebarSettings.Text = "Payouts";
+            btnSidebarSettings.Visible = true;
         }
 
         // ----- Pending Approvals: new accounts waiting for an admin decision -----
@@ -79,7 +84,7 @@ namespace Meraki_Project
             _users = UserRepository.GetUsers(tbSearchUsers.Text.Trim())
                 .Where(u => u.Status == "pending").ToList();
             dgvUsers.Rows.Clear();
-            foreach (var u in _users)
+            foreach (User u in _users)
             {
                 int idx = dgvUsers.Rows.Add(u.FullName, Capitalize(u.Role), u.Email,
                                             u.CreatedAt.ToString("MMM d, yyyy"), "Approve", "Decline");
@@ -95,7 +100,7 @@ namespace Meraki_Project
 
         private void LoadKpisAndCharts()
         {
-            var (parents, sitters, monthBookings, revenue) = BookingRepository.GetAdminKpis();
+            (int parents, int sitters, int monthBookings, decimal revenue) = BookingRepository.GetAdminKpis();
             lblKpiParentsValue.Text = parents.ToString("N0");
             lblKpiBabysittersValue.Text = sitters.ToString("N0");
             lblKpiBookingsValue.Text = monthBookings.ToString("N0");
@@ -104,15 +109,15 @@ namespace Meraki_Project
             // Chart the last 6 months ENDING this month, so the month that actually
             // has activity is always on screen and the bars visibly grow as new
             // bookings come in (a fixed Jan-Jun window was empty and looked static).
-            var today = DateTime.Today;
-            var months = new (int Year, int Month)[6];
+            DateTime today = DateTime.Today;
+            (int Year, int Month)[] months = new (int Year, int Month)[6];
             for (int i = 0; i < 6; i++)
             {
-                var d = today.AddMonths(-5 + i);
+                DateTime d = today.AddMonths(-5 + i);
                 months[i] = (d.Year, d.Month);
             }
-            var statsByYear = new Dictionary<int, (int[] Counts, decimal[] Revenue)>();
-            foreach (var m in months)
+            Dictionary<int, (int[] Counts, decimal[] Revenue)> statsByYear = new Dictionary<int, (int[] Counts, decimal[] Revenue)>();
+            foreach ((int Year, int Month) m in months)
                 if (!statsByYear.ContainsKey(m.Year))
                     statsByYear[m.Year] = BookingRepository.GetMonthlyStats(m.Year);
 
@@ -144,8 +149,9 @@ namespace Meraki_Project
             AddCol("Role", 110);
             AddCol("Email", 220);
             AddCol("Status", 110);
-            AddCol("Joined", 120);
-            AddCol("Action", 100);
+            AddCol("Joined", 110);
+            AddCol("Action", 95);
+            AddCol("Delete", 80);
 
             ReloadUsers();
         }
@@ -154,7 +160,7 @@ namespace Meraki_Project
         {
             _users = UserRepository.GetUsers(tbSearchUsers.Text.Trim());
             dgvUsers.Rows.Clear();
-            foreach (var u in _users)
+            foreach (User u in _users)
             {
                 string action = u.Role == "admin" ? "" :
                     u.Status switch
@@ -163,19 +169,26 @@ namespace Meraki_Project
                         "suspended" => "Activate",
                         _ => "Suspend",
                     };
+                // Admins can't be deleted or status-changed from here (you can't
+                // lock yourself out), so their action/delete cells stay blank.
+                string deleteText = u.Role == "admin" ? "" : "Delete";
                 int idx = dgvUsers.Rows.Add(u.FullName, Capitalize(u.Role), u.Email, u.Status,
-                                            u.CreatedAt.ToString("MMM d, yyyy"), action);
+                                            u.CreatedAt.ToString("MMM d, yyyy"), action, deleteText);
                 dgvUsers.Rows[idx].Tag = u;
                 StyleStatusCell(dgvUsers.Rows[idx].Cells[3], u.Status);
-                StyleActionCell(dgvUsers.Rows[idx].Cells[5],
-                    u.Status == "active" ? ActionStyle.Neutral : ActionStyle.Green);
+                if (u.Role != "admin")
+                {
+                    StyleActionCell(dgvUsers.Rows[idx].Cells[5],
+                        u.Status == "active" ? ActionStyle.Neutral : ActionStyle.Green);
+                    StyleActionCell(dgvUsers.Rows[idx].Cells[6], ActionStyle.Red);
+                }
             }
         }
 
         // Coloured "pill" text for status cells, like the design.
         private static void StyleStatusCell(DataGridViewCell cell, string status)
         {
-            var (back, fore) = status switch
+            (Color back, Color fore) = status switch
             {
                 "confirmed" => (Color.FromArgb(232, 247, 247), Color.FromArgb(42, 112, 112)),
                 "active" => (Color.FromArgb(232, 247, 240), Color.FromArgb(34, 120, 80)),
@@ -198,7 +211,7 @@ namespace Meraki_Project
         // Action cells look like small buttons so they're obviously clickable.
         private static void StyleActionCell(DataGridViewCell cell, ActionStyle kind)
         {
-            var (back, fore) = kind switch
+            (Color back, Color fore) = kind switch
             {
                 ActionStyle.Green => (Color.FromArgb(46, 125, 50), Color.White),
                 ActionStyle.Red => (Color.FromArgb(198, 63, 63), Color.White),
@@ -228,9 +241,10 @@ namespace Meraki_Project
             AddCol("Children", 70);
             AddCol("Total", 80);
             AddCol("Status", 95);
-            AddCol("View", 70);
-            AddCol("Accept", 80);
-            AddCol("Decline", 80);
+            AddCol("View", 65);
+            AddCol("Accept", 75);
+            AddCol("Decline", 75);
+            AddCol("Delete", 70);
 
             try { _bookings = BookingRepository.GetAll(); }
             catch (Exception ex)
@@ -246,7 +260,7 @@ namespace Meraki_Project
         {
             string search = tbSearchUsers.Text.Trim();
             dgvUsers.Rows.Clear();
-            foreach (var b in _bookings.Where(b =>
+            foreach (BookingInfo b in _bookings.Where(b =>
                          search.Length == 0
                          || b.ParentName.Contains(search, StringComparison.OrdinalIgnoreCase)
                          || b.SitterName.Contains(search, StringComparison.OrdinalIgnoreCase)))
@@ -255,7 +269,7 @@ namespace Meraki_Project
                 int idx = dgvUsers.Rows.Add(b.Date.ToString("MMM d, yyyy"), b.TimeRangeText,
                                             b.ParentName, b.SitterName, b.ChildrenCount,
                                             "$" + b.Total.ToString("0.00"), b.Status, "View",
-                                            pending ? "Accept" : "", pending ? "Decline" : "");
+                                            pending ? "Accept" : "", pending ? "Decline" : "", "Delete");
                 dgvUsers.Rows[idx].Tag = b;
                 StyleStatusCell(dgvUsers.Rows[idx].Cells[6], b.Status);
                 StyleActionCell(dgvUsers.Rows[idx].Cells[7], ActionStyle.Neutral);
@@ -264,6 +278,7 @@ namespace Meraki_Project
                     StyleActionCell(dgvUsers.Rows[idx].Cells[8], ActionStyle.Green);
                     StyleActionCell(dgvUsers.Rows[idx].Cells[9], ActionStyle.Red);
                 }
+                StyleActionCell(dgvUsers.Rows[idx].Cells[10], ActionStyle.Red);
             }
         }
 
@@ -271,6 +286,7 @@ namespace Meraki_Project
         {
             if (_mode == GridMode.Users) ReloadUsers();
             else if (_mode == GridMode.PendingApprovals) ReloadPendingApprovals();
+            else if (_mode == GridMode.Payouts) ReloadPayouts();
             else ReloadBookings();
         }
 
@@ -284,17 +300,36 @@ namespace Meraki_Project
                 if (dgvUsers.Rows[e.RowIndex].Tag is not BookingInfo booking) return;
                 if (e.ColumnIndex == 7)
                 {
-                    using var dlg = new ReceiptDialog(booking, showParentSide: true);
+                    using ReceiptDialog dlg = new ReceiptDialog(booking, showParentSide: true);
                     dlg.ShowDialog(this);
                 }
                 else if ((e.ColumnIndex == 8 || e.ColumnIndex == 9) && booking.Status == "pending")
                 {
                     DecideBooking(booking, accept: e.ColumnIndex == 8);
                 }
+                else if (e.ColumnIndex == 10)
+                {
+                    DeleteBooking(booking);
+                }
+                return;
+            }
+
+            if (_mode == GridMode.Payouts)
+            {
+                if (dgvUsers.Rows[e.RowIndex].Tag is not BookingInfo payout) return;
+                if (e.ColumnIndex == 4) SettlePayout(payout, pay: true);   // Pay Babysitter
+                else if (e.ColumnIndex == 5) SettlePayout(payout, pay: false); // Discard
                 return;
             }
 
             if (dgvUsers.Rows[e.RowIndex].Tag is not User u || u.Role == "admin") return;
+
+            // Delete column is the last one in both the Users and Pending grids.
+            if ((_mode == GridMode.Users && e.ColumnIndex == 6))
+            {
+                DeleteUser(u);
+                return;
+            }
 
             string? newStatus = null;
             if (_mode == GridMode.PendingApprovals)
@@ -347,14 +382,138 @@ namespace Meraki_Project
             try
             {
                 BookingRepository.SetStatus(booking.BookingId, accept ? "confirmed" : "declined");
-                if (accept) PaymentRepository.MarkPaid(booking.BookingId);
-                else PaymentRepository.Cancel(booking.BookingId);
+                // Accepting only confirms the booking - no charge yet. Declining
+                // drops the payment (nothing was ever charged).
+                if (!accept) PaymentRepository.Discard(booking.BookingId);
                 ExtrasRepository.AddNotification(booking.ParentId, accept
                     ? $"Your booking for {booking.Date:MMM d} was confirmed by the administrator."
                     : $"Your booking for {booking.Date:MMM d} was declined by the administrator.");
                 ExtrasRepository.AddNotification(booking.BabysitterId, accept
                     ? $"Your booking with {booking.ParentName} on {booking.Date:MMM d} was confirmed by the administrator."
                     : $"Your booking with {booking.ParentName} on {booking.Date:MMM d} was declined by the administrator.");
+                ShowBookingsGrid();
+                LoadKpisAndCharts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ----- Payouts: money parents have approved, waiting for the admin -----
+
+        private void ShowPayoutsGrid()
+        {
+            _mode = GridMode.Payouts;
+            lblUserTableTitle.Text = "Payouts";
+            tbSearchUsers.PlaceholderText = "Search by parent or babysitter...";
+
+            dgvUsers.Columns.Clear();
+            AddCol("Date", 130);
+            AddCol("Parent", 200);
+            AddCol("Babysitter", 200);
+            AddCol("Amount", 110);
+            AddCol("Pay Babysitter", 150);
+            AddCol("Discard", 110);
+
+            try { _bookings = PaymentRepository.GetApprovedPayouts(); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error while loading payouts:\n" + ex.Message,
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _bookings = new List<BookingInfo>();
+            }
+            ReloadPayouts();
+        }
+
+        private void ReloadPayouts()
+        {
+            string search = tbSearchUsers.Text.Trim();
+            dgvUsers.Rows.Clear();
+            foreach (BookingInfo b in _bookings.Where(b =>
+                         search.Length == 0
+                         || b.ParentName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                         || b.SitterName.Contains(search, StringComparison.OrdinalIgnoreCase)))
+            {
+                int idx = dgvUsers.Rows.Add(b.Date.ToString("MMM d, yyyy"), b.ParentName,
+                                            b.SitterName, "$" + b.Total.ToString("0.00"),
+                                            "Pay Babysitter", "Discard");
+                dgvUsers.Rows[idx].Tag = b;
+                StyleActionCell(dgvUsers.Rows[idx].Cells[4], ActionStyle.Green);
+                StyleActionCell(dgvUsers.Rows[idx].Cells[5], ActionStyle.Red);
+            }
+            if (_bookings.Count == 0)
+                lblUserTableTitle.Text = "Payouts  ·  nothing to release";
+        }
+
+        // pay == true  -> admin charges the parent and pays the babysitter ('paid').
+        // pay == false -> admin discards the payment (e.g. a dispute); no money moves.
+        private void SettlePayout(BookingInfo b, bool pay)
+        {
+            string verb = pay ? "charge the parent and pay the babysitter" : "discard the payment";
+            if (MessageBox.Show(
+                    $"Do you want to {verb} for the {b.Date:MMM d} booking ({b.ParentName} → {b.SitterName}, ${b.Total:0.00})?",
+                    "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            try
+            {
+                if (pay)
+                {
+                    PaymentRepository.MarkPaid(b.BookingId);
+                    ExtrasRepository.AddNotification(b.BabysitterId,
+                        $"You've been paid ${b.Total:0.00} for the {b.Date:MMM d} booking. Your receipt is ready.");
+                    ExtrasRepository.AddNotification(b.ParentId,
+                        $"Your card was charged ${b.Total:0.00} for the {b.Date:MMM d} booking. Thank you!");
+                }
+                else
+                {
+                    PaymentRepository.Discard(b.BookingId);
+                    ExtrasRepository.AddNotification(b.BabysitterId,
+                        $"Payment for the {b.Date:MMM d} booking was discarded by the administrator.");
+                }
+                ShowPayoutsGrid();
+                LoadKpisAndCharts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ----- Delete (admin can remove any user or booking, even confirmed ones) -----
+
+        private void DeleteUser(User u)
+        {
+            if (MessageBox.Show(
+                    $"Permanently delete {u.FullName} and ALL of their bookings, payments and reviews?\nThis cannot be undone.",
+                    "Delete user", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+            try
+            {
+                UserRepository.Delete(u.UserId);
+                if (_mode == GridMode.PendingApprovals) ShowPendingApprovalsGrid();
+                else ShowUsersGrid();
+                LoadKpisAndCharts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DeleteBooking(BookingInfo b)
+        {
+            if (MessageBox.Show(
+                    $"Permanently delete the {b.Date:MMM d} booking between {b.ParentName} and {b.SitterName}?\nThis cannot be undone.",
+                    "Delete booking", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+            try
+            {
+                BookingRepository.Delete(b.BookingId);
                 ShowBookingsGrid();
                 LoadKpisAndCharts();
             }
@@ -432,15 +591,17 @@ namespace Meraki_Project
             ShowPendingApprovalsGrid();
         }
 
-        // "Settings" button is hidden at load; this handler is kept only because the
-        // designer wires it, and does nothing.
+        // "Settings" button is relabelled to "Payouts" at load - it lists every
+        // parent-approved payment the admin still has to charge & release.
         private void btnSidebarSettings_Click(object sender, EventArgs e)
         {
+            SetActiveSidebarButton(btnSidebarSettings);
+            ShowPayoutsGrid();
         }
 
         private void SetActiveSidebarButton(Guna2Button active)
         {
-            foreach (var btn in new[] { btnSidebarOverview, btnSidebarUsers, btnSidebarBookings, btnSidebarReports, btnSidebarSettings })
+            foreach (Guna2Button btn in new[] { btnSidebarOverview, btnSidebarUsers, btnSidebarBookings, btnSidebarReports, btnSidebarSettings })
             {
                 bool isActive = btn == active;
                 btn.FillColor = isActive ? ColorActiveTabFill : Color.Transparent;

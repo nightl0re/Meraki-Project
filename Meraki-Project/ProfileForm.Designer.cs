@@ -66,6 +66,10 @@
             tbLocation = new Guna.UI2.WinForms.Guna2TextBox();
             lblBioCaption = new Label();
             tbBio = new Guna.UI2.WinForms.Guna2TextBox();
+            lblRateCaption = new Label();
+            tbHourlyRate = new Guna.UI2.WinForms.Guna2TextBox();
+            lblExperienceCaption = new Label();
+            tbExperience = new Guna.UI2.WinForms.Guna2TextBox();
             pnlSkillsCard = new Guna.UI2.WinForms.Guna2Panel();
             lblSkillsTitle = new Label();
             flpSkills = new FlowLayoutPanel();
@@ -537,7 +541,7 @@
             pnlTabProfile.Controls.Add(pnlSkillsCard);
             pnlTabProfile.Location = new Point(30, 384);
             pnlTabProfile.Name = "pnlTabProfile";
-            pnlTabProfile.Size = new Size(900, 700);
+            pnlTabProfile.Size = new Size(900, 800);
             pnlTabProfile.TabIndex = 2;
             //
             // pnlPersonalInfoCard
@@ -557,10 +561,14 @@
             pnlPersonalInfoCard.Controls.Add(tbLocation);
             pnlPersonalInfoCard.Controls.Add(lblBioCaption);
             pnlPersonalInfoCard.Controls.Add(tbBio);
+            pnlPersonalInfoCard.Controls.Add(lblRateCaption);
+            pnlPersonalInfoCard.Controls.Add(tbHourlyRate);
+            pnlPersonalInfoCard.Controls.Add(lblExperienceCaption);
+            pnlPersonalInfoCard.Controls.Add(tbExperience);
             pnlPersonalInfoCard.FillColor = Color.White;
             pnlPersonalInfoCard.Location = new Point(0, 0);
             pnlPersonalInfoCard.Name = "pnlPersonalInfoCard";
-            pnlPersonalInfoCard.Size = new Size(900, 460);
+            pnlPersonalInfoCard.Size = new Size(900, 540);
             pnlPersonalInfoCard.TabIndex = 0;
             //
             // lblPersonalInfoTitle
@@ -725,6 +733,56 @@
             tbBio.Size = new Size(868, 60);
             tbBio.TabIndex = 12;
             //
+            // lblRateCaption (babysitter-only; shown by LoadProfile)
+            //
+            lblRateCaption.BackColor = Color.Transparent;
+            lblRateCaption.Font = new Font("Segoe UI", 7.5F);
+            lblRateCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblRateCaption.Location = new Point(16, 456);
+            lblRateCaption.Name = "lblRateCaption";
+            lblRateCaption.Size = new Size(300, 18);
+            lblRateCaption.TabIndex = 13;
+            lblRateCaption.Text = "Hourly Rate ($/hr)";
+            //
+            // tbHourlyRate
+            //
+            tbHourlyRate.BorderRadius = 10;
+            tbHourlyRate.DefaultText = "";
+            tbHourlyRate.FillColor = Color.FromArgb(247, 245, 242);
+            tbHourlyRate.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbHourlyRate.Font = new Font("Segoe UI", 9F);
+            tbHourlyRate.Location = new Point(16, 478);
+            tbHourlyRate.Name = "tbHourlyRate";
+            tbHourlyRate.ReadOnly = true;
+            tbHourlyRate.SelectedText = "";
+            tbHourlyRate.Size = new Size(410, 44);
+            tbHourlyRate.TabIndex = 14;
+            //
+            // lblExperienceCaption (babysitter-only; shown by LoadProfile)
+            //
+            lblExperienceCaption.BackColor = Color.Transparent;
+            lblExperienceCaption.Font = new Font("Segoe UI", 7.5F);
+            lblExperienceCaption.ForeColor = Color.FromArgb(154, 136, 128);
+            lblExperienceCaption.Location = new Point(436, 456);
+            lblExperienceCaption.Name = "lblExperienceCaption";
+            lblExperienceCaption.Size = new Size(300, 18);
+            lblExperienceCaption.TabIndex = 15;
+            lblExperienceCaption.Text = "Years of Experience";
+            //
+            // tbExperience
+            //
+            tbExperience.BorderRadius = 10;
+            tbExperience.DefaultText = "";
+            tbExperience.FillColor = Color.FromArgb(247, 245, 242);
+            tbExperience.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
+            tbExperience.Font = new Font("Segoe UI", 9F);
+            tbExperience.Location = new Point(436, 478);
+            tbExperience.Name = "tbExperience";
+            tbExperience.ReadOnly = true;
+            tbExperience.SelectedText = "";
+            tbExperience.Size = new Size(448, 44);
+            tbExperience.TabIndex = 16;
+            //
             // pnlSkillsCard
             //
             pnlSkillsCard.BackColor = Color.Transparent;
@@ -732,7 +790,7 @@
             pnlSkillsCard.Controls.Add(lblSkillsTitle);
             pnlSkillsCard.Controls.Add(flpSkills);
             pnlSkillsCard.FillColor = Color.White;
-            pnlSkillsCard.Location = new Point(0, 476);
+            pnlSkillsCard.Location = new Point(0, 556);
             pnlSkillsCard.Name = "pnlSkillsCard";
             pnlSkillsCard.Size = new Size(900, 200);
             pnlSkillsCard.TabIndex = 1;
@@ -866,6 +924,10 @@
         private Guna.UI2.WinForms.Guna2TextBox tbLocation;
         private System.Windows.Forms.Label lblBioCaption;
         private Guna.UI2.WinForms.Guna2TextBox tbBio;
+        private System.Windows.Forms.Label lblRateCaption;
+        private Guna.UI2.WinForms.Guna2TextBox tbHourlyRate;
+        private System.Windows.Forms.Label lblExperienceCaption;
+        private Guna.UI2.WinForms.Guna2TextBox tbExperience;
         private Guna.UI2.WinForms.Guna2Panel pnlSkillsCard;
         private System.Windows.Forms.Label lblSkillsTitle;
         private System.Windows.Forms.FlowLayoutPanel flpSkills;

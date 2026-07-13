@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // "My Profile" page for the signed-in user. Shows their details, reviews and
+    // settings. Babysitters can edit their bio, location, hourly rate, years of
+    // experience and skills here; the Save button writes it all to the database.
     public partial class ProfileForm : Form
     {
         private List<string> _allSkills = new();
@@ -45,7 +48,7 @@ namespace Meraki_Project
 
         private void LoadProfile()
         {
-            var user = UserRepository.GetById(Session.CurrentUserId);
+            User? user = UserRepository.GetById(Session.CurrentUserId);
             if (user == null) return;
 
             tbFirstName.Text = user.FirstName;
@@ -70,8 +73,10 @@ namespace Meraki_Project
 
             if (isBabysitter)
             {
-                var profile = BabysitterRepository.GetProfile(Session.CurrentUserId);
-                var (_, bookings, _, avg, count) = BabysitterRepository.GetDashboardStats(Session.CurrentUserId);
+                (string Bio, string Location, decimal HourlyRate, int ExperienceYears, bool Verified) profile =
+                    BabysitterRepository.GetProfile(Session.CurrentUserId);
+                (_, int bookings, _, double avg, int count) =
+                    BabysitterRepository.GetDashboardStats(Session.CurrentUserId);
 
                 tbBio.Text = profile.Bio;
                 tbLocation.Text = profile.Location;
@@ -85,17 +90,25 @@ namespace Meraki_Project
                 lblStatRateValue.Text = $"${profile.HourlyRate:0}/hr";
                 lblStatRateLabel.Text = "Rate";
 
+                // Babysitters can edit their rate and experience, so those fields show.
+                lblRateCaption.Visible = true;
+                tbHourlyRate.Visible = true;
+                lblExperienceCaption.Visible = true;
+                tbExperience.Visible = true;
+                tbHourlyRate.Text = profile.HourlyRate.ToString("0.00");
+                tbExperience.Text = profile.ExperienceYears.ToString();
+
                 pnlSkillsCard.Visible = true;
                 _allSkills = BabysitterRepository.GetAllSkills();
                 _selectedSkills.Clear();
-                foreach (var s in BabysitterRepository.GetSkillsFor(Session.CurrentUserId))
+                foreach (string s in BabysitterRepository.GetSkillsFor(Session.CurrentUserId))
                     _selectedSkills.Add(s);
                 RenderSkills();
                 RenderReviews(ReviewRepository.GetForBabysitter(Session.CurrentUserId));
             }
             else
             {
-                var myBookings = BookingRepository.GetForParent(Session.CurrentUserId);
+                List<BookingInfo> myBookings = BookingRepository.GetForParent(Session.CurrentUserId);
                 tbBio.Text = "Parent looking for reliable, caring babysitters.";
                 tbLocation.Text = "";
                 lblRatingLocation.Text = $"Member since {user.CreatedAt:MMMM yyyy}";
@@ -105,6 +118,12 @@ namespace Meraki_Project
                 lblStatExperienceLabel.Text = "Completed";
                 lblStatRateValue.Text = user.CreatedAt.Year.ToString();
                 lblStatRateLabel.Text = "Member Since";
+
+                // Parents have no rate/experience, so those fields stay hidden.
+                lblRateCaption.Visible = false;
+                tbHourlyRate.Visible = false;
+                lblExperienceCaption.Visible = false;
+                tbExperience.Visible = false;
 
                 pnlSkillsCard.Visible = false;
                 RenderReviews(new List<ReviewInfo>());
@@ -160,14 +179,37 @@ namespace Meraki_Project
                     return;
                 }
 
+                // Babysitters set a rate and experience - validate those before saving.
+                decimal hourlyRate = 0m;
+                int experienceYears = 0;
+                if (Session.CurrentRole == UserRole.Babysitter)
+                {
+                    if (!decimal.TryParse(tbHourlyRate.Text.Trim(), out hourlyRate) || hourlyRate < 1m || hourlyRate > 500m)
+                    {
+                        MessageBox.Show("Please enter a valid hourly rate between $1 and $500.", "Meraki",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    if (!int.TryParse(tbExperience.Text.Trim(), out experienceYears) || experienceYears < 0 || experienceYears > 60)
+                    {
+                        MessageBox.Show("Please enter your years of experience as a whole number (0-60).", "Meraki",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
                 try
                 {
                     UserRepository.UpdateContact(Session.CurrentUserId, first, last, tbPhone.Text.Trim());
                     if (Session.CurrentRole == UserRole.Babysitter)
                     {
                         BabysitterRepository.UpdateProfile(Session.CurrentUserId,
-                            tbBio.Text.Trim(), tbLocation.Text.Trim());
+                            tbBio.Text.Trim(), tbLocation.Text.Trim(), hourlyRate, experienceYears);
                         BabysitterRepository.SetSkills(Session.CurrentUserId, _selectedSkills);
+
+                        // Reflect the new rate/experience in the header stat cards immediately.
+                        lblStatRateValue.Text = $"${hourlyRate:0}/hr";
+                        lblStatExperienceValue.Text = experienceYears + "yr";
                     }
                     Session.CurrentUserName = $"{first} {last}";
                     lblProfileName.Text = Session.CurrentUserName;
@@ -191,7 +233,7 @@ namespace Meraki_Project
             btnEditProfile.FillColor = editing ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242);
             btnEditProfile.ForeColor = editing ? Color.White : Color.FromArgb(60, 50, 45);
 
-            foreach (var box in new[] { tbFirstName, tbLastName, tbPhone, tbLocation, tbBio })
+            foreach (Guna2TextBox box in new[] { tbFirstName, tbLastName, tbPhone, tbLocation, tbBio, tbHourlyRate, tbExperience })
             {
                 box.ReadOnly = !editing;
                 box.FillColor = editing ? Color.FromArgb(247, 245, 242) : Color.White;
@@ -205,7 +247,7 @@ namespace Meraki_Project
 
         private void btnChangePhoto_Click(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            using OpenFileDialog dialog = new OpenFileDialog
             {
                 Filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp",
                 Title = "Choose a profile photo",
@@ -214,9 +256,9 @@ namespace Meraki_Project
 
             try
             {
-                using var original = Image.FromFile(dialog.FileName);
-                using var resized = new Bitmap(original, new Size(200, 200));
-                using var ms = new MemoryStream();
+                using Image original = Image.FromFile(dialog.FileName);
+                using Bitmap resized = new Bitmap(original, new Size(200, 200));
+                using MemoryStream ms = new MemoryStream();
                 resized.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                 byte[] bytes = ms.ToArray();
 
@@ -239,7 +281,7 @@ namespace Meraki_Project
         {
             flpSkills.SuspendLayout();
             flpSkills.Controls.Clear();
-            foreach (var skill in _allSkills)
+            foreach (string skill in _allSkills)
                 flpSkills.Controls.Add(BuildSkillChip(skill));
             flpSkills.ResumeLayout();
         }
@@ -248,7 +290,7 @@ namespace Meraki_Project
         {
             bool active = _selectedSkills.Contains(skill);
             int width = TextRenderer.MeasureText(skill, new Font("Segoe UI", 8.5F)).Width + 28;
-            var chip = new Guna2Button
+            Guna2Button chip = new Guna2Button
             {
                 Text = skill,
                 Size = new Size(width, 32),
@@ -303,7 +345,7 @@ namespace Meraki_Project
             }
             else
             {
-                foreach (var r in reviews)
+                foreach (ReviewInfo r in reviews)
                     flpReviews.Controls.Add(BuildReviewCard(r));
             }
             flpReviews.ResumeLayout();
@@ -311,7 +353,7 @@ namespace Meraki_Project
 
         private Control BuildReviewCard(ReviewInfo r)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = 860,
                 Height = 100,
@@ -366,7 +408,7 @@ namespace Meraki_Project
         {
             pnlTabSettings.Controls.Clear();
 
-            var items = new (string Title, string Description)[]
+            (string Title, string Description)[] items = new (string Title, string Description)[]
             {
                 ("Notifications", "Manage your notification preferences"),
                 ("Privacy & Security", "Update password and account security"),
@@ -375,7 +417,7 @@ namespace Meraki_Project
             };
 
             int y = 0;
-            foreach (var item in items)
+            foreach ((string Title, string Description) item in items)
             {
                 pnlTabSettings.Controls.Add(BuildSettingsRow(item.Title, item.Description, y));
                 y += 76;
@@ -384,7 +426,7 @@ namespace Meraki_Project
 
         private Control BuildSettingsRow(string title, string description, int y)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Location = new Point(0, y),
                 Size = new Size(900, 66),
@@ -393,7 +435,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
                 Cursor = Cursors.Hand,
             };
-            var titleLabel = new Label
+            Label titleLabel = new Label
             {
                 Text = title,
                 Location = new Point(16, 12),
@@ -402,7 +444,7 @@ namespace Meraki_Project
                 ForeColor = Color.FromArgb(60, 50, 45),
                 BackColor = Color.Transparent,
             };
-            var descLabel = new Label
+            Label descLabel = new Label
             {
                 Text = description,
                 Location = new Point(16, 36),

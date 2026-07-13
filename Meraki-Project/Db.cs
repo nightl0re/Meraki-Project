@@ -11,7 +11,7 @@ namespace Meraki_Project
 
         public static MySqlConnection Open()
         {
-            var conn = new MySqlConnection(ConnectionString);
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
             conn.Open();
             return conn;
         }
@@ -20,7 +20,7 @@ namespace Meraki_Project
         // message instead of a crash on the first query.
         public static void TestConnection()
         {
-            using var conn = Open();
+            using MySqlConnection conn = Open();
         }
     }
 }

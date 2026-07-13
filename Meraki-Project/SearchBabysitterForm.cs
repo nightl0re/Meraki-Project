@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // "Find a Babysitter" page for parents. Lists active babysitters as cards
+    // with a live search + rating filter, a favourite toggle, and buttons to
+    // open a full profile or start a booking.
     public partial class SearchBabysitterForm : Form
     {
         private static readonly Color[] AvatarPalette =
@@ -79,7 +82,7 @@ namespace Meraki_Project
         private void SetMinRating(double rating, Guna2Button activeButton)
         {
             _minRating = rating;
-            foreach (var btn in new[] { btnRatingAny, btnRating4, btnRating45, btnRating48 })
+            foreach (Guna2Button btn in new[] { btnRatingAny, btnRating4, btnRating45, btnRating48 })
             {
                 bool active = btn == activeButton;
                 btn.FillColor = active ? Color.FromArgb(232, 113, 74) : Color.FromArgb(247, 245, 242);
@@ -107,7 +110,7 @@ namespace Meraki_Project
             string search = tbSearch.Text.Trim();
 
             // Search by name only for now (location/skill search comes later).
-            var filtered = _all.Where(b =>
+            List<BabysitterInfo> filtered = _all.Where(b =>
                 (search.Length == 0
                     || b.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
                 && b.HourlyRate <= _maxRate
@@ -120,7 +123,7 @@ namespace Meraki_Project
 
             flpResults.SuspendLayout();
             flpResults.Controls.Clear();
-            foreach (var b in filtered)
+            foreach (BabysitterInfo b in filtered)
                 flpResults.Controls.Add(BuildBabysitterCard(b));
             flpResults.ResumeLayout();
 
@@ -133,7 +136,7 @@ namespace Meraki_Project
         {
             Color accent = AvatarPalette[b.UserId % AvatarPalette.Length];
 
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Size = new Size(1100, 170),
                 Margin = new Padding(0, 0, 0, 16),
@@ -144,7 +147,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
-            var accentBar = new Guna2Panel
+            Guna2Panel accentBar = new Guna2Panel
             {
                 Location = new Point(10, 16),
                 Size = new Size(5, 138),
@@ -153,7 +156,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
-            var avatar = new Guna2Panel
+            Guna2Panel avatar = new Guna2Panel
             {
                 BorderRadius = 18,
                 FillColor = Ui.Lighten(accent, 0.8),
@@ -171,7 +174,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var nameLabel = new Label
+            Label nameLabel = new Label
             {
                 Text = b.Name + (b.Verified ? "  ✓" : ""),
                 Location = new Point(114, 22),
@@ -180,7 +183,7 @@ namespace Meraki_Project
                 ForeColor = Color.FromArgb(60, 50, 45),
                 BackColor = Color.Transparent,
             };
-            var metaLabel = new Label
+            Label metaLabel = new Label
             {
                 Text = $"📍 {(b.Location.Length > 0 ? b.Location : "No location")}   ·   {b.ExperienceYears}yr exp   ·   "
                      + (b.ReviewCount > 0 ? $"★ {b.AvgRating:0.0} ({b.ReviewCount})" : "★ New"),
@@ -190,7 +193,7 @@ namespace Meraki_Project
                 ForeColor = Color.FromArgb(154, 136, 128),
                 BackColor = Color.Transparent,
             };
-            var bioLabel = new Label
+            Label bioLabel = new Label
             {
                 Text = b.Bio.Length > 0 ? b.Bio : "This babysitter hasn't written a bio yet.",
                 Location = new Point(114, 76),
@@ -200,7 +203,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
-            var tagsFlow = new FlowLayoutPanel
+            FlowLayoutPanel tagsFlow = new FlowLayoutPanel
             {
                 Location = new Point(112, 104),
                 Size = new Size(640, 54),
@@ -208,7 +211,7 @@ namespace Meraki_Project
                 WrapContents = true,
                 BackColor = Color.Transparent,
             };
-            foreach (var tag in b.Skills.Take(4))
+            foreach (string tag in b.Skills.Take(4))
             {
                 tagsFlow.Controls.Add(new Label
                 {
@@ -222,7 +225,7 @@ namespace Meraki_Project
                 });
             }
 
-            var favoriteBtn = new Guna2Button
+            Guna2Button favoriteBtn = new Guna2Button
             {
                 Text = _favorites.Contains(b.UserId) ? "♥" : "♡",
                 Location = new Point(1046, 14),
@@ -247,7 +250,7 @@ namespace Meraki_Project
                 }
             };
 
-            var rateLabel = new Label
+            Label rateLabel = new Label
             {
                 Text = $"${b.HourlyRate:0}/hr",
                 Location = new Point(880, 44),
@@ -258,7 +261,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
-            var profileBtn = new Guna2Button
+            Guna2Button profileBtn = new Guna2Button
             {
                 Text = "View Profile",
                 Location = new Point(870, 78),
@@ -273,7 +276,7 @@ namespace Meraki_Project
             };
             profileBtn.Click += (s, e) => OpenProfile(b.UserId);
 
-            var bookBtn = new Guna2Button
+            Guna2Button bookBtn = new Guna2Button
             {
                 Text = b.Available ? "Book Now" : "Unavailable",
                 Location = new Point(870, 122),

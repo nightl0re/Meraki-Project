@@ -25,7 +25,7 @@ namespace Meraki_Project
             StartPosition = FormStartPosition.CenterParent;
             BackColor = Color.FromArgb(253, 244, 239);
 
-            var title = new Label
+            Label title = new Label
             {
                 Text = $"How was {babysitterName}?",
                 Location = new Point(24, 20),
@@ -39,7 +39,7 @@ namespace Meraki_Project
             for (int i = 0; i < 5; i++)
             {
                 int starValue = i + 1;
-                var star = new Guna2Button
+                Guna2Button star = new Guna2Button
                 {
                     Text = "☆",
                     Location = new Point(24 + i * 64, 60),
@@ -55,7 +55,7 @@ namespace Meraki_Project
                 Controls.Add(star);
             }
 
-            var commentCaption = new Label
+            Label commentCaption = new Label
             {
                 Text = "Your comment (optional)",
                 Location = new Point(24, 132),
@@ -79,7 +79,7 @@ namespace Meraki_Project
             _tbComment.FocusedState.BorderColor = Color.FromArgb(232, 113, 74);
             Controls.Add(_tbComment);
 
-            var submit = new Guna2Button
+            Guna2Button submit = new Guna2Button
             {
                 Text = "Submit Review",
                 Location = new Point(24, 262),
@@ -102,7 +102,7 @@ namespace Meraki_Project
             };
             Controls.Add(submit);
 
-            var cancel = new Guna2Button
+            Guna2Button cancel = new Guna2Button
             {
                 Text = "Cancel",
                 Location = new Point(276, 262),

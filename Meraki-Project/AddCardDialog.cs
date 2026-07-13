@@ -62,7 +62,7 @@ namespace Meraki_Project
             _tbCvv.PasswordChar = '●';
             Controls.Add(_tbCvv);
 
-            var note = new Label
+            Label note = new Label
             {
                 Text = "Only the last 4 digits are stored. Your CVV is never saved.",
                 Location = new Point(160, 294),
@@ -73,7 +73,7 @@ namespace Meraki_Project
             };
             Controls.Add(note);
 
-            var save = new Guna2Button
+            Guna2Button save = new Guna2Button
             {
                 Text = "Save Card",
                 Location = new Point(24, 350),
@@ -87,7 +87,7 @@ namespace Meraki_Project
             save.Click += (s, e) => TrySave();
             Controls.Add(save);
 
-            var cancel = new Guna2Button
+            Guna2Button cancel = new Guna2Button
             {
                 Text = "Cancel",
                 Location = new Point(276, 350),
@@ -178,7 +178,7 @@ namespace Meraki_Project
 
         private static Guna2TextBox MakeTextBox(int y, string placeholder)
         {
-            var tb = new Guna2TextBox
+            Guna2TextBox tb = new Guna2TextBox
             {
                 Location = new Point(24, y),
                 Size = new Size(412, 40),

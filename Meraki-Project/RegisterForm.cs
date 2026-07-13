@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Sign-up page. Validates the form, creates the account with status
+    // 'pending' (an admin must approve it), and for babysitters also creates an
+    // empty babysitter profile row.
     public partial class RegisterForm : Form
     {
         private static readonly Color ColorCoral = Color.FromArgb(232, 113, 74);

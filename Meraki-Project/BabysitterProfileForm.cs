@@ -73,7 +73,7 @@ namespace Meraki_Project
             // About tab
             lblBio.Text = _info.Bio.Length > 0 ? _info.Bio : "This babysitter hasn't written a bio yet.";
             flpSkills.Controls.Clear();
-            foreach (var skill in _info.Skills)
+            foreach (string skill in _info.Skills)
             {
                 flpSkills.Controls.Add(new Label
                 {
@@ -103,7 +103,7 @@ namespace Meraki_Project
             }
             else
             {
-                foreach (var rv in reviews)
+                foreach (ReviewInfo rv in reviews)
                     flpReviews.Controls.Add(BuildReviewCard(rv));
             }
 
@@ -112,7 +112,7 @@ namespace Meraki_Project
 
         private Control BuildReviewCard(ReviewInfo rv)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = 1360,
                 Height = 90,
@@ -183,7 +183,7 @@ namespace Meraki_Project
         private void btnStar_Click(object sender, EventArgs e)
         {
             _rating = int.Parse((string)((Guna2Button)sender!).Tag!);
-            var stars = new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 };
+            Guna2Button[] stars = new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 };
             for (int i = 0; i < 5; i++)
             {
                 bool filled = i < _rating;
@@ -217,7 +217,7 @@ namespace Meraki_Project
                 // immediately with the new review included.
                 _rating = 0;
                 tbComment.Text = "";
-                foreach (var star in new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 })
+                foreach (Guna2Button star in new[] { btnStar1, btnStar2, btnStar3, btnStar4, btnStar5 })
                 {
                     star.Text = "\u2606";
                     star.ForeColor = StarGrey;

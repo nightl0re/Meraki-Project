@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Four-step "Book Now" wizard: date and time, choose babysitter, details, then
+    // confirm + pick a card. It creates the booking and an 'authorized' payment -
+    // the parent is only charged later, after the job is completed and confirmed.
     public partial class BookingForm : Form
     {
         private static readonly string[] TimeSlots =
@@ -104,7 +107,7 @@ namespace Meraki_Project
             cbYear.Items.Add((DateTime.Today.Year + 1).ToString());
 
             cbStartTime.Items.Clear();
-            foreach (var slot in TimeSlots)
+            foreach (string slot in TimeSlots)
                 cbStartTime.Items.Add(slot);
 
             // Default to today so the parent only has to pick time + duration.
@@ -152,7 +155,7 @@ namespace Meraki_Project
             }
             else
             {
-                var date = new DateTime(
+                DateTime date = new DateTime(
                     int.Parse(cbYear.SelectedItem!.ToString()!),
                     cbMonth.SelectedIndex + 1,
                     cbDay.SelectedIndex + 1);
@@ -175,9 +178,9 @@ namespace Meraki_Project
             flpDurations.Controls.Clear();
             _durationButtons.Clear();
 
-            foreach (var d in Durations)
+            foreach (string d in Durations)
             {
-                var btn = new Guna2Button
+                Guna2Button btn = new Guna2Button
                 {
                     Text = d,
                     Size = new Size(120, 40),
@@ -198,7 +201,7 @@ namespace Meraki_Project
         private void SelectDuration(string duration)
         {
             _selectedDuration = duration;
-            foreach (var pair in _durationButtons)
+            foreach (KeyValuePair<string, Guna2Button> pair in _durationButtons)
                 StyleChoiceButton(pair.Value, pair.Key == duration, Teal);
             UpdateContinueAppearance();
         }
@@ -230,7 +233,7 @@ namespace Meraki_Project
                     BackColor = Color.Transparent,
                 });
             }
-            foreach (var b in _sitters)
+            foreach (BabysitterInfo b in _sitters)
                 flpBabysitterSelect.Controls.Add(BuildBabysitterChoiceRow(b));
             flpBabysitterSelect.ResumeLayout();
         }
@@ -240,7 +243,7 @@ namespace Meraki_Project
             bool selected = _selectedBabysitterId == b.UserId;
             Color accent = AvatarPalette[b.UserId % AvatarPalette.Length];
 
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = 860,
                 Height = 90,
@@ -251,7 +254,7 @@ namespace Meraki_Project
                 Cursor = Cursors.Hand,
             };
 
-            var avatar = new Guna2Panel
+            Guna2Panel avatar = new Guna2Panel
             {
                 BorderRadius = 16,
                 FillColor = Ui.Lighten(accent, 0.8),
@@ -269,7 +272,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var nameLabel = new Label
+            Label nameLabel = new Label
             {
                 Text = b.Name,
                 Location = new Point(84, 20),
@@ -278,7 +281,7 @@ namespace Meraki_Project
                 ForeColor = TextDark,
                 BackColor = Color.Transparent,
             };
-            var detailLabel = new Label
+            Label detailLabel = new Label
             {
                 Text = (b.ReviewCount > 0 ? $"★ {b.AvgRating:0.0}" : "★ New") + $"    ${b.HourlyRate:0}/hr",
                 Location = new Point(84, 46),
@@ -287,7 +290,7 @@ namespace Meraki_Project
                 ForeColor = TextMuted,
                 BackColor = Color.Transparent,
             };
-            var checkLabel = new Label
+            Label checkLabel = new Label
             {
                 Text = "✓",
                 Location = new Point(800, 30),
@@ -318,7 +321,7 @@ namespace Meraki_Project
         private void SelectBabysitter(int id)
         {
             _selectedBabysitterId = id;
-            foreach (var sitterId in _sitterRows.Keys)
+            foreach (int sitterId in _sitterRows.Keys)
             {
                 bool sel = sitterId == id;
                 _sitterRows[sitterId].FillColor = sel ? Color.FromArgb(253, 238, 232) : Color.White;
@@ -351,7 +354,7 @@ namespace Meraki_Project
 
         private void RenderConfirmSummary()
         {
-            var sitter = SelectedSitter;
+            BabysitterInfo? sitter = SelectedSitter;
             DateTime date = _selectedDate ?? DateTime.Today;
             int hours = ParseDurationHours(_selectedDuration);
             decimal rate = sitter?.HourlyRate ?? 0;
@@ -384,7 +387,7 @@ namespace Meraki_Project
             }
 
             cbCard.Items.Clear();
-            foreach (var c in _cards)
+            foreach (PaymentCard c in _cards)
                 cbCard.Items.Add(c.Display);
 
             if (_cards.Count == 0)
@@ -401,7 +404,7 @@ namespace Meraki_Project
 
         private void btnAddCard_Click(object sender, EventArgs e)
         {
-            using var dlg = new AddCardDialog();
+            using AddCardDialog dlg = new AddCardDialog();
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
 
             try
@@ -431,7 +434,7 @@ namespace Meraki_Project
 
         private void ConfirmBooking()
         {
-            var sitter = SelectedSitter;
+            BabysitterInfo? sitter = SelectedSitter;
             if (sitter == null) return;
 
             if (_cards.Count == 0 || cbCard.SelectedIndex < 0 || cbCard.SelectedIndex >= _cards.Count)
@@ -440,7 +443,7 @@ namespace Meraki_Project
                     "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var card = _cards[cbCard.SelectedIndex];
+            PaymentCard card = _cards[cbCard.SelectedIndex];
 
             DateTime date = _selectedDate ?? DateTime.Today;
             int hours = ParseDurationHours(_selectedDuration);
@@ -453,8 +456,9 @@ namespace Meraki_Project
                     hours, _childCount, tbAddress.Text.Trim(), tbNotes.Text.Trim(),
                     sitter.HourlyRate, _serviceFee, total);
 
-                // The payment waits as 'pending' and is charged when the sitter accepts.
-                PaymentRepository.CreatePendingPayment(bookingId, card.CardId, total);
+                // Nothing is charged now. The card is only recorded ('authorized');
+                // the parent pays after the job is finished and everyone confirms.
+                PaymentRepository.CreateAuthorizedPayment(bookingId, card.CardId, total);
 
                 ExtrasRepository.AddNotification(sitter.UserId,
                     $"New booking request from {Session.CurrentUserName} for {date:MMM d}");
@@ -467,8 +471,9 @@ namespace Meraki_Project
             }
 
             lblConfirmedMessage.Text =
-                $"Your booking request was sent to {sitter.Name}. Your {card.Brand} card " +
-                $"ending {card.Last4} will be charged ${total:0.00} once they accept.";
+                $"Your booking request was sent to {sitter.Name}. You won't be charged now - " +
+                $"your {card.Brand} card ending {card.Last4} is only billed ${total:0.00} after " +
+                "the job is completed and you confirm it.";
             lblConfirmedDate.Text = $"Date:  {date:MMMM d, yyyy}";
             lblConfirmedTime.Text = $"Time:  {_selectedTime} · {_selectedDuration}";
             lblConfirmedBabysitter.Text = $"Babysitter:  {sitter.Name}";
@@ -523,8 +528,8 @@ namespace Meraki_Project
 
             FillDateAndTimeCombos();
             cbStartTime.SelectedIndex = -1;
-            foreach (var pair in _durationButtons) StyleChoiceButton(pair.Value, false, Teal);
-            foreach (var sitterId in _sitterRows.Keys)
+            foreach (KeyValuePair<string, Guna2Button> pair in _durationButtons) StyleChoiceButton(pair.Value, false, Teal);
+            foreach (int sitterId in _sitterRows.Keys)
             {
                 _sitterRows[sitterId].FillColor = Color.White;
                 _sitterChecks[sitterId].Visible = false;

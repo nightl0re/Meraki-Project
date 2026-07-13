@@ -112,7 +112,7 @@ namespace Meraki_Project
         {
             get
             {
-                var span = DateTime.Now - CreatedAt;
+                TimeSpan span = DateTime.Now - CreatedAt;
                 if (span.TotalMinutes < 60) return $"{Math.Max(1, (int)span.TotalMinutes)} min ago";
                 if (span.TotalHours < 24) return $"{(int)span.TotalHours} hr{((int)span.TotalHours == 1 ? "" : "s")} ago";
                 if (span.TotalDays < 2) return "Yesterday";

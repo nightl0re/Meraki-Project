@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Parent home page. Lists the parent's bookings, lets them confirm jobs the
+    // babysitter has marked complete (which releases payment), leave reviews, and
+    // reach the search/booking pages.
     public partial class ParentDashboardForm : Form
     {
         private static readonly Color ColorHeading = Color.FromArgb(60, 50, 45);
@@ -46,16 +49,21 @@ namespace Meraki_Project
             // so a review can be left. Best-effort; never block the dashboard.
             try { BookingRepository.AutoCompletePastBookings(); } catch { }
 
-            var all = BookingRepository.GetForParent(Session.CurrentUserId);
-            var upcoming = all
+            List<BookingInfo> all = BookingRepository.GetForParent(Session.CurrentUserId);
+            List<BookingInfo> upcoming = all
                 .Where(b => (b.Status == "pending" || b.Status == "confirmed") && b.Date >= DateTime.Today)
                 .OrderBy(b => b.Date).ThenBy(b => b.Start)
                 .ToList();
-            var reviewable = all
+            List<BookingInfo> reviewable = all
                 .Where(b => !b.HasReview && b.Date < DateTime.Today
                             && (b.Status == "confirmed" || b.Status == "completed"))
                 .OrderByDescending(b => b.Date).ThenByDescending(b => b.Start)
                 .ToList();
+
+            // Jobs the babysitter marked done that are waiting for THIS parent to
+            // confirm before any money is charged.
+            List<BookingInfo> awaitingConfirm =
+                BookingRepository.GetAwaitingParentConfirm(Session.CurrentUserId);
 
             int thisWeek = upcoming.Count(b => b.Date < DateTime.Today.AddDays(7));
             lblBannerSubtext.Text = upcoming.Count == 0
@@ -65,23 +73,129 @@ namespace Meraki_Project
             flpBookings.SuspendLayout();
             flpBookings.Controls.Clear();
 
-            if (upcoming.Count == 0 && reviewable.Count == 0)
+            if (upcoming.Count == 0 && reviewable.Count == 0 && awaitingConfirm.Count == 0)
             {
                 flpBookings.Controls.Add(EmptyLabel("No bookings yet. Tap \"Book a Babysitter\" to get started."));
             }
             else
             {
-                foreach (var b in upcoming)
+                // The confirmation step is the most urgent, so it goes at the top.
+                if (awaitingConfirm.Count > 0)
+                {
+                    flpBookings.Controls.Add(SectionLabel("Confirm completed jobs"));
+                    foreach (BookingInfo b in awaitingConfirm)
+                        flpBookings.Controls.Add(BuildConfirmCard(b));
+                }
+
+                foreach (BookingInfo b in upcoming)
                     flpBookings.Controls.Add(BuildBookingCard(b, reviewable: false));
 
                 if (reviewable.Count > 0)
                 {
                     flpBookings.Controls.Add(SectionLabel("Leave a review"));
-                    foreach (var b in reviewable)
+                    foreach (BookingInfo b in reviewable)
                         flpBookings.Controls.Add(BuildBookingCard(b, reviewable: true));
                 }
             }
             flpBookings.ResumeLayout();
+        }
+
+        // Card for a job the babysitter says is done: the parent confirms it was
+        // completed properly (which lets the admin release payment) or reports a
+        // problem (which flags it for the admin instead of paying).
+        private Control BuildConfirmCard(BookingInfo b)
+        {
+            Guna2Panel card = new Guna2Panel
+            {
+                Width = 1400,
+                Height = 96,
+                Margin = new Padding(0, 0, 0, 12),
+                BorderRadius = 16,
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(255, 224, 178),
+                FillColor = Color.FromArgb(255, 250, 240),
+                BackColor = Color.Transparent,
+            };
+            card.Controls.Add(new Label
+            {
+                Text = $"{b.SitterName} marked this booking completed",
+                Location = new Point(20, 16),
+                Size = new Size(700, 24),
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = ColorHeading,
+                BackColor = Color.Transparent,
+            });
+            card.Controls.Add(new Label
+            {
+                Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}  ·  ${b.Total:0.00}",
+                Location = new Point(20, 46),
+                Size = new Size(700, 20),
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = TextMuted,
+                BackColor = Color.Transparent,
+            });
+
+            Guna2Button confirmBtn = new Guna2Button
+            {
+                Text = "Confirm & approve payment",
+                Location = new Point(950, 28),
+                Size = new Size(220, 40),
+                BorderRadius = 10,
+                FillColor = Color.FromArgb(46, 125, 50),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = Color.Transparent,
+            };
+            confirmBtn.Click += (s, e) => ConfirmCompletion(b, approved: true);
+
+            Guna2Button problemBtn = new Guna2Button
+            {
+                Text = "Report a problem",
+                Location = new Point(1184, 28),
+                Size = new Size(180, 40),
+                BorderRadius = 10,
+                BorderThickness = 1,
+                BorderColor = Color.FromArgb(232, 200, 200),
+                FillColor = Color.White,
+                ForeColor = Color.FromArgb(198, 63, 63),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = Color.Transparent,
+            };
+            problemBtn.Click += (s, e) => ConfirmCompletion(b, approved: false);
+
+            card.Controls.Add(confirmBtn);
+            card.Controls.Add(problemBtn);
+            return card;
+        }
+
+        // approved == true  -> parent confirms, payment becomes 'approved' (admin can pay).
+        // approved == false -> parent reports an issue; the admin is notified to review it.
+        private void ConfirmCompletion(BookingInfo b, bool approved)
+        {
+            try
+            {
+                if (approved)
+                {
+                    PaymentRepository.MarkApprovedByParent(b.BookingId);
+                    ExtrasRepository.AddNotification(b.BabysitterId,
+                        $"{Session.CurrentUserName} confirmed the {b.Date:MMM d} booking. Payment is now with the admin for release.");
+                    MessageBox.Show("Thanks! Payment will be released to the babysitter by the admin.",
+                        "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    ExtrasRepository.AddNotification(b.BabysitterId,
+                        $"{Session.CurrentUserName} reported a problem with the {b.Date:MMM d} booking. The admin will review it.");
+                    MessageBox.Show("Thanks for letting us know. The admin will review this booking before any payment.",
+                        "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                LoadBookings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private Label EmptyLabel(string text) => new()
@@ -108,7 +222,7 @@ namespace Meraki_Project
 
         private Control BuildBookingCard(BookingInfo b, bool reviewable)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = 1400,
                 Height = 96,
@@ -125,7 +239,7 @@ namespace Meraki_Project
             Color accent = confirmedCard ? Color.FromArgb(94, 200, 196) : Color.FromArgb(244, 168, 124);
 
             // Left accent bar (rounded) - the fresh look from the design.
-            var accentBar = new Guna2Panel
+            Guna2Panel accentBar = new Guna2Panel
             {
                 Location = new Point(12, 16),
                 Size = new Size(5, 64),
@@ -134,7 +248,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
             // Avatar with the sitter's initial.
-            var avatar = new Guna2Panel
+            Guna2Panel avatar = new Guna2Panel
             {
                 Location = new Point(28, 20),
                 Size = new Size(56, 56),
@@ -152,7 +266,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var nameLabel = new Label
+            Label nameLabel = new Label
             {
                 Text = b.SitterName,
                 Location = new Point(100, 16),
@@ -161,7 +275,7 @@ namespace Meraki_Project
                 ForeColor = ColorHeading,
                 BackColor = Color.Transparent,
             };
-            var dateLabel = new Label
+            Label dateLabel = new Label
             {
                 Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}",
                 Location = new Point(100, 44),
@@ -170,7 +284,7 @@ namespace Meraki_Project
                 ForeColor = TextMuted,
                 BackColor = Color.Transparent,
             };
-            var detailLabel = new Label
+            Label detailLabel = new Label
             {
                 Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}  ·  tap for receipt",
                 Location = new Point(100, 66),
@@ -188,7 +302,7 @@ namespace Meraki_Project
 
             EventHandler openReceipt = (s, e) =>
             {
-                using var dlg = new ReceiptDialog(b, showParentSide: true);
+                using ReceiptDialog dlg = new ReceiptDialog(b, showParentSide: true);
                 dlg.ShowDialog(this);
             };
             card.Click += openReceipt;
@@ -198,7 +312,7 @@ namespace Meraki_Project
 
             if (reviewable)
             {
-                var reviewBtn = new Guna2Button
+                Guna2Button reviewBtn = new Guna2Button
                 {
                     Text = "★  Leave a review",
                     Location = new Point(1180, 28),
@@ -215,7 +329,7 @@ namespace Meraki_Project
             else
             {
                 bool confirmed = b.Status == "confirmed";
-                var badge = new Label
+                Label badge = new Label
                 {
                     Text = confirmed ? "Confirmed" : "Pending",
                     Location = new Point(1230, 34),
@@ -230,7 +344,7 @@ namespace Meraki_Project
             }
 
             // View the babysitter's profile / reviews straight from the booking.
-            var profileBtn = new Guna2Button
+            Guna2Button profileBtn = new Guna2Button
             {
                 Text = "View Profile",
                 Location = new Point(1010, 28),
@@ -252,7 +366,7 @@ namespace Meraki_Project
 
         private void LeaveReview(BookingInfo booking)
         {
-            using var dialog = new ReviewDialog(booking.SitterName);
+            using ReviewDialog dialog = new ReviewDialog(booking.SitterName);
             if (dialog.ShowDialog(this) != DialogResult.OK) return;
 
             try
@@ -303,15 +417,15 @@ namespace Meraki_Project
         {
             try
             {
-                var all = BookingRepository.GetForParent(Session.CurrentUserId);
+                List<BookingInfo> all = BookingRepository.GetForParent(Session.CurrentUserId);
                 if (all.Count == 0)
                 {
                     MessageBox.Show("You have no bookings yet.", "My Bookings",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                var sb = new StringBuilder();
-                foreach (var b in all.Take(12))
+                StringBuilder sb = new StringBuilder();
+                foreach (BookingInfo b in all.Take(12))
                     sb.AppendLine($"{b.Date:MMM d, yyyy}  {b.TimeRangeText}  ·  {b.SitterName}  ·  ${b.Total:0.00}  ·  {b.Status}");
                 MessageBox.Show(sb.ToString(), "My Bookings", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -326,15 +440,15 @@ namespace Meraki_Project
         {
             try
             {
-                var notifications = ExtrasRepository.GetNotifications(Session.CurrentUserId);
+                List<NotificationInfo> notifications = ExtrasRepository.GetNotifications(Session.CurrentUserId);
                 if (notifications.Count == 0)
                 {
                     MessageBox.Show("No notifications yet.", "Notifications",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                var sb = new StringBuilder();
-                foreach (var n in notifications)
+                StringBuilder sb = new StringBuilder();
+                foreach (NotificationInfo n in notifications)
                     sb.AppendLine($"{(n.Unread ? "●" : "○")}  {n.Message}   ({n.TimeAgoText})");
                 MessageBox.Show(sb.ToString(), "Notifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ExtrasRepository.MarkAllRead(Session.CurrentUserId);

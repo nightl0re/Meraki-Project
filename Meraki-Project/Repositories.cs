@@ -19,12 +19,12 @@ namespace Meraki_Project
         public static LoginResult Authenticate(string email, string password, out User? user)
         {
             user = null;
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT user_id, role, first_name, last_name, email, phone, status, created_at, password
                   FROM users WHERE email = @e", conn);
             cmd.Parameters.AddWithValue("@e", email);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return LoginResult.NoSuchEmail;
 
             string stored = r.GetString("password");
@@ -39,8 +39,8 @@ namespace Meraki_Project
         // register again, which reuses (resets) the declined row.
         public static bool EmailExists(string email)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "SELECT COUNT(*) FROM users WHERE email = @e AND status <> 'declined'", conn);
             cmd.Parameters.AddWithValue("@e", email);
             return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
@@ -53,11 +53,11 @@ namespace Meraki_Project
         public static int Register(string firstName, string lastName, string email,
                                    string phone, string password, UserRole role)
         {
-            using var conn = Db.Open();
-            using var tx = conn.BeginTransaction();
+            using MySqlConnection conn = Db.Open();
+            using MySqlTransaction tx = conn.BeginTransaction();
 
             int userId;
-            using (var find = new MySqlCommand(
+            using (MySqlCommand find = new MySqlCommand(
                 "SELECT user_id FROM users WHERE email = @e AND status = 'declined'", conn, tx))
             {
                 find.Parameters.AddWithValue("@e", email);
@@ -65,7 +65,7 @@ namespace Meraki_Project
                 userId = existing == null || existing is DBNull ? 0 : Convert.ToInt32(existing);
             }
 
-            using var cmd = userId > 0
+            using MySqlCommand cmd = userId > 0
                 ? new MySqlCommand(
                     @"UPDATE users SET role = @role, first_name = @fn, last_name = @ln,
                              phone = @ph, password = @pw, status = 'pending',
@@ -86,7 +86,7 @@ namespace Meraki_Project
 
             if (role == UserRole.Babysitter)
             {
-                using var profileCmd = new MySqlCommand(
+                using MySqlCommand profileCmd = new MySqlCommand(
                     @"INSERT IGNORE INTO babysitter_profiles (user_id, bio, location) VALUES (@id, '', '')", conn, tx);
                 profileCmd.Parameters.AddWithValue("@id", userId);
                 profileCmd.ExecuteNonQuery();
@@ -98,14 +98,14 @@ namespace Meraki_Project
 
         public static User? GetById(int userId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT user_id, role, first_name, last_name, email, phone, status, created_at, photo
                   FROM users WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@id", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return null;
-            var u = ReadUser(r);
+            User u = ReadUser(r);
             u.Photo = r.IsDBNull(r.GetOrdinal("photo")) ? null : (byte[])r["photo"];
             return u;
         }
@@ -113,16 +113,16 @@ namespace Meraki_Project
         // Admin grid. Search matches name or email.
         public static List<User> GetUsers(string search)
         {
-            var list = new List<User>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<User> list = new List<User>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT user_id, role, first_name, last_name, email, phone, status, created_at
                   FROM users
                   WHERE (@s = '' OR CONCAT(first_name,' ',last_name) LIKE @like OR email LIKE @like)
                   ORDER BY (status = 'pending') DESC, created_at DESC", conn);
             cmd.Parameters.AddWithValue("@s", search);
             cmd.Parameters.AddWithValue("@like", "%" + search + "%");
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
                 list.Add(ReadUser(r));
             return list;
@@ -130,17 +130,59 @@ namespace Meraki_Project
 
         public static void SetStatus(int userId, string status)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand("UPDATE users SET status = @s WHERE user_id = @id", conn);
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand("UPDATE users SET status = @s WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@s", status);
             cmd.Parameters.AddWithValue("@id", userId);
             cmd.ExecuteNonQuery();
         }
 
+        // Admin permanently deletes an account and everything that references it.
+        // Foreign keys force a strict delete order (children before parents), so the
+        // whole thing runs in one transaction: it all succeeds or nothing changes.
+        public static void Delete(int userId)
+        {
+            using MySqlConnection conn = Db.Open();
+            using MySqlTransaction tx = conn.BeginTransaction();
+
+            // 1) reviews that mention this user, or that hang off this user's bookings.
+            Exec(conn, tx,
+                @"DELETE FROM reviews
+                  WHERE parent_id = @id OR babysitter_id = @id
+                     OR booking_id IN (SELECT booking_id FROM bookings
+                                       WHERE parent_id = @id OR babysitter_id = @id)", userId);
+            // 2) payments for this user's bookings or made with this user's cards.
+            Exec(conn, tx,
+                @"DELETE FROM payments
+                  WHERE booking_id IN (SELECT booking_id FROM bookings
+                                       WHERE parent_id = @id OR babysitter_id = @id)
+                     OR card_id IN (SELECT card_id FROM payment_cards WHERE user_id = @id)", userId);
+            // 3) now the bookings themselves are free of children.
+            Exec(conn, tx, "DELETE FROM bookings WHERE parent_id = @id OR babysitter_id = @id", userId);
+            // 4) the remaining rows that point straight at the user.
+            Exec(conn, tx, "DELETE FROM payment_cards WHERE user_id = @id", userId);
+            Exec(conn, tx, "DELETE FROM favorites WHERE parent_id = @id OR babysitter_id = @id", userId);
+            Exec(conn, tx, "DELETE FROM notifications WHERE user_id = @id", userId);
+            Exec(conn, tx, "DELETE FROM babysitter_skills WHERE babysitter_id = @id", userId);
+            Exec(conn, tx, "DELETE FROM babysitter_profiles WHERE user_id = @id", userId);
+            // 5) finally the account row.
+            Exec(conn, tx, "DELETE FROM users WHERE user_id = @id", userId);
+
+            tx.Commit();
+        }
+
+        // Small helper so the delete cascade above stays readable.
+        private static void Exec(MySqlConnection conn, MySqlTransaction tx, string sql, int id)
+        {
+            using MySqlCommand cmd = new MySqlCommand(sql, conn, tx);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+        }
+
         public static void UpdateContact(int userId, string firstName, string lastName, string phone)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "UPDATE users SET first_name = @fn, last_name = @ln, phone = @ph WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@fn", firstName);
             cmd.Parameters.AddWithValue("@ln", lastName);
@@ -151,8 +193,8 @@ namespace Meraki_Project
 
         public static void SetPhoto(int userId, byte[] imageBytes)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand("UPDATE users SET photo = @p WHERE user_id = @id", conn);
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand("UPDATE users SET photo = @p WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@p", imageBytes);
             cmd.Parameters.AddWithValue("@id", userId);
             cmd.ExecuteNonQuery();
@@ -178,9 +220,9 @@ namespace Meraki_Project
         // Only 'active' (admin-approved) accounts are ever shown to parents.
         public static List<BabysitterInfo> GetActiveBabysitters()
         {
-            var list = new List<BabysitterInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<BabysitterInfo> list = new List<BabysitterInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name,
                          COALESCE(p.bio,'') AS bio, p.hourly_rate, p.experience_years,
                          p.location, p.verified, p.available,
@@ -196,7 +238,7 @@ namespace Meraki_Project
                   JOIN babysitter_profiles p ON p.user_id = u.user_id
                   WHERE u.status = 'active'
                   ORDER BY avg_rating DESC, name", conn);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
                 string skills = r.GetString("skills");
@@ -221,8 +263,8 @@ namespace Meraki_Project
         // Full public card for ONE babysitter (for the "View Profile" popup).
         public static BabysitterInfo? GetBabysitterInfo(int userId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name,
                          COALESCE(p.bio,'') AS bio, p.hourly_rate, p.experience_years,
                          p.location, p.verified, p.available,
@@ -238,7 +280,7 @@ namespace Meraki_Project
                   JOIN babysitter_profiles p ON p.user_id = u.user_id
                   WHERE u.user_id = @id", conn);
             cmd.Parameters.AddWithValue("@id", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return null;
             string skills = r.GetString("skills");
             return new BabysitterInfo
@@ -260,64 +302,71 @@ namespace Meraki_Project
         public static (string Bio, string Location, decimal HourlyRate, int ExperienceYears, bool Verified)
             GetProfile(int userId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT COALESCE(bio,'') bio, location, hourly_rate, experience_years, verified
                   FROM babysitter_profiles WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@id", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return ("", "", 15m, 0, false);
             return (r.GetString("bio"), r.GetString("location"),
                     r.GetDecimal("hourly_rate"), r.GetInt32("experience_years"), r.GetBoolean("verified"));
         }
 
-        public static void UpdateProfile(int userId, string bio, string location)
+        // Saves everything a babysitter can edit about their own profile, now
+        // including their hourly rate and years of experience.
+        public static void UpdateProfile(int userId, string bio, string location,
+                                         decimal hourlyRate, int experienceYears)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
-                "UPDATE babysitter_profiles SET bio = @b, location = @l WHERE user_id = @id", conn);
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
+                @"UPDATE babysitter_profiles
+                  SET bio = @b, location = @l, hourly_rate = @rate, experience_years = @exp
+                  WHERE user_id = @id", conn);
             cmd.Parameters.AddWithValue("@b", bio);
             cmd.Parameters.AddWithValue("@l", location);
+            cmd.Parameters.AddWithValue("@rate", hourlyRate);
+            cmd.Parameters.AddWithValue("@exp", experienceYears);
             cmd.Parameters.AddWithValue("@id", userId);
             cmd.ExecuteNonQuery();
         }
 
         public static List<string> GetAllSkills()
         {
-            var list = new List<string>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand("SELECT name FROM skills ORDER BY skill_id", conn);
-            using var r = cmd.ExecuteReader();
+            List<string> list = new List<string>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand("SELECT name FROM skills ORDER BY skill_id", conn);
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read()) list.Add(r.GetString(0));
             return list;
         }
 
         public static List<string> GetSkillsFor(int userId)
         {
-            var list = new List<string>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<string> list = new List<string>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT s.name FROM babysitter_skills bs
                   JOIN skills s ON s.skill_id = bs.skill_id
                   WHERE bs.babysitter_id = @id ORDER BY s.skill_id", conn);
             cmd.Parameters.AddWithValue("@id", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read()) list.Add(r.GetString(0));
             return list;
         }
 
         public static void SetSkills(int userId, IEnumerable<string> skillNames)
         {
-            using var conn = Db.Open();
-            using var tx = conn.BeginTransaction();
-            using (var del = new MySqlCommand("DELETE FROM babysitter_skills WHERE babysitter_id = @id", conn, tx))
+            using MySqlConnection conn = Db.Open();
+            using MySqlTransaction tx = conn.BeginTransaction();
+            using (MySqlCommand del = new MySqlCommand("DELETE FROM babysitter_skills WHERE babysitter_id = @id", conn, tx))
             {
                 del.Parameters.AddWithValue("@id", userId);
                 del.ExecuteNonQuery();
             }
-            foreach (var name in skillNames)
+            foreach (string name in skillNames)
             {
-                using var ins = new MySqlCommand(
+                using MySqlCommand ins = new MySqlCommand(
                     @"INSERT INTO babysitter_skills (babysitter_id, skill_id)
                       SELECT @id, skill_id FROM skills WHERE name = @n", conn, tx);
                 ins.Parameters.AddWithValue("@id", userId);
@@ -331,19 +380,23 @@ namespace Meraki_Project
         public static (decimal MonthEarnings, int TotalBookings, int HoursWorked, double AvgRating, int ReviewCount)
             GetDashboardStats(int userId)
         {
-            using var conn = Db.Open();
+            using MySqlConnection conn = Db.Open();
             decimal earnings = 0; int bookings = 0, hours = 0;
-            using (var cmd = new MySqlCommand(
-                @"SELECT COALESCE(SUM(CASE WHEN status = 'completed'
-                                            AND YEAR(booking_date) = YEAR(CURDATE())
-                                            AND MONTH(booking_date) = MONTH(CURDATE())
-                                           THEN total END), 0) AS month_earnings,
+            // Earnings now come from payments the admin has actually PAID OUT this
+            // month - not merely from completed bookings - so the tile reflects real
+            // money received. Booking/hours counts still use the bookings table.
+            using (MySqlCommand cmd = new MySqlCommand(
+                @"SELECT COALESCE((SELECT SUM(pay.amount) FROM payments pay
+                                   JOIN bookings pb ON pb.booking_id = pay.booking_id
+                                   WHERE pb.babysitter_id = @id AND pay.status = 'paid'
+                                     AND YEAR(pay.paid_at) = YEAR(CURDATE())
+                                     AND MONTH(pay.paid_at) = MONTH(CURDATE())), 0) AS month_earnings,
                          SUM(CASE WHEN status IN ('confirmed','completed') THEN 1 ELSE 0 END) AS total_bookings,
                          COALESCE(SUM(CASE WHEN status = 'completed' THEN duration_hours END), 0) AS hours_worked
                   FROM bookings WHERE babysitter_id = @id", conn))
             {
                 cmd.Parameters.AddWithValue("@id", userId);
-                using var r = cmd.ExecuteReader();
+                using MySqlDataReader r = cmd.ExecuteReader();
                 if (r.Read())
                 {
                     earnings = r.GetDecimal("month_earnings");
@@ -353,12 +406,12 @@ namespace Meraki_Project
             }
 
             double avg = 0; int count = 0;
-            using (var cmd = new MySqlCommand(
+            using (MySqlCommand cmd = new MySqlCommand(
                 @"SELECT COALESCE(AVG(rating),0) a, COUNT(review_id) c
                   FROM reviews WHERE babysitter_id = @id", conn))
             {
                 cmd.Parameters.AddWithValue("@id", userId);
-                using var r = cmd.ExecuteReader();
+                using MySqlDataReader r = cmd.ExecuteReader();
                 if (r.Read()) { avg = r.GetDouble("a"); count = r.GetInt32("c"); }
             }
             return (earnings, bookings, hours, avg, count);
@@ -372,8 +425,8 @@ namespace Meraki_Project
                                  int hours, int children, string address, string notes,
                                  decimal hourlyRate, decimal serviceFee, decimal total)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"INSERT INTO bookings (parent_id, babysitter_id, booking_date, start_time, duration_hours,
                                         children_count, address, notes, status, hourly_rate, service_fee, total)
                   VALUES (@p, @b, @d, @t, @h, @c, @a, @n, 'pending', @rate, @fee, @total)", conn);
@@ -409,6 +462,20 @@ namespace Meraki_Project
             return Query(sql, "@id", parentId);
         }
 
+        // Bookings the babysitter has marked done and that are now waiting for THIS
+        // parent to confirm the job was completed properly (payment 'awaiting_confirm').
+        public static List<BookingInfo> GetAwaitingParentConfirm(int parentId)
+        {
+            const string sql =
+                @"SELECT b.*, CONCAT(u.first_name,' ',u.last_name) AS sitter_name
+                  FROM bookings b
+                  JOIN users u ON u.user_id = b.babysitter_id
+                  JOIN payments pay ON pay.booking_id = b.booking_id
+                  WHERE b.parent_id = @id AND pay.status = 'awaiting_confirm'
+                  ORDER BY b.booking_date DESC, b.start_time DESC";
+            return Query(sql, "@id", parentId);
+        }
+
         public static List<BookingInfo> GetPendingForBabysitter(int babysitterId)
         {
             const string sql =
@@ -438,8 +505,8 @@ namespace Meraki_Project
         // earnings/hours and lets the parent leave a review. Safe to call on load.
         public static void AutoCompletePastBookings()
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "UPDATE bookings SET status = 'completed' WHERE status = 'confirmed' AND booking_date < CURDATE()", conn);
             cmd.ExecuteNonQuery();
         }
@@ -447,9 +514,9 @@ namespace Meraki_Project
         // Confirmed/completed bookings of one month, for the dashboard calendar.
         public static Dictionary<int, BookingInfo> GetMonthCalendar(int babysitterId, int year, int month)
         {
-            var dict = new Dictionary<int, BookingInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            Dictionary<int, BookingInfo> dict = new Dictionary<int, BookingInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT b.*, CONCAT(u.first_name,' ',u.last_name) AS parent_name
                   FROM bookings b
                   JOIN users u ON u.user_id = b.parent_id
@@ -458,10 +525,10 @@ namespace Meraki_Project
             cmd.Parameters.AddWithValue("@id", babysitterId);
             cmd.Parameters.AddWithValue("@y", year);
             cmd.Parameters.AddWithValue("@m", month);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
-                var b = ReadBooking(r);
+                BookingInfo b = ReadBooking(r);
                 dict[b.Date.Day] = b;   // one entry per day is enough for the cell
             }
             return dict;
@@ -475,8 +542,8 @@ namespace Meraki_Project
         // Returns null when there's nothing left to review for this pairing.
         public static int? FindReviewableBooking(int parentId, int babysitterId, string authorRole)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT b.booking_id
                   FROM bookings b
                   LEFT JOIN reviews r ON r.booking_id = b.booking_id AND r.author_role = @role
@@ -494,11 +561,31 @@ namespace Meraki_Project
 
         public static void SetStatus(int bookingId, string status)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand("UPDATE bookings SET status = @s WHERE booking_id = @id", conn);
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand("UPDATE bookings SET status = @s WHERE booking_id = @id", conn);
             cmd.Parameters.AddWithValue("@s", status);
             cmd.Parameters.AddWithValue("@id", bookingId);
             cmd.ExecuteNonQuery();
+        }
+
+        // Admin deletes a single booking. Its payment and any reviews must go first
+        // (they reference the booking), so all three run in one transaction.
+        public static void Delete(int bookingId)
+        {
+            using MySqlConnection conn = Db.Open();
+            using MySqlTransaction tx = conn.BeginTransaction();
+            foreach (string table in new[] { "reviews", "payments" })
+            {
+                using MySqlCommand child = new MySqlCommand(
+                    $"DELETE FROM {table} WHERE booking_id = @id", conn, tx);
+                child.Parameters.AddWithValue("@id", bookingId);
+                child.ExecuteNonQuery();
+            }
+            using MySqlCommand cmd = new MySqlCommand(
+                "DELETE FROM bookings WHERE booking_id = @id", conn, tx);
+            cmd.Parameters.AddWithValue("@id", bookingId);
+            cmd.ExecuteNonQuery();
+            tx.Commit();
         }
 
         // ----- Admin -----
@@ -517,15 +604,15 @@ namespace Meraki_Project
 
         public static (int Parents, int Babysitters, int BookingsThisMonth, decimal Revenue) GetAdminKpis()
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT (SELECT COUNT(*) FROM users WHERE role = 'parent') AS parents,
                          (SELECT COUNT(*) FROM users WHERE role = 'babysitter') AS sitters,
                          (SELECT COUNT(*) FROM bookings
                           WHERE YEAR(booking_date) = YEAR(CURDATE())
                             AND MONTH(booking_date) = MONTH(CURDATE())) AS month_bookings,
-                         (SELECT COALESCE(SUM(total),0) FROM bookings WHERE status = 'completed') AS revenue", conn);
-            using var r = cmd.ExecuteReader();
+                         (SELECT COALESCE(SUM(amount),0) FROM payments WHERE status = 'paid') AS revenue", conn);
+            using MySqlDataReader r = cmd.ExecuteReader();
             r.Read();
             return (r.GetInt32("parents"), r.GetInt32("sitters"),
                     r.GetInt32("month_bookings"), r.GetDecimal("revenue"));
@@ -534,35 +621,55 @@ namespace Meraki_Project
         // counts[0] = January ... counts[11] = December, for the given year.
         public static (int[] Counts, decimal[] Revenue) GetMonthlyStats(int year)
         {
-            var counts = new int[12];
-            var revenue = new decimal[12];
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
-                @"SELECT MONTH(booking_date) AS m, COUNT(*) AS c,
-                         COALESCE(SUM(CASE WHEN status = 'completed' THEN total END), 0) AS rev
+            int[] counts = new int[12];
+            decimal[] revenue = new decimal[12];
+            using MySqlConnection conn = Db.Open();
+
+            // Bars = number of bookings per month. Grouped on its own so every
+            // selected column is either the GROUP BY expression or an aggregate
+            // (required by MySQL's only_full_group_by mode).
+            using (MySqlCommand cmd = new MySqlCommand(
+                @"SELECT MONTH(booking_date) AS m, COUNT(*) AS c
                   FROM bookings WHERE YEAR(booking_date) = @y
-                  GROUP BY MONTH(booking_date)", conn);
-            cmd.Parameters.AddWithValue("@y", year);
-            using var r = cmd.ExecuteReader();
-            while (r.Read())
+                  GROUP BY MONTH(booking_date)", conn))
             {
-                int m = r.GetInt32("m") - 1;
-                counts[m] = r.GetInt32("c");
-                revenue[m] = r.GetDecimal("rev");
+                cmd.Parameters.AddWithValue("@y", year);
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                    counts[r.GetInt32("m") - 1] = r.GetInt32("c");
             }
+
+            // Revenue = money actually paid out each month, taken straight from the
+            // payments table and grouped by its own paid_at month - a separate query
+            // instead of a correlated subquery, so the two charts stay truthful.
+            using (MySqlCommand cmd = new MySqlCommand(
+                @"SELECT MONTH(paid_at) AS m, SUM(amount) AS rev
+                  FROM payments WHERE status = 'paid' AND YEAR(paid_at) = @y
+                  GROUP BY MONTH(paid_at)", conn))
+            {
+                cmd.Parameters.AddWithValue("@y", year);
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                    revenue[r.GetInt32("m") - 1] = r.GetDecimal("rev");
+            }
+
             return (counts, revenue);
         }
 
         // ----- shared row mapping -----
 
+        // Lets other repositories (e.g. PaymentRepository) reuse the booking-row
+        // mapper for a parameterless query without duplicating ReadBooking.
+        public static List<BookingInfo> QueryPublic(string sql) => Query(sql, null, 0);
+
         private static List<BookingInfo> Query(string sql, string? paramName, int paramValue)
         {
-            var list = new List<BookingInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(sql, conn);
+            List<BookingInfo> list = new List<BookingInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(sql, conn);
             if (paramName != null)
                 cmd.Parameters.AddWithValue(paramName, paramValue);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
                 list.Add(ReadBooking(r));
             return list;
@@ -629,11 +736,11 @@ namespace Meraki_Project
 
         private static List<ReviewInfo> Query(string sql, int id)
         {
-            var list = new List<ReviewInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(sql, conn);
+            List<ReviewInfo> list = new List<ReviewInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@id", id);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
                 list.Add(new ReviewInfo
@@ -654,9 +761,9 @@ namespace Meraki_Project
         public static void Add(int? bookingId, int parentId, int babysitterId,
                                string authorRole, int rating, string comment)
         {
-            using var conn = Db.Open();
-            using var tx = conn.BeginTransaction();
-            using (var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlTransaction tx = conn.BeginTransaction();
+            using (MySqlCommand cmd = new MySqlCommand(
                 @"INSERT INTO reviews (booking_id, parent_id, babysitter_id, author_role, rating, comment)
                   VALUES (@b, @p, @s, @role, @r, @c)", conn, tx))
             {
@@ -671,7 +778,7 @@ namespace Meraki_Project
             if (bookingId.HasValue)
             {
                 // A reviewed booking is, by definition, finished.
-                using var done = new MySqlCommand(
+                using MySqlCommand done = new MySqlCommand(
                     "UPDATE bookings SET status = 'completed' WHERE booking_id = @b", conn, tx);
                 done.Parameters.AddWithValue("@b", bookingId.Value);
                 done.ExecuteNonQuery();
@@ -689,9 +796,9 @@ namespace Meraki_Project
         // booked is discoverable.)
         public static List<ParentInfo> GetAllParents()
         {
-            var list = new List<ParentInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<ParentInfo> list = new List<ParentInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name, u.created_at,
                          COALESCE((SELECT AVG(r.rating) FROM reviews r
                                    WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter'), 0) AS avg_rating,
@@ -702,7 +809,7 @@ namespace Meraki_Project
                   FROM users u
                   WHERE u.role = 'parent' AND u.status = 'active'
                   ORDER BY name", conn);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
                 list.Add(new ParentInfo
@@ -720,8 +827,8 @@ namespace Meraki_Project
 
         public static ParentInfo? GetParentInfo(int parentId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT u.user_id, CONCAT(u.first_name,' ',u.last_name) AS name, u.created_at,
                          COALESCE((SELECT AVG(r.rating) FROM reviews r
                                    WHERE r.parent_id = u.user_id AND r.author_role = 'babysitter'), 0) AS avg_rating,
@@ -731,7 +838,7 @@ namespace Meraki_Project
                           WHERE b.parent_id = u.user_id AND b.status = 'completed') AS completed_count
                   FROM users u WHERE u.user_id = @id", conn);
             cmd.Parameters.AddWithValue("@id", parentId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return null;
             return new ParentInfo
             {
@@ -750,13 +857,13 @@ namespace Meraki_Project
     {
         public static List<PaymentCard> GetCards(int userId)
         {
-            var list = new List<PaymentCard>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<PaymentCard> list = new List<PaymentCard>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT card_id, card_holder, last4, brand, exp_month, exp_year
                   FROM payment_cards WHERE user_id = @u ORDER BY card_id", conn);
             cmd.Parameters.AddWithValue("@u", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
                 list.Add(new PaymentCard
@@ -777,8 +884,8 @@ namespace Meraki_Project
         public static int AddCard(int userId, string holder, string last4, string brand,
                                   int expMonth, int expYear)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"INSERT INTO payment_cards (user_id, card_holder, last4, brand, exp_month, exp_year)
                   VALUES (@u, @h, @l4, @b, @m, @y)", conn);
             cmd.Parameters.AddWithValue("@u", userId);
@@ -791,52 +898,94 @@ namespace Meraki_Project
             return (int)cmd.LastInsertedId;
         }
 
-        public static void CreatePendingPayment(int bookingId, int cardId, decimal amount)
+        // Records the chosen card against a new booking WITHOUT charging anything.
+        // The parent only pays after the job is finished, so it starts 'authorized'.
+        public static void CreateAuthorizedPayment(int bookingId, int cardId, decimal amount)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"INSERT INTO payments (booking_id, card_id, amount, status)
-                  VALUES (@b, @c, @a, 'pending')", conn);
+                  VALUES (@b, @c, @a, 'authorized')", conn);
             cmd.Parameters.AddWithValue("@b", bookingId);
             cmd.Parameters.AddWithValue("@c", cardId);
             cmd.Parameters.AddWithValue("@a", amount);
             cmd.ExecuteNonQuery();
         }
 
-        // The simulated charge: fires when the babysitter accepts the booking.
+        // Moves a payment from one status to the next, but only from the exact
+        // status we expect - so the same button can't fire the step twice.
+        private static void Advance(int bookingId, string fromStatus, string toStatus)
+        {
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
+                @"UPDATE payments SET status = @to
+                  WHERE booking_id = @b AND status = @from", conn);
+            cmd.Parameters.AddWithValue("@to", toStatus);
+            cmd.Parameters.AddWithValue("@from", fromStatus);
+            cmd.Parameters.AddWithValue("@b", bookingId);
+            cmd.ExecuteNonQuery();
+        }
+
+        // Babysitter says the job is done -> now waiting for the parent to confirm.
+        public static void MarkAwaitingConfirm(int bookingId) =>
+            Advance(bookingId, "authorized", "awaiting_confirm");
+
+        // Parent confirms the job was completed properly -> ready for the admin.
+        public static void MarkApprovedByParent(int bookingId) =>
+            Advance(bookingId, "awaiting_confirm", "approved");
+
+        // Admin charges the parent and pays the babysitter -> receipt now exists.
         public static void MarkPaid(int bookingId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"UPDATE payments SET status = 'paid', paid_at = NOW()
-                  WHERE booking_id = @b AND status = 'pending'", conn);
+                  WHERE booking_id = @b AND status = 'approved'", conn);
             cmd.Parameters.AddWithValue("@b", bookingId);
             cmd.ExecuteNonQuery();
         }
 
-        public static void Cancel(int bookingId)
+        // Admin (or a decline) drops the payment: no money changes hands. Allowed
+        // from any not-yet-paid status so a no-show can be discarded at any point.
+        public static void Discard(int bookingId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
-                @"UPDATE payments SET status = 'cancelled'
-                  WHERE booking_id = @b AND status = 'pending'", conn);
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
+                @"UPDATE payments SET status = 'discarded'
+                  WHERE booking_id = @b AND status <> 'paid'", conn);
             cmd.Parameters.AddWithValue("@b", bookingId);
             cmd.ExecuteNonQuery();
         }
 
-        // For the receipt: how this booking was (or will be) paid. Null when the
-        // booking predates the payment feature.
+        // For the receipt/status line: current payment state + which card. Null when
+        // the booking predates the payment feature.
         public static (string Status, string Brand, string Last4)? GetForBooking(int bookingId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT p.status, c.brand, c.last4
                   FROM payments p JOIN payment_cards c ON c.card_id = p.card_id
                   WHERE p.booking_id = @b", conn);
             cmd.Parameters.AddWithValue("@b", bookingId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             if (!r.Read()) return null;
             return (r.GetString("status"), r.GetString("brand"), r.GetString("last4"));
+        }
+
+        // Admin "Payouts" screen: every payment the parent has approved and that
+        // the admin has not settled yet - i.e. money ready to charge & pay out.
+        public static List<BookingInfo> GetApprovedPayouts()
+        {
+            const string sql =
+                @"SELECT b.*, CONCAT(p.first_name,' ',p.last_name) AS parent_name,
+                         CONCAT(s.first_name,' ',s.last_name) AS sitter_name
+                  FROM bookings b
+                  JOIN payments pay ON pay.booking_id = b.booking_id
+                  JOIN users p ON p.user_id = b.parent_id
+                  JOIN users s ON s.user_id = b.babysitter_id
+                  WHERE pay.status = 'approved'
+                  ORDER BY b.booking_date DESC, b.start_time DESC";
+            return BookingRepository.QueryPublic(sql);
         }
     }
 
@@ -845,12 +994,12 @@ namespace Meraki_Project
     {
         public static HashSet<int> GetFavoriteIds(int parentId)
         {
-            var set = new HashSet<int>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            HashSet<int> set = new HashSet<int>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "SELECT babysitter_id FROM favorites WHERE parent_id = @p", conn);
             cmd.Parameters.AddWithValue("@p", parentId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read()) set.Add(r.GetInt32(0));
             return set;
         }
@@ -858,15 +1007,15 @@ namespace Meraki_Project
         // Returns true when the babysitter is now a favorite.
         public static bool ToggleFavorite(int parentId, int babysitterId)
         {
-            using var conn = Db.Open();
-            using var del = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand del = new MySqlCommand(
                 "DELETE FROM favorites WHERE parent_id = @p AND babysitter_id = @b", conn);
             del.Parameters.AddWithValue("@p", parentId);
             del.Parameters.AddWithValue("@b", babysitterId);
             if (del.ExecuteNonQuery() > 0)
                 return false;   // it existed and was removed
 
-            using var ins = new MySqlCommand(
+            using MySqlCommand ins = new MySqlCommand(
                 "INSERT INTO favorites (parent_id, babysitter_id) VALUES (@p, @b)", conn);
             ins.Parameters.AddWithValue("@p", parentId);
             ins.Parameters.AddWithValue("@b", babysitterId);
@@ -876,14 +1025,14 @@ namespace Meraki_Project
 
         public static List<NotificationInfo> GetNotifications(int userId, int limit = 12)
         {
-            var list = new List<NotificationInfo>();
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            List<NotificationInfo> list = new List<NotificationInfo>();
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 @"SELECT notification_id, message, is_read, created_at
                   FROM notifications WHERE user_id = @u
                   ORDER BY created_at DESC LIMIT " + limit, conn);
             cmd.Parameters.AddWithValue("@u", userId);
-            using var r = cmd.ExecuteReader();
+            using MySqlDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
                 list.Add(new NotificationInfo
@@ -899,8 +1048,8 @@ namespace Meraki_Project
 
         public static void MarkAllRead(int userId)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "UPDATE notifications SET is_read = TRUE WHERE user_id = @u", conn);
             cmd.Parameters.AddWithValue("@u", userId);
             cmd.ExecuteNonQuery();
@@ -908,8 +1057,8 @@ namespace Meraki_Project
 
         public static void AddNotification(int userId, string message)
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "INSERT INTO notifications (user_id, message) VALUES (@u, @m)", conn);
             cmd.Parameters.AddWithValue("@u", userId);
             cmd.Parameters.AddWithValue("@m", message);
@@ -918,11 +1067,11 @@ namespace Meraki_Project
 
         public static decimal GetServiceFee()
         {
-            using var conn = Db.Open();
-            using var cmd = new MySqlCommand(
+            using MySqlConnection conn = Db.Open();
+            using MySqlCommand cmd = new MySqlCommand(
                 "SELECT setting_value FROM settings WHERE setting_key = 'service_fee'", conn);
             object? v = cmd.ExecuteScalar();
-            return v != null && decimal.TryParse(v.ToString(), out var fee) ? fee : 2.50m;
+            return v != null && decimal.TryParse(v.ToString(), out decimal fee) ? fee : 2.50m;
         }
     }
 }

@@ -51,14 +51,14 @@ namespace Meraki_Project
         private void RenderResults()
         {
             string search = tbSearch.Text.Trim();
-            var filtered = _all.Where(p =>
+            List<ParentInfo> filtered = _all.Where(p =>
                 search.Length == 0 || p.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
             lblPageSubtitle.Text = $"{filtered.Count} famil{(filtered.Count == 1 ? "y" : "ies")} on Meraki";
 
             flpResults.SuspendLayout();
             flpResults.Controls.Clear();
-            foreach (var p in filtered)
+            foreach (ParentInfo p in filtered)
                 flpResults.Controls.Add(BuildParentCard(p));
             flpResults.ResumeLayout();
 
@@ -67,7 +67,7 @@ namespace Meraki_Project
 
         private Control BuildParentCard(ParentInfo p)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Size = new Size(1440, 110),
                 Margin = new Padding(0, 0, 0, 14),
@@ -79,7 +79,7 @@ namespace Meraki_Project
                 Cursor = Cursors.Hand,
             };
 
-            var accentBar = new Guna2Panel
+            Guna2Panel accentBar = new Guna2Panel
             {
                 Location = new Point(12, 18),
                 Size = new Size(5, 74),
@@ -87,7 +87,7 @@ namespace Meraki_Project
                 FillColor = Teal,
                 BackColor = Color.Transparent,
             };
-            var avatar = new Guna2Panel
+            Guna2Panel avatar = new Guna2Panel
             {
                 Location = new Point(30, 22),
                 Size = new Size(64, 64),
@@ -105,7 +105,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var nameLabel = new Label
+            Label nameLabel = new Label
             {
                 Text = p.Name,
                 Location = new Point(112, 22),
@@ -114,7 +114,7 @@ namespace Meraki_Project
                 ForeColor = TextDark,
                 BackColor = Color.Transparent,
             };
-            var metaLabel = new Label
+            Label metaLabel = new Label
             {
                 Text = $"Member since {p.MemberSince:MMM yyyy}   ·   " +
                        $"{p.CompletedBookingCount} completed booking{(p.CompletedBookingCount == 1 ? "" : "s")}   ·   " +
@@ -126,7 +126,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             };
 
-            var profileBtn = new Guna2Button
+            Guna2Button profileBtn = new Guna2Button
             {
                 Text = "View Profile",
                 Location = new Point(1250, 32),

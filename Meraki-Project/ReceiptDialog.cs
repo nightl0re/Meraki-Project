@@ -25,7 +25,7 @@ namespace Meraki_Project
             StartPosition = FormStartPosition.CenterParent;
             BackColor = Color.FromArgb(253, 244, 239);
 
-            var header = new Guna2Panel
+            Guna2Panel header = new Guna2Panel
             {
                 Location = new Point(0, 0),
                 Size = new Size(440, 96),
@@ -63,14 +63,14 @@ namespace Meraki_Project
                 AddRow("Notes", b.Notes, ref y);
 
             y += 8;
-            var divider = new Panel { Location = new Point(24, y), Size = new Size(392, 1), BackColor = Color.FromArgb(230, 224, 218) };
+            Panel divider = new Panel { Location = new Point(24, y), Size = new Size(392, 1), BackColor = Color.FromArgb(230, 224, 218) };
             Controls.Add(divider);
             y += 14;
 
             AddRow("Rate", $"${b.HourlyRate:0.00}/hr × {b.DurationHours}h", ref y);
             AddRow("Service fee", $"${b.ServiceFee:0.00}", ref y);
 
-            var totalLabel = new Label
+            Label totalLabel = new Label
             {
                 Text = "Total",
                 Location = new Point(24, y),
@@ -79,7 +79,7 @@ namespace Meraki_Project
                 ForeColor = TextDark,
                 BackColor = Color.Transparent,
             };
-            var totalValue = new Label
+            Label totalValue = new Label
             {
                 Text = $"${b.Total:0.00}",
                 Location = new Point(180, y),
@@ -93,19 +93,22 @@ namespace Meraki_Project
             Controls.Add(totalValue);
             y += 34;
 
-            // Payment line (older bookings from before the payment feature have none).
+            // Payment line describing where this booking is in the pay-after-completion
+            // flow. Older bookings from before the payment feature simply have none.
             try
             {
-                var payment = PaymentRepository.GetForBooking(b.BookingId);
+                (string Status, string Brand, string Last4)? payment =
+                    PaymentRepository.GetForBooking(b.BookingId);
                 if (payment != null)
                 {
-                    var (payStatus, brand, last4) = payment.Value;
+                    (string payStatus, string brand, string last4) = payment.Value;
                     string payText = payStatus switch
                     {
+                        "authorized" => $"{brand} •••• {last4} on file - billed after the job is completed",
+                        "awaiting_confirm" => "Job marked done - waiting for the parent to confirm",
+                        "approved" => "Approved by the parent - awaiting admin payout",
                         "paid" => $"Paid with {brand} •••• {last4}",
-                        "pending" => $"{brand} •••• {last4} - charged when the babysitter accepts",
-                        "cancelled" => "No charge was made (booking declined)",
-                        "refunded" => $"Refunded to {brand} •••• {last4}",
+                        "discarded" => "No charge was made",
                         _ => "",
                     };
                     Controls.Add(new Label
@@ -121,7 +124,7 @@ namespace Meraki_Project
             }
             catch { /* the receipt still works without the payment line */ }
 
-            var close = new Guna2Button
+            Guna2Button close = new Guna2Button
             {
                 Text = "Close",
                 Location = new Point(24, 456),

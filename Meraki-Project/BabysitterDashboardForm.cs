@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Meraki_Project
 {
+    // Babysitter home page. Shows earnings/ratings tiles, the confirmed-booking
+    // schedule, and incoming requests to accept or decline. The babysitter also
+    // marks a finished job "completed" here, which starts the payment release.
     public partial class BabysitterDashboardForm : Form
     {
         private static readonly Color TextMuted = Color.FromArgb(154, 136, 128);
@@ -50,9 +53,10 @@ namespace Meraki_Project
 
         private void LoadStats()
         {
-            var (earnings, bookings, hours, avg, count) =
+            (decimal earnings, int bookings, int hours, double avg, int count) =
                 BabysitterRepository.GetDashboardStats(Session.CurrentUserId);
-            var profile = BabysitterRepository.GetProfile(Session.CurrentUserId);
+            (string Bio, string Location, decimal HourlyRate, int ExperienceYears, bool Verified) profile =
+                BabysitterRepository.GetProfile(Session.CurrentUserId);
 
             lblStatMonthValue.Text = "$" + earnings.ToString("0");
             lblStatBookingsValue.Text = bookings.ToString();
@@ -75,11 +79,11 @@ namespace Meraki_Project
 
         private void RenderSchedule()
         {
-            var bookings = BookingRepository.GetScheduleForBabysitter(Session.CurrentUserId);
-            var today = DateTime.Today;
-            var upcoming = bookings.Where(b => b.Date >= today)
+            List<BookingInfo> bookings = BookingRepository.GetScheduleForBabysitter(Session.CurrentUserId);
+            DateTime today = DateTime.Today;
+            List<BookingInfo> upcoming = bookings.Where(b => b.Date >= today)
                                    .OrderBy(b => b.Date).ThenBy(b => b.Start).ToList();
-            var past = bookings.Where(b => b.Date < today)
+            List<BookingInfo> past = bookings.Where(b => b.Date < today)
                                .OrderByDescending(b => b.Date).ThenByDescending(b => b.Start).ToList();
 
             flpSchedule.SuspendLayout();
@@ -94,12 +98,12 @@ namespace Meraki_Project
                 if (upcoming.Count > 0)
                 {
                     flpSchedule.Controls.Add(SectionLabel("Upcoming"));
-                    foreach (var b in upcoming) flpSchedule.Controls.Add(BuildScheduleCard(b));
+                    foreach (BookingInfo b in upcoming) flpSchedule.Controls.Add(BuildScheduleCard(b));
                 }
                 if (past.Count > 0)
                 {
                     flpSchedule.Controls.Add(SectionLabel("Past"));
-                    foreach (var b in past.Take(10)) flpSchedule.Controls.Add(BuildScheduleCard(b));
+                    foreach (BookingInfo b in past.Take(10)) flpSchedule.Controls.Add(BuildScheduleCard(b));
                 }
             }
             flpSchedule.ResumeLayout();
@@ -132,7 +136,7 @@ namespace Meraki_Project
             bool completed = b.Status == "completed";
             Color stripe = completed ? Color.FromArgb(210, 205, 200) : Color.FromArgb(94, 200, 196);
 
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = 820,
                 Height = 78,
@@ -145,7 +149,7 @@ namespace Meraki_Project
                 Cursor = Cursors.Hand,
             };
 
-            var accentBar = new Guna2Panel
+            Guna2Panel accentBar = new Guna2Panel
             {
                 Location = new Point(10, 14),
                 Size = new Size(4, 50),
@@ -153,7 +157,7 @@ namespace Meraki_Project
                 FillColor = stripe,
                 BackColor = Color.Transparent,
             };
-            var avatar = new Guna2Panel
+            Guna2Panel avatar = new Guna2Panel
             {
                 Location = new Point(22, 15),
                 Size = new Size(48, 48),
@@ -171,7 +175,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var nameLabel = new Label
+            Label nameLabel = new Label
             {
                 Text = b.ParentName,
                 Location = new Point(84, 10),
@@ -180,7 +184,7 @@ namespace Meraki_Project
                 ForeColor = TextDark,
                 BackColor = Color.Transparent,
             };
-            var whenLabel = new Label
+            Label whenLabel = new Label
             {
                 Text = $"{b.Date:ddd, MMM d}  ·  {b.TimeRangeText}",
                 Location = new Point(84, 34),
@@ -189,7 +193,7 @@ namespace Meraki_Project
                 ForeColor = TextMuted,
                 BackColor = Color.Transparent,
             };
-            var payLabel = new Label
+            Label payLabel = new Label
             {
                 Text = $"{b.ChildrenCount} {(b.ChildrenCount == 1 ? "child" : "children")}  ·  ${b.Total:0.00}",
                 Location = new Point(84, 52),
@@ -198,11 +202,11 @@ namespace Meraki_Project
                 ForeColor = TextMuted,
                 BackColor = Color.Transparent,
             };
-            var statusLabel = new Label
+            Label statusLabel = new Label
             {
                 Text = completed ? "Completed" : "Confirmed",
-                Location = new Point(680, 26),
-                Size = new Size(120, 26),
+                Location = new Point(694, 12),
+                Size = new Size(108, 24),
                 TextAlign = ContentAlignment.MiddleCenter,
                 BackColor = completed ? Color.FromArgb(235, 232, 228) : Color.FromArgb(210, 240, 238),
                 ForeColor = completed ? TextMuted : Color.FromArgb(42, 112, 112),
@@ -211,11 +215,11 @@ namespace Meraki_Project
 
             // A small explicit receipt link; clicking anywhere else on the card
             // opens the parent's profile (reviews + write one).
-            var receiptLink = new Label
+            Label receiptLink = new Label
             {
                 Text = "Receipt",
-                Location = new Point(680, 52),
-                Size = new Size(120, 20),
+                Location = new Point(694, 46),
+                Size = new Size(108, 20),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Font = new Font("Segoe UI", 8F, FontStyle.Underline),
                 ForeColor = TextMuted,
@@ -224,7 +228,7 @@ namespace Meraki_Project
             };
             receiptLink.Click += (s, e) =>
             {
-                using var dlg = new ReceiptDialog(b, showParentSide: false);
+                using ReceiptDialog dlg = new ReceiptDialog(b, showParentSide: false);
                 dlg.ShowDialog(this);
             };
 
@@ -236,6 +240,25 @@ namespace Meraki_Project
             card.Controls.Add(statusLabel);
             card.Controls.Add(receiptLink);
 
+            // On a still-confirmed booking the babysitter can report the job is done.
+            // That flips it to 'completed' and asks the parent to confirm before pay.
+            if (!completed)
+            {
+                Guna2Button completeBtn = new Guna2Button
+                {
+                    Text = "I completed the job",
+                    Location = new Point(496, 24),
+                    Size = new Size(176, 30),
+                    BorderRadius = 8,
+                    FillColor = Color.FromArgb(46, 125, 50),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                    BackColor = Color.Transparent,
+                };
+                completeBtn.Click += (s, e) => MarkJobCompleted(b);
+                card.Controls.Add(completeBtn);
+            }
+
             EventHandler openParent = (s, e) =>
                 Navigation.GoTo(this, new ParentProfileForm(b.ParentId));
             card.Click += openParent;
@@ -245,6 +268,34 @@ namespace Meraki_Project
             statusLabel.Click += openParent;
 
             return card;
+        }
+
+        // Babysitter reports a confirmed booking as finished. The booking becomes
+        // 'completed' and its payment moves to 'awaiting_confirm' so the parent is
+        // asked to confirm before the admin releases the money.
+        private void MarkJobCompleted(BookingInfo b)
+        {
+            if (MessageBox.Show(
+                    $"Mark the booking with {b.ParentName} on {b.Date:MMM d} as completed?",
+                    "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            try
+            {
+                BookingRepository.SetStatus(b.BookingId, "completed");
+                PaymentRepository.MarkAwaitingConfirm(b.BookingId);
+                ExtrasRepository.AddNotification(b.ParentId,
+                    $"{Session.CurrentUserName} marked your {b.Date:MMM d} booking complete. Please confirm it so payment can be released.");
+
+                BeginInvoke(new Action(() => { RenderSchedule(); LoadStats(); }));
+                MessageBox.Show("Marked as completed. The parent will confirm, then you'll be paid.",
+                    "Meraki", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Database error:\n" + ex.Message, "Meraki",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // ----- Notifications dropdown -----
@@ -287,7 +338,7 @@ namespace Meraki_Project
             }
             else
             {
-                foreach (var n in _notifications)
+                foreach (NotificationInfo n in _notifications)
                     flpNotificationsList.Controls.Add(BuildNotificationRow(n));
             }
             flpNotificationsList.ResumeLayout();
@@ -295,7 +346,7 @@ namespace Meraki_Project
 
         private Control BuildNotificationRow(NotificationInfo n)
         {
-            var panel = new Panel
+            Panel panel = new Panel
             {
                 Width = flpNotificationsList.ClientSize.Width - 8,
                 Height = 46,
@@ -328,7 +379,7 @@ namespace Meraki_Project
             try
             {
                 ExtrasRepository.MarkAllRead(Session.CurrentUserId);
-                foreach (var n in _notifications) n.Unread = false;
+                foreach (NotificationInfo n in _notifications) n.Unread = false;
                 RenderNotifications();
             }
             catch (Exception ex)
@@ -364,7 +415,7 @@ namespace Meraki_Project
             }
             else
             {
-                foreach (var r in _pendingRequests)
+                foreach (BookingInfo r in _pendingRequests)
                     flpPendingRequests.Controls.Add(BuildPendingRequestCard(r));
             }
             flpPendingRequests.ResumeLayout();
@@ -372,7 +423,7 @@ namespace Meraki_Project
 
         private Control BuildPendingRequestCard(BookingInfo r)
         {
-            var card = new Guna2Panel
+            Guna2Panel card = new Guna2Panel
             {
                 Width = flpPendingRequests.ClientSize.Width - 8,
                 Height = 100,
@@ -410,7 +461,7 @@ namespace Meraki_Project
                 BackColor = Color.Transparent,
             });
 
-            var acceptBtn = new Guna2Button
+            Guna2Button acceptBtn = new Guna2Button
             {
                 Text = "Accept",
                 Location = new Point(12, 68),
@@ -423,7 +474,7 @@ namespace Meraki_Project
             };
             acceptBtn.Click += (s, e) => RespondToRequest(r, accepted: true);
 
-            var declineBtn = new Guna2Button
+            Guna2Button declineBtn = new Guna2Button
             {
                 Text = "Decline",
                 Location = new Point(170, 68),
@@ -436,7 +487,7 @@ namespace Meraki_Project
             };
             declineBtn.Click += (s, e) => RespondToRequest(r, accepted: false);
 
-            var viewParentBtn = new Guna2Button
+            Guna2Button viewParentBtn = new Guna2Button
             {
                 Text = "View Parent",
                 Location = new Point(328, 68),
@@ -464,12 +515,12 @@ namespace Meraki_Project
             {
                 BookingRepository.SetStatus(r.BookingId, accepted ? "confirmed" : "declined");
 
-                // Settle the (simulated) payment: charge on accept, release on decline.
-                if (accepted) PaymentRepository.MarkPaid(r.BookingId);
-                else PaymentRepository.Cancel(r.BookingId);
+                // No money moves here. Accepting just confirms the job; declining
+                // drops the (still uncharged) payment entirely.
+                if (!accepted) PaymentRepository.Discard(r.BookingId);
 
                 ExtrasRepository.AddNotification(r.ParentId, accepted
-                    ? $"{Session.CurrentUserName} confirmed your booking for {r.Date:MMM d}. Your card was charged ${r.Total:0.00}."
+                    ? $"{Session.CurrentUserName} confirmed your booking for {r.Date:MMM d}. You'll pay after the job is completed."
                     : $"{Session.CurrentUserName} declined your booking request for {r.Date:MMM d}. No charge was made.");
 
                 // Defer the list rebuild so we never dispose the button that is
